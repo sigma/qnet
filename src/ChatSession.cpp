@@ -34,7 +34,7 @@
 
 ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
         : ChatPage(parent, name) {
-    
+
     host = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/host","");
     port = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/port","");
     this->mtp = mtp;
@@ -83,7 +83,7 @@ void ChatSession::displayStdout(const QString& msg) {
     emit outputMessage(msg);
     QString m(msg);
     QString output;
-    
+
     if (m.startsWith("<Mtp> Welcome")) {
         this->login = m.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
         displayStderr("Setting user name to " + this->login + ".");
@@ -173,8 +173,6 @@ void ChatSession::kill(Page * ref) {
 }
 
 void ChatSession::returnPressed() {
-
-
     // delete this $#!@? "\n" we've just inserted
     chat_edit->doKeyboardAction(QTextEdit::ActionBackspace);
 
@@ -218,7 +216,7 @@ void ChatSession::send(const QString & m) {
         while (m.length() > limit) {
             int last_space = m.findRev(' ',limit);
             if(last_space == -1) last_space = limit;
-            
+
             mng->writeStdin(prefix + m.left(last_space));
             m = msg.right(m.length() - last_space);
         }

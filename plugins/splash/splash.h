@@ -39,7 +39,8 @@ public slots:
     
 private:
     QTimer *m_timer;
-    QLabel label;
+    QLabel *m_label;
+    int m_screen;
     int time;
 };
 

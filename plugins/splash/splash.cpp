@@ -14,6 +14,7 @@
 #include <qcolor.h>
 #include <qregexp.h>
 #include <qpoint.h>
+#include <qcursor.h>
 
 #include "splash.h"
 
@@ -22,11 +23,13 @@
 PLUGIN_FACTORY(Splash,"splash");
 
 Splash::Splash(QWidget * /*parent*/, const char *name, Master * session) 
-    : Page(0, name, session, WStyle_Customize | Style_Splash), label(this) {
+    : Page(0, name, session, WStyle_Customize | Style_Splash) {
+    m_screen = QApplication::desktop()->primaryScreen();
+    
+    m_label = new QLabel(this);
+    m_label->setPaletteBackgroundColor(QColor("lightgrey"));
+
     setFocusPolicy(QWidget::NoFocus);
-    QColor color1("lightgrey");
-//    QColor color2("white");
-    label.setPaletteBackgroundColor(color1);
     m_timer = new QTimer(this);
     time = 3000;
 
@@ -59,10 +62,11 @@ void Splash::append(const QString & msg) {
     QRegExp re("\\[([NS]?)([EO]?)\\](.*)");
     if(re.exactMatch(msg)) {
         m_timer->stop();
-        label.setText(re.cap(3).replace(QRegExp("&gt "),">").replace(QRegExp("&lt "),"<").replace(QRegExp("&amp "),"&"));
-        label.adjustSize();
-        resize(label.size());
-        QRect scr = QApplication::desktop()->screenGeometry();
+        m_label->setText(re.cap(3).replace(QRegExp("&gt "),">").replace(QRegExp("&lt "),"<").replace(QRegExp("&amp "),"&"));
+        m_label->adjustSize();
+        resize(m_label->size());
+
+        QRect scr = QApplication::desktop()->screenGeometry(QCursor::pos());
 
         QPoint pt = scr.center();
 

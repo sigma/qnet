@@ -15,4 +15,5 @@ SUBDIRS += tell \
            emit \
            ptime \
            pformat \
-           cron
+           cron \
+           osdsplash
