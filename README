@@ -1,14 +1,15 @@
+WARNING: ce fichier est largement outdated, mais j'ai la flemme de le mettre à jour complètement, donc si une information se révèle erronée *et* gênante (si c'est seulement erronée, n'en parlez même pas ;)), n'hésitez pas à m'insulter (oui je sais, vous n'hésitez jamais, je vous hais).
+
 QNet
 ~~~~
 QNet est un nième client pour <Mtp> Chat! écrit en Qt (enfin c'est le
 premier en Qt et le nième en général... enfin je me comprends)
-Version actuelle : 0.47-cvs
-
+Version actuelle : 0.50
 
 Compiler
 ~~~~~~~~
-pré-requis : 
-- libqt3 + headers 
+pré-requis :
+- libqt3 + headers
 - qmake
 
 Les versions de Qt testées sont les suivantes : Qt 3.0.5 (marche à peu près convenablement), Qt >= 3.1 (pas de problème particulier)
@@ -18,8 +19,8 @@ Si quelqu'un me propose un patch spécifique pour contourner ce genre de problème
 
 pour la compilation proprement dite, il faut positionner les variables
 d'environnements QTDIR et QMAKESPEC
-(ex : 
-    "export QTDIR=/usr/lib/qt3" (mandrake) ou "export QTDIR=/usr/share/qt" voire "export QTDIR=/usr/share/qt3" (debian)
+(ex :
+    "export QTDIR=/usr/lib/qt3" (mandrake) ou "export QTDIR=/usr/share/qt" voire "export QTDIR=/usr/share/qt3" (debian) ou même "export QTDIR=/usr/X11R6" (FreeBSD)
     "export QMAKESPEC=linux-g++"
 )
 
@@ -62,11 +63,10 @@ Exemples de fonctionnalités :
 - contrôle distant (en cours, utilité indéniable ;-))
 - équivalent du kaware (apparition en bas de l'écran d'un message contenant le login, ou d'un message de tell)
 
-
 Précisions sur les filtres
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 Les versions antérieures à la 0.47 intègrent les filtres dans le code : outre le fait que ceci est Mal(tm) ca vous empêche de les configurer, donc la question est réglée.
-Bon maintenant, suite à des demandes répétées de nombreux fans (assorties de menaces d'ailleurs) les filtres sont déportés dans le .qnetrc, ce qui est Bien(tm). A l'heure où j'écris (Vendredi 9 Mai, 10h, tout est calme), la configuration a l'intérieur du client n'est pas encore possible, mais nos meilleurs techniciens y travaillent jour et nuit. Donc, si vous voulez vous lancer dans l'écriture d'un filtre, il vous faudra :
+Bon maintenant, suite à des demandes répétées de nombreux fans (assorties de menaces d'ailleurs) les filtres sont déportés dans le .qnetrc, ce qui est Bien(tm). A l'heure où j'écris (Vendredi 9 Mai 2003, 10h, tout est calme), la configuration a l'intérieur du client n'est pas encore possible, mais nos meilleurs techniciens y travaillent jour et nuit. Donc, si vous voulez vous lancer dans l'écriture d'un filtre, il vous faudra :
 - maîtriser la syntaxe obscure desdits filtres
 - les convertir en format xml (ce qui n'est pas nécessairement la partie la plus facile)
 
@@ -79,7 +79,7 @@ Au commencement il y eut le filtre (Filter) dans toute sa splendeur de généralit
 
 - LineFilter, dont la tache est d'agir sur les éléments plus simples que sont les lignes de texte.
 
-- ItemFilter, qui essaie de ramasser par ci, par là quelques éléments caractéristiques 
+- ItemFilter, qui essaie de ramasser par ci, par là quelques éléments caractéristiques
 
 - InputFilter, qui lui n'agit pas sur ce qui arrive dans le client, mais sur ce qui en sort, nous reviendrons sur son rôle ultérieurement.
 
