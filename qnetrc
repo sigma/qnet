@@ -9,9 +9,10 @@
    <file>/path/to/libtell.so</file>
    <file>/path/to/libbrowser.so</file>
    <file>/path/to/libdrawing.so</file>
-   <file>/path/libsplash.so</file>
-   <file>/path/libid.so</file>
-   <file>/path/libaffect.so</file>
+   <file>/path/to/libsplash.so</file>
+   <file>/path/to/libid.so</file>
+   <file>/path/to/libaffect.so</file>
+   <file>/path/to/libemit.so</file>
   </plugins>
   <filters>
    <input>
