@@ -61,7 +61,8 @@ HEADERS += qnet.h \
            chatpage.h \
            ../interfaces/page.h \
            ../interfaces/master.h \
-           ../interfaces/mtpbrowser.h 
+           ../interfaces/mtpbrowser.h \
+           MtpContext.h 
 FORMS += qnet_base.ui \
          connectionbox.ui \
          sessionsdialogbase.ui \
@@ -70,5 +71,4 @@ FORMS += qnet_base.ui \
          urlsettingsbase.ui \
          prefixsettingsbase.ui \
          fortunesettings.ui \
-         appearancesettings.ui \
-         idform.ui 
+         appearancesettings.ui 

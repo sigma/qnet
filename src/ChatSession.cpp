@@ -540,7 +540,7 @@ void ChatSession::applyFilters() {
 
         QString bname("finger");
         BlockFilter * f2 = new BlockFilter(bname,m_context);
-        QString pat(":browser:Finger: \\1\\<font face=fixed size=3>\\2\\</font>\\3\\");
+        QString pat(":id:Finger: \\0\\");
         f2->setResultPattern(pat);
         QString beg("^(<.*>)?(Login *: \\w+)(<.*>)?");
         f2->setBeginRegExp(beg);

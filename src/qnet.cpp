@@ -199,44 +199,6 @@ void QMtp::fileNew() {
 }
 
 Page * QMtp::getNewPage(QString type,QString name,ChatSession * ref) {
-/*    if (type == "tell") {
-            TellPage * edit = new TellPage(tabs,name,ref);
-            edit->setPrefix("tell " + name + " ");
-            tabs->addTab(edit,name);
-            tabs->showPage(edit);
-            tab_map.insert(edit,ref);
-
-
-            connect(edit, SIGNAL(textDisplayed(QWidget *)),
-                    this, SLOT(slotTextDisplayed(QWidget *)));
-
-            return edit;
-        }
-    else if (type == "browser") {
-            BrowserPage * edit = new BrowserPage(tabs,name,ref);
-            tabs->addTab(edit,name);
-            tabs->showPage(edit);
-            tab_map.insert(edit,ref);
-
-            connect(edit, SIGNAL(textDisplayed(QWidget *)),
-                    this, SLOT(slotTextDisplayed(QWidget *)));
-
-            return edit;
-        }
-    else if (type == "drawing") {
-            Painter * paint = new Painter(tabs,name,ref);
-            tabs->addTab(paint,name);
-            tabs->showPage(paint);
-            tab_map.insert(paint,ref);
-
-            return paint;
-        }
-    else if (type == "splash") {
-            Splash * splash = new Splash(tabs,name,ref);
-            tab_map.insert(splash,ref);
-
-            return splash;
-        }*/
     QMap<QString,void*>::Iterator it;
     if((it = plugins_map.find(type)) != plugins_map.end()) {
 	create_t* create_plugin = (create_t*) dlsym(*it, "create");

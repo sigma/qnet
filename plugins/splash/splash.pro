@@ -3,13 +3,13 @@
 # Subdir relative project main directory: ./plugins/splash
 # Target is a library:  
 
+SOURCES += splash.cpp
+HEADERS += splash.h \
+../../interfaces/master.h \
+../../interfaces/page.h
 TEMPLATE = lib 
 CONFIG += release \
           warn_on \
           qt \
           thread 
 INCLUDEPATH = ../../interfaces 
-SOURCES += splash.cpp 
-HEADERS += splash.h \
-../../interfaces/master.h \
-../../interfaces/page.h
