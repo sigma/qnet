@@ -33,12 +33,14 @@ public:
     InputFilter * getInputDependency();
 
     void setBeginRegExp(const QString& reg);
+    void setMainRegExp(const QString& reg);
     void setEndRegExp(const QString& reg);
     void setResultPattern(const QString& pat);
     void setBeginPattern(const QString& pat);
     void setEndPattern(const QString& pat);
 
     QString getBeginRegExp() const;
+    QString getMainRegExp() const;
     QString getEndRegExp() const;
     QString getResultPattern() const;
     QString getBeginPattern() const;
@@ -50,9 +52,9 @@ public:
 private:
     InputFilter * dependency;
     bool finished;
-    MtpRegExp beg_reg,end_reg;
+    MtpRegExp beg_reg,main_reg,end_reg;
     MtpContext * m_context;
-    QString main_pattern,begin_pattern,end_pattern,begin,end;
+    QString main_pattern,begin_pattern,end_pattern,begin,main,end;
 };
 
 #endif

@@ -212,8 +212,10 @@ void ChatPage::slotGoto() {
 }
 
 void ChatPage::addUser(const QString& name) {
-    users_box->insertItem(name);
-    users_box->sort();
+    if(!users_box->findItem(name)) {
+        users_box->insertItem(name);
+        users_box->sort();
+    }
 }
 
 void ChatPage::removeUser(const QString& name) {

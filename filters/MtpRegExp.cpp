@@ -45,6 +45,7 @@ bool MtpRegExp::exactMatch(const QString & str) {
     }
 
     reg = QRegExp(res);
+    reg.setCaseSensitive(false);
     return reg.exactMatch(str);
 }
 

@@ -55,6 +55,8 @@ public slots:
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString &);
+    void incoming(const QString &);
+    void outgoing(const QString &);
 
 signals:
 	void outputMessage(const QString& );
@@ -64,7 +66,6 @@ private:
     void escape(QString * msg);
     void unescape(QString * msg);
     bool filter(QString * msg);
-    void getInfo();
 
     QString caseUnsensitive(const QString& msg);
 

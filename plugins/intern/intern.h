@@ -10,27 +10,32 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#ifndef AFFECT_H
-#define AFFECT_H
+#ifndef INTERN_H
+#define INTERN_H
 
 #include "page.h"
 
 /**
 @author Yann Hodique
 */
-class Affect : public Page {
+class Intern : public Page {
     Q_OBJECT
 public:
-    Affect(QWidget *parent, const char *name, Master * session);
+    Intern(QWidget *parent, const char *name, Master * session);
 
-    ~Affect();
+    ~Intern();
 
     bool isSlave() {
         return false;
     }
     void append(const QString& msg);
 
-    QString shellOutput(const QString& cmd);
+private:
+    void affectAppend(const QString&);
+    void emitAppend(const QString&);
+    void pformatAppend(const QString&);
+    void ptimeAppend(const QString&);
+    void usersAppend(const QString&);
 };
 
 #endif

@@ -34,6 +34,8 @@ class Master : public QObject {
     virtual void send(const QString &) = 0;
 
 public slots:
+    virtual void incoming(const QString &) {}
+    virtual void outgoing(const QString &) {}
     virtual void slotLinkClicked(const QString &) {}
     virtual void closeSession() {}
     virtual void slotReconnect() {}

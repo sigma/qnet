@@ -49,6 +49,7 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     enable_stdout = true;
     receiving_who = false;
     position = 0;
+    who_demanded = false;
 
     connect(mng, SIGNAL(processExited()),
             this, SLOT(closeSession()));
@@ -77,32 +78,7 @@ void ChatSession::displayStdout(const QString& msg) {
     QString m(msg);
     QString output;
 
-    if (m.startsWith("<Mtp> Welcome")) {
-        this->login = m.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
-        displayStderr("Setting user name to " + this->login + ".");
-
-        context()->setVar("login",caseUnsensitive(this->login));
-        context()->setVar("Login",this->login);
-        context()->setVar("channel","Hall");
-
-        QString new_m("<Mtp> Welcome, " + login + ".");
-
-        escape(&new_m);
-        new_m = m_filter->filterOut(new_m);
-#if (QT_VERSION < 305)
-        new_m += "<br>";
-#endif
-
-        output = Filter::expandVars(new_m,context());
-        unescape(&output);
-        m_chatpage->append(output);
-
-        position += new_m.length();
-        login_set = true;
-        m_chatpage->chat_edit->setUndoRedoEnabled(true);
-        mng->writeStdin(QString("set client ") + CLIENT);
-        getInfo();
-    } else if(filter(&m)) {
+    if(filter(&m)) {
         escape(&m);
         m = m_filter->filterOut(m);
 
@@ -226,69 +202,20 @@ void ChatSession::unescape(QString * msg) {
     *msg = msg->replace(QRegExp("&bks "),"\\");
 }
 
+void ChatSession::incoming(const QString &user) {
+    m_chatpage->addUser(user);
+}
+
+void ChatSession::outgoing(const QString &user) {
+    m_chatpage->removeUser(user);
+}
+
 bool ChatSession::filter(QString * msg) {
     if (msg->startsWith("\a")) {
         *msg = msg->replace(QRegExp("^\a"),"");
-    }
-
-    QRegExp beep("^[0-9: ]*<Mtp> ([^ ]*) beeps you.*");
-    if (beep.exactMatch(*msg))
         QApplication::beep();
-
-    QRegExp user_out("^[0-9: ]*<Mtp> ([^ ]*) (leaves|disconnects|is kicked out).*");
-    if (user_out.exactMatch(*msg))
-        m_chatpage->removeUser(user_out.cap(1));
-
-    QRegExp user_kick("^[0-9: ]*<Mtp> You kick ([^ ]*) out.*");
-    if (user_kick.exactMatch(*msg))
-        m_chatpage->removeUser(user_kick.cap(1));
-
-    QRegExp user_in("^[0-9: ]*<Mtp> ([^ ]*) (comes in ?!).*");
-    if (user_in.exactMatch(*msg))
-        m_chatpage->addUser(user_in.cap(1));
-
-
-
-    if (msg->startsWith(" Login")) {
-
-        if (who_demanded) {
-            receiving_who = true;
-            displayStderr("Getting informations about connected users");
-            who_demanded = false;
-            enable_stdout = false;
-        }
-        return enable_stdout;
     }
-
-    if (msg->startsWith("-----")) {
-        if(receiving_who)
-            m_chatpage->users_box->clear();
-        return (enable_stdout);
-    }
-
-    if (msg->startsWith("<Mtp> There ")) {
-        bool tmp = this->enable_stdout;
-        this->enable_stdout = true;
-        this->receiving_who = false;
-        m_chatpage->users_box->sort();
-        return tmp;
-    }
-
-    if (receiving_who) {
-        QString login(*msg);
-        m_chatpage->users_box->insertItem(login.replace(QRegExp(" .*"),""));
-        return enable_stdout;
-    }
-
-    //    if (msg->startsWith("<Mtp> Password:"))
-    //        chat_edit->setEchoMode(QLineEdit::Password);
-
     return true;
-}
-
-void ChatSession::getInfo() {
-    who_demanded = true;
-    mng->writeStdin("who all");
 }
 
 QString ChatSession::caseUnsensitive(const QString& msg) {
@@ -342,6 +269,7 @@ void ChatSession::updateFilters() {
 
 void ChatSession::slotReconnect() {
     delete mng;
+    m_chatpage->users_box->clear();
     emit inactive();
     createTelnetManager();
     emit active();

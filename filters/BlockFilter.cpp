@@ -29,9 +29,9 @@ bool BlockFilter::applyTo(QString & msg, Position pos) {
             setResult(applyProcessedRegexpToPattern(re,begin_pattern));
             finished = false;
         }
-            
+
         return match;
-    }    
+    }
     case IN: {
         MtpRegExp re(end_reg);
         bool match_test = re.exactMatch(msg);
@@ -41,11 +41,13 @@ bool BlockFilter::applyTo(QString & msg, Position pos) {
             setResult(applyProcessedRegexpToPattern(re,end_pattern));
         }
         else {
-            MtpRegExp re("^(<.*>)?([^<>]+)(<.*>)?");
+            MtpRegExp re(main_reg);
             bool match = re.exactMatch(msg);
 
             if (match)
                 setResult(applyProcessedRegexpToPattern(re,main_pattern));
+            else
+                setResult(msg);
         return match;
         }
     }}
@@ -59,6 +61,11 @@ void BlockFilter::setInputDependency(InputFilter * in) {
 void BlockFilter::setBeginRegExp(const QString& reg) {
     begin = reg;
     this->beg_reg = MtpRegExp(reg,m_context);
+}
+
+void BlockFilter::setMainRegExp(const QString& reg) {
+    main = reg;
+    this->main_reg = MtpRegExp(reg,m_context);
 }
 
 void BlockFilter::setEndRegExp(const QString& reg) {
@@ -88,6 +95,10 @@ void BlockFilter::setEndPattern(const QString& pat) {
 
 QString BlockFilter::getBeginRegExp() const {
     return begin;
+}
+
+QString BlockFilter::getMainRegExp() const {
+    return main;
 }
 
 QString BlockFilter::getEndRegExp() const {

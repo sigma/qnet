@@ -25,6 +25,7 @@ void MtpFiltersSettings::displayBlock( const QString & name)
     block_begin_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/beginresult"));
     block_end_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/endresult"));
     block_begin->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/begin"));
+    block_main->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/main"));
     block_end->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/end"));
     block_input->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/depend",""));
     block_active_check->setChecked(DomUtil::readBoolEntry(*m_dom,"/filters/" + name + "/active"));
@@ -76,6 +77,7 @@ void MtpFiltersSettings::changedBlock()
     DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/beginresult",block_begin_result->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/endresult",block_end_result->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/begin",block_begin->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/main",block_main->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/end",block_end->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/depend",block_input->text());
     DomUtil::writeBoolEntry(*m_dom,"/filters/" + block_name->text() + "/active",block_active_check->isChecked());
@@ -358,6 +360,7 @@ void MtpFiltersSettings::activateBlock(int index )
         modified_block = false;
     }
     disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_main, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
@@ -367,6 +370,7 @@ void MtpFiltersSettings::activateBlock(int index )
     disconnect(block_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
     displayBlock(block_rules->text(index));
     connect(block_begin, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
+    connect(block_main, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
     connect(block_end, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
     connect(block_input, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
     connect(block_begin_result, SIGNAL(textChanged()), SLOT(slotBlock()));
@@ -449,6 +453,7 @@ void MtpFiltersSettings::slotBlock()
 {
     modified_block = true;
     disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_main, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));    
     disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));

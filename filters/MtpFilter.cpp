@@ -63,6 +63,7 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	BlockFilter* f = new BlockFilter(*it,m_context);
 	f->setBeginRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/begin"));
+	f->setMainRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/main"));
 	f->setEndRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/end"));
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
     f->setBeginPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/beginresult"));
@@ -126,6 +127,7 @@ MtpFilter::~MtpFilter() {
         DomUtil::writeEntry(*m_dom,"/filters/" + name + "/beginresult",(*it)->getBeginPattern());
         DomUtil::writeEntry(*m_dom,"/filters/" + name + "/endresult",(*it)->getEndPattern());
 	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/begin",(*it)->getBeginRegExp());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/main",(*it)->getMainRegExp());
 	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/end",(*it)->getEndRegExp());
 	    if((*it)->getInputDependency())
 		DomUtil::writeEntry(*m_dom,"/filters/" + name + "/depend",(*it)->getInputDependency()->getName());

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>619</width>
-            <height>417</height>
+            <width>631</width>
+            <height>478</height>
         </rect>
     </property>
     <property name="caption">
@@ -212,10 +212,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>6</number>
-                    </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
+                    <widget class="QLayoutWidget" row="0" column="0" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>layout27</cstring>
                         </property>
@@ -313,15 +310,15 @@
                             </spacer>
                         </grid>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="1">
+                    <widget class="QLayoutWidget" row="1" column="1">
                         <property name="name">
-                            <cstring>layout16</cstring>
+                            <cstring>layout19</cstring>
                         </property>
-                        <grid>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel" row="4" column="0">
+                            <widget class="QLabel">
                                 <property name="name">
                                     <cstring>textLabel1_2</cstring>
                                 </property>
@@ -329,39 +326,15 @@
                                     <string>Begin result</string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="1" column="0">
+                            <widget class="QTextEdit">
                                 <property name="name">
-                                    <cstring>begin_label</cstring>
+                                    <cstring>block_begin_result</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Begin line</string>
+                                <property name="textFormat">
+                                    <enum>PlainText</enum>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel9_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Name</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="6" column="0">
-                                <property name="name">
-                                    <cstring>textLabel2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>End result</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>end_label</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>End line</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="8" column="0">
+                            <widget class="QLabel">
                                 <property name="name">
                                     <cstring>textLabel2</cstring>
                                 </property>
@@ -377,12 +350,7 @@
                                     <string>Main result</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="2" column="1">
-                                <property name="name">
-                                    <cstring>block_end</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QTextEdit" row="9" column="0" rowspan="1" colspan="2">
+                            <widget class="QTextEdit">
                                 <property name="name">
                                     <cstring>block_result</cstring>
                                 </property>
@@ -390,12 +358,15 @@
                                     <enum>PlainText</enum>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit" row="1" column="1">
+                            <widget class="QLabel">
                                 <property name="name">
-                                    <cstring>block_begin</cstring>
+                                    <cstring>textLabel2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>End result</string>
                                 </property>
                             </widget>
-                            <widget class="QTextEdit" row="7" column="0" rowspan="1" colspan="2">
+                            <widget class="QTextEdit">
                                 <property name="name">
                                     <cstring>block_end_result</cstring>
                                 </property>
@@ -403,36 +374,105 @@
                                     <enum>PlainText</enum>
                                 </property>
                             </widget>
-                            <widget class="QTextEdit" row="5" column="0" rowspan="1" colspan="2">
+                        </vbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="1">
+                        <property name="name">
+                            <cstring>layout18</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>block_begin_result</cstring>
+                                    <cstring>layout16</cstring>
                                 </property>
-                                <property name="textFormat">
-                                    <enum>PlainText</enum>
-                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>TextLabel9_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Name</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>begin_label</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Begin line</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Main line</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>end_label</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>End line</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>input_label</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Related input (opt)</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
                             </widget>
-                            <widget class="QLabel" row="3" column="0">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>input_label</cstring>
+                                    <cstring>layout17</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Related input (opt)</string>
-                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>block_name</cstring>
+                                        </property>
+                                        <property name="readOnly">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>block_begin</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>block_main</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>block_end</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>block_input</cstring>
+                                        </property>
+                                    </widget>
+                                </vbox>
                             </widget>
-                            <widget class="QLineEdit" row="3" column="1">
-                                <property name="name">
-                                    <cstring>block_input</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>block_name</cstring>
-                                </property>
-                                <property name="readOnly">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                        </grid>
+                        </hbox>
                     </widget>
                 </grid>
             </widget>
