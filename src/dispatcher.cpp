@@ -1,7 +1,7 @@
 /*
  *  File: dispatcher.cpp
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 18:27:18 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:43:52 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -42,7 +42,7 @@ void Dispatcher::appendText(const QString& str) {
 
 void Dispatcher::appendLine(const QString& l) {
     for(AreaList::Iterator it = areas.begin(); it != areas.end(); ++it) {
-        (*it)->getOutput()->display(l);
+        (*it)->display(l);
     }
     cursor.insertBlock();
     cursor.insertText(l);

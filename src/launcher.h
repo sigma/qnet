@@ -1,7 +1,7 @@
 /*
  *  File: launcher.h
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <21/01/2005 15:44:54 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:44:37 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -35,7 +35,7 @@ private:
     MtpArea *ed;
     Dispatcher *d;
 
-public slots:
+public:
     Launcher(int & argc, char ** argv);
     ~Launcher();
 
