@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'chatpage.ui'
 **
 ** Created: Mon Jan 6 19:27:11 2003
-**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.4 2003/05/06 07:11:36 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.5 2003/12/28 20:47:59 uid66908 Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -40,29 +40,30 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
   
  
     chat_view = new MtpBrowser(hsplit,"chat_view");
+    chat_view->setMinimumSize( QSize( 525, 330 ) );
     users_box = new QListBox(hsplit,"users_box");
 
     users_box->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
-    users_box->setMinimumSize( QSize( 75, 200 ) );
+    users_box->setMinimumSize( QSize( 75, 330 ) );
 
     chat_edit = new QTextEdit(vsplit,"chat_edit");
 
     chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
-    chat_edit->setMinimumSize( QSize( 300, 50 ) );
+    chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
    
-    QValueList<int> list = vsplit->sizes();
-    int tmp = list[1];
-    list[1] = 0; // Strange things happend here...
-    list[0] += tmp-list[1];
-    vsplit->setSizes(list);
+//     QValueList<int> list = vsplit->sizes();
+//     int tmp = list[1];
+//     list[1] = 0; // Strange things happend here...
+//     list[0] += tmp-list[1];
+//     vsplit->setSizes(list);
     
-    list = hsplit->sizes();
-    tmp = list[1];
-    list[1] = 0; // Strange things happend here...
-    list[0] += tmp-list[1];
-    hsplit->setSizes(list);  
+//     list = hsplit->sizes();
+//     tmp = list[1];
+//     list[1] = 0; // Strange things happend here...
+//     list[0] += tmp-list[1];
+//     hsplit->setSizes(list);  
     
        ChatPageLayout->addWidget(vsplit,0,0);
        /* 
@@ -86,7 +87,7 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
     ChatPageLayout->addWidget( chat_view, 0, 0 );
     languageChange();
     */
-    resize( QSize(573, 361).expandedTo(minimumSizeHint()) );
+    resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
     repaint();
 }
 

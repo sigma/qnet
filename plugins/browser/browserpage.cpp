@@ -32,7 +32,7 @@ BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
 
     BrowserPageBaseLayout->addWidget( chat_view, 0, 0 );
     languageChange();
-    resize( QSize(573, 361).expandedTo(minimumSizeHint()) );
+    resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
 
     chat_view->setTextFormat(Qt::RichText);
 
