@@ -1,7 +1,7 @@
 /*
  *  File: launcher.cpp
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <20/01/2005 20:50:26 Yann Hodique>
+ *  Time-stamp: <21/01/2005 14:08:06 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -18,6 +18,16 @@
 #include "launcher.h"
 #include "dispatcher.h"
 #include "mtpsocket.h"
+#include "mainwindow.h"
+#include "floatingtab.h"
+#include "mtpprotocol.h"
+#include "mtparea.h"
+
+Launcher::Launcher(int & argc, char ** argv) : QApplication(argc,argv) {
+    ed = 0;
+}
+
+Launcher::~Launcher() {}
 
 void Launcher::init() {
     MtpSocket * s = new MtpSocket(this);
