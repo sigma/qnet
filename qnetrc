@@ -10,6 +10,8 @@
    <file>/path/to/libbrowser.so</file>
    <file>/path/to/libdrawing.so</file>
    <file>/path/libsplash.so</file>
+   <file>/path/libid.so</file>
+   <file>/path/libaffect.so</file>
   </plugins>
   <filters>
    <input>
@@ -78,7 +80,7 @@
  <filters>
   <format>
    <active>true</active>
-   <policy>17</policy>
+   <policy>0</policy>
    <result>&lt;mypre>\0\&lt;/mypre></result>
   </format>
   <wall>
@@ -112,13 +114,13 @@
   </test_file>
   <ignore_warning>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result></result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  \w+ is away and may not be hearing you(&lt;.*>)?</regexp>
   </ignore_warning>
   <join_dessin>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\0\
 :drawing:Dessin:
 :affect:Affectations:channel=Dessin</result>
@@ -126,90 +128,90 @@
   </join_dessin>
   <join_others>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\0\
 :affect:Affectations:channel=\3\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You join channel (\w+)(&lt;.*>)?</regexp>
   </join_others>
   <leave_channel>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\0\
 :affect:Affectations:channel=Hall</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You leave channel (\w+)(&lt;.*>)?</regexp>
   </leave_channel>
   <draw_other>
    <active>true</active>
-   <policy>16</policy>
+   <policy>0</policy>
    <result>:drawing:Dessin:\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \w+&amp;gt  )(\}[LCT][^&lt;]*)(&lt;.*>)?</regexp>
   </draw_other>
   <tell_receive>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>:tell:\4\: \1\&amp;lt \4\&amp;gt \6\\7\
 :splash:spl:&lt;\4\> \6\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (tells you:|asks you:|replies:)([^&lt;]*)(&lt;.*>)?</regexp>
   </tell_receive>
   <tell_emit>
    <active>true</active>
-   <policy>3407964</policy>
+   <policy>0</policy>
    <result>:tell:\4\: \1\&lt;font color=darkblue>&amp;lt \Login\&amp;gt \6\&lt;/font>\7\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You (tell|ask|reply to) (\w+)(:)(.*)(&lt;.*>)?</regexp>
   </tell_emit>
   <notify_moves>
    <active>true</active>
-   <policy>2097244</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=blue>\2\\3\\4\ \5\\6\\7\&lt;/font>
 :tell?:\4\: \1\&lt;font color=blue>\3\\4\ \5\\6\&lt;/font>\7\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (is away|is back|leaves|disconnects|is kicked out|comes in)(.*)(&lt;.*>)?</regexp>
   </notify_moves>
   <mytalk>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=darkblue>\2\\3\&lt;/font>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \login\&amp;gt .*)(&lt;.*>)?</regexp>
   </mytalk>
   <emote>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=darkgreen>\2\\3\&lt;/font>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  \*.*)(&lt;.*>)?</regexp>
   </emote>
   <me>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=red>\2\\3\&lt;/font>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt .*you:.*)(&lt;.*>)?</regexp>
   </me>
   <other>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=magenta>\2\\3\&lt;/font>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  You.*)(&lt;.*>)?</regexp>
   </other>
   <server>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=blue>\2\\3\&lt;/font>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt .*)(&lt;.*>)?</regexp>
   </server>
   <aboutme>
    <active>true</active>
-   <policy>4063348</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=red>\2\\3\\4\\5\&lt;/font>
 :splash:spl:\2\\3\\4\</result>
    <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt .*\login\[^&lt;]*)(&lt;.*>)?</regexp>
   </aboutme>
   <aboutme2>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=red>\2\&lt;/font></result>
    <regexp>(:\w+:\w+:)?(.*\login\.*)</regexp>
   </aboutme2>
   <default>
    <active>true</active>
-   <policy>2147483647</policy>
+   <policy>0</policy>
    <result>\1\&lt;font color=black>\2\&lt;/font></result>
    <regexp>(:\w+:\w+:)?(.*)</regexp>
   </default>
@@ -222,7 +224,7 @@
   </urls>
   <wall_emit>
    <active>true</active>
-   <policy>17</policy>
+   <policy>1</policy>
    <result>\0\</result>
    <regexp>wall</regexp>
    <memorize>true</memorize>
