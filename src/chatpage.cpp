@@ -1,11 +1,12 @@
-/****************************************************************************
-** Form implementation generated from reading ui file 'chatpage.ui'
-**
-** Created: Mon Jan 6 19:27:11 2003
-**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.5 2003/12/28 20:47:59 uid66908 Exp $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
+/***************************************************************************
+ *   Copyright (C) 2002 by Yann Hodique                                    *
+ *   Yann.Hodique@lifl.fr                                                  *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
 
 #include "chatpage.h"
 
@@ -20,6 +21,7 @@
 
 #include <qsplitter.h>
 #include <qvaluelist.h>
+#include <qaction.h>
 
 #include "mtpbrowser.h"
 
@@ -52,43 +54,56 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
     chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
-   
-//     QValueList<int> list = vsplit->sizes();
-//     int tmp = list[1];
-//     list[1] = 0; // Strange things happend here...
-//     list[0] += tmp-list[1];
-//     vsplit->setSizes(list);
-    
-//     list = hsplit->sizes();
-//     tmp = list[1];
-//     list[1] = 0; // Strange things happend here...
-//     list[0] += tmp-list[1];
-//     hsplit->setSizes(list);  
-    
-       ChatPageLayout->addWidget(vsplit,0,0);
-       /* 
-    ChatPageLayout = new QGridLayout( this, 1, 1, 6, 6, "ChatPageLayout"); 
+    ChatPageLayout->addWidget(vsplit,0,0);
 
-    chat_edit = new QTextEdit( this, "chat_edit" );
-    chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
-    chat_edit->setMaximumSize( QSize( 32767, 50 ) );
-    chat_edit->setFrameShape( QTextEdit::LineEditPanel );
-
-    ChatPageLayout->addMultiCellWidget( chat_edit, 1, 1, 0, 1 );
-
-    users_box = new QListBox( this, "users_box" );
-    users_box->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
-    users_box->setMaximumSize( QSize( 75, 32767 ) );
-
-    ChatPageLayout->addWidget( users_box, 0, 1 );
-
-    chat_view = new MtpBrowser( this, "chat_view" );
-
-    ChatPageLayout->addWidget( chat_view, 0, 0 );
-    languageChange();
-    */
     resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
     repaint();
+
+    chat_view->setTextFormat(Qt::RichText);
+
+    chat_view->setWrapPolicy(QTextBrowser::Anywhere);
+    chat_view->setLinkUnderline(true);
+
+    history_up = new QAction(chat_edit,"up");
+    history_up->setAccel(QKeySequence(SHIFT + Key_Up));
+    history_down = new QAction(chat_edit,"down");
+    history_down->setAccel(QKeySequence(SHIFT + Key_Down));
+    new_line = new QAction(chat_edit,"new");
+    new_line->setAccel(QKeySequence(CTRL + Key_Return));
+
+    pgup = new QAction(chat_edit,"pgup");
+    pgup->setAccel(QKeySequence(Key_PageUp));
+    pgdown = new QAction(chat_edit,"pgdown");
+    pgdown->setAccel(QKeySequence(Key_PageDown));
+
+    connect(history_up, SIGNAL(activated()),
+            this, SLOT(slotHistoryUp()));
+    connect(history_down, SIGNAL(activated()),
+            this, SLOT(slotHistoryDown()));
+    connect(new_line, SIGNAL(activated()),
+            this, SLOT(slotNewLine()));
+
+    connect(chat_view,SIGNAL(linkClicked(const QString &)),
+            this, SLOT(slotLinkClicked(const QString &)));
+
+    connect(chat_edit, SIGNAL(returnPressed()),
+            this, SLOT(returnPressed()));
+
+    connect(pgup,SIGNAL(activated()),
+            this,SLOT(slotPageUp()));
+    connect(pgdown,SIGNAL(activated()),
+            this,SLOT(slotPageDown()));
+
+//     connect(users_box, SIGNAL(doubleClicked(QListBoxItem*)),
+//             this,SLOT(slotUserDoubleClicked(QListBoxItem*)));
+    
+    chat_edit->setFocus();
+    chat_edit->setWordWrap(QTextEdit::NoWrap);
+    chat_edit->setTextFormat(Qt::PlainText);
+
+    history_iterator = 0;
+
+    setFocusProxy(chat_edit);
 }
 
 /*
@@ -105,12 +120,59 @@ ChatPage::~ChatPage()
  */
 void ChatPage::languageChange()
 {
-    setCaption( tr( "Form1" ) );
+    setCaption( tr( "ChatPage" ) );
     QToolTip::add( chat_edit, tr( "SHIFT+UP/DOWN for history - CTRL+ENTER to insert a new line" ) );
 }
 
 void ChatPage::returnPressed()
 {
     qWarning( "ChatPage::returnPressed(): Not implemented yet" );
+}
+
+void ChatPage::ensureFocus() {
+    chat_edit->setFocus();
+}
+
+void ChatPage::slotHistoryUp() {
+
+    if (history_iterator == 0)
+        history_iterator=history.begin();
+    else if (history_iterator != (--history.end()))
+        history_iterator++;
+    chat_edit->setText(*history_iterator);
+}
+
+void ChatPage::slotHistoryDown() {
+    if( history_iterator == 0)
+        return;
+    if (history_iterator != history.begin()) {
+        history_iterator--;
+        chat_edit->setText(*history_iterator);
+    } else {
+        chat_edit->clear();
+        history_iterator = 0;
+    }
+}
+
+void ChatPage::slotNewLine() {
+    chat_edit->doKeyboardAction(QTextEdit::ActionReturn);
+}
+
+void ChatPage::slotPageUp() {
+    chat_view->moveCursor(QTextEdit::MovePgUp,false);
+}
+
+void ChatPage::slotPageDown() {
+    chat_view->moveCursor(QTextEdit::MovePgDown,false);
+}
+
+void ChatPage::addUser(const QString& name) {
+    users_box->insertItem(name);
+    users_box->sort();
+}
+
+void ChatPage::removeUser(const QString& name) {
+    QListBoxItem * item = users_box->findItem(name,Qt::ExactMatch);
+    delete item;
 }
 

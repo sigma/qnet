@@ -22,10 +22,8 @@
 #include "master.h"
 
 class QProcess;
-class QAction;
 class QString;
 class QStringList;
-class QStyleSheetItem;
 class TelnetManager;
 class MtpSettings;
 class QMtp;
@@ -52,21 +50,14 @@ public slots:
     void returnPressed();
     void closeSession();
     void slotLinkClicked(const QString &);
-    void slotHistoryUp();
-    void slotHistoryDown();
-    void slotNewLine();
     void slotComplete();
     void slotReconnect();
-    void slotPageUp();
-    void slotPageDown();
 
     void slotUserDoubleClicked(QListBoxItem*);
         
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString &);
-
-    void ensureFocus();
     
 private:
     void escape(QString * msg);
@@ -74,10 +65,7 @@ private:
     bool filter(QString * msg);
     void getInfo();
 
-    QString caseUnsensitive(const QString& msg);
-    
-    void removeUser(const QString&);
-    void addUser(const QString&);
+    QString caseUnsensitive(const QString& msg);    
 
     void executeShellCommand(const QString&);
     void createTelnetManager();
@@ -93,24 +81,18 @@ private:
     bool receiving_who;
     int position;
 
-    QString doc_source;
-
-    QAction *history_up, *history_down, *new_line, *complete, *reconnect, *pgup, *pgdown;
-    QStringList history;
-    QStringList::Iterator history_iterator;
     QString host, port, session_name;
 
+    QAction *complete, *reconnect;
+    
     QDomDocument * m_dom;
     MtpFilter * m_filter;
 //    MtpContext * m_context;
     std::vector<Page *> brothers;
-
-signals:
-	void textDisplayed(QWidget *);
+    
 private slots:
 	void deleteProcess();
-signals:
-	void outputMessage(const QString& );
+
 };
 
 #endif

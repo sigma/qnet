@@ -7,30 +7,30 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-
-#include "ChatSession.h"
-#include "telnetmanager.h"
+#include <qglobal.h>
+#include <qaction.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qregexp.h>
-#include <qstylesheet.h>
-#include <qaction.h>
 #include <qkeysequence.h>
 #include <qprocess.h>
-#include "mtpbrowser.h"
 #include <qlineedit.h>
 #include <qlistbox.h>
+#include <qmessagebox.h>
+#include <qtextedit.h>
+#include <qapplication.h>
+
 #include <iostream>
+
+#include "ChatSession.h"
+#include "telnetmanager.h"
+#include "mtpbrowser.h"
 #include "mtpfilterssettings.h"
 #include "qnet.h"
 #include "domutil.h"
 #include "MtpFilter.h"
 #include "MtpContext.h"
-#include <qmessagebox.h>
-#include <qtextedit.h>
-#include <qapplication.h>
 #include "page.h"
-#include <qglobal.h>
 
 ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
         : ChatPage(parent, name) {
@@ -41,47 +41,19 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     this->m_dom = dom;
     this->session_name = session_name;
 
-/*    mng = new TelnetManager(this);
-    mng->setArgs(host,port);
-    mng->setLogin(DomUtil::readEntry(*dom,"/sessions/" + session_name + "/login",""));
-    mng->setPassword(DomUtil::readEntry(*dom,"/sessions/" + session_name + "/password",""));
-    mng->start();*/
-    
     createTelnetManager();
 
     displayStderr("Connecting to " + host + ":" + port);
-
-    chat_view->setTextFormat(Qt::RichText);
-
-    chat_view->setWrapPolicy(QTextBrowser::Anywhere);
-    chat_view->setLinkUnderline(true);
 
     login_set = false;
     enable_stdout = true;
     receiving_who = false;
     position = 0;
 
-    history_up = new QAction(chat_edit,"up");
-    history_up->setAccel(QKeySequence(SHIFT + Key_Up));
-    history_down = new QAction(chat_edit,"down");
-    history_down->setAccel(QKeySequence(SHIFT + Key_Down));
-    new_line = new QAction(chat_edit,"new");
-    new_line->setAccel(QKeySequence(CTRL + Key_Return));
     complete = new QAction(chat_edit,"complete");
     complete->setAccel(QKeySequence(Key_Tab));
     reconnect = new QAction(this,"reconnect");
     reconnect->setAccel(QKeySequence(CTRL + Key_R));
-    pgup = new QAction(chat_edit,"pgup");
-    pgup->setAccel(QKeySequence(Key_PageUp));
-    pgdown = new QAction(chat_edit,"pgdown");
-    pgdown->setAccel(QKeySequence(Key_PageDown));
-
-    connect(history_up, SIGNAL(activated()),
-            this, SLOT(slotHistoryUp()));
-    connect(history_down, SIGNAL(activated()),
-            this, SLOT(slotHistoryDown()));
-    connect(new_line, SIGNAL(activated()),
-            this, SLOT(slotNewLine()));
     connect(complete, SIGNAL(activated()),
             this, SLOT(slotComplete()));
     connect(reconnect, SIGNAL(activated()),
@@ -90,37 +62,13 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     connect(mng, SIGNAL(processExited()),
             this, SLOT(closeSession()));
 
-    connect(chat_view,SIGNAL(linkClicked(const QString &)),
-            this, SLOT(slotLinkClicked(const QString &)));
-
-    connect(chat_edit, SIGNAL(returnPressed()),
-            this, SLOT(returnPressed()));
-
-    connect(pgup,SIGNAL(activated()),
-            this,SLOT(slotPageUp()));
-    connect(pgdown,SIGNAL(activated()),
-            this,SLOT(slotPageDown()));
-
-//     connect(users_box, SIGNAL(doubleClicked(QListBoxItem*)),
-//             this,SLOT(slotUserDoubleClicked(QListBoxItem*)));
-    
-    chat_edit->setFocus();
-    chat_edit->setWordWrap(QTextEdit::NoWrap);
-    chat_edit->setTextFormat(Qt::PlainText);
-
-    doc_source = chat_view->source();
-    history_iterator = 0;
-
-    //proc = new QProcess(this);
     m_filter = new MtpFilter(dom,context());
-//    context() = new MtpContext();
 
-    setFocusProxy(chat_edit);
+    chat_edit->setUndoRedoEnabled(false);
 }
 
 
 ChatSession::~ChatSession() {
-    //delete mng;
     delete m_filter;
     for (std::vector<Page*>::iterator it = brothers.begin(); it != brothers.end(); ++it)
         delete (*it);
@@ -158,6 +106,7 @@ void ChatSession::displayStdout(const QString& msg) {
 
         position += new_m.length();
         login_set = true;
+        chat_edit->setUndoRedoEnabled(true);
         mng->writeStdin(QString("set client ") + CLIENT);
         getInfo();
     } else if(filter(&m)) {
@@ -280,10 +229,6 @@ void ChatSession::send(const QString & m) {
 
 }
 
-void ChatSession::ensureFocus() {
-    chat_edit->setFocus();
-}
-
 void ChatSession::closeSession() {
     QMessageBox::information(this,"Connection lost","Lost connection with host " + host);
 }
@@ -294,31 +239,6 @@ void ChatSession::slotLinkClicked(const QString & link) {
     for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
         if(link.startsWith(*it))
             executeShellCommand(DomUtil::readEntry(*m_dom,QString("/urls/" + *it + "/command")).replace(QRegExp("%l"),link));
-}
-
-void ChatSession::slotHistoryUp() {
-
-    if (history_iterator == 0)
-        history_iterator=history.begin();
-    else if (history_iterator != (--history.end()))
-        history_iterator++;
-    chat_edit->setText(*history_iterator);
-}
-
-void ChatSession::slotHistoryDown() {
-    if( history_iterator == 0)
-        return;
-    if (history_iterator != history.begin()) {
-        history_iterator--;
-        chat_edit->setText(*history_iterator);
-    } else {
-        chat_edit->clear();
-        history_iterator = 0;
-    }
-}
-
-void ChatSession::slotNewLine() {
-    chat_edit->doKeyboardAction(QTextEdit::ActionReturn);
 }
 
 void ChatSession::slotComplete() {
@@ -357,14 +277,6 @@ void ChatSession::slotReconnect() {
     emit inactive();
     createTelnetManager();
     emit active();
-}
-
-void ChatSession::slotPageUp() {
-    chat_view->moveCursor(QTextEdit::MovePgUp,false);
-}
-
-void ChatSession::slotPageDown() {
-    chat_view->moveCursor(QTextEdit::MovePgDown,false);
 }
 
 void ChatSession::slotUserDoubleClicked(QListBoxItem* item) {
@@ -455,16 +367,6 @@ QString ChatSession::caseUnsensitive(const QString& msg) {
     for (unsigned int i = 0; i<msg.length(); i++)
         res += "[" + up.at(i) + low.at(i) + "]";
     return res;
-}
-
-void ChatSession::addUser(const QString& name) {
-    users_box->insertItem(name);
-    users_box->sort();
-}
-
-void ChatSession::removeUser(const QString& name) {
-    QListBoxItem * item = users_box->findItem(name,Qt::ExactMatch);
-    delete item;
 }
 
 void ChatSession::executeShellCommand(const QString& com) {
