@@ -17,24 +17,20 @@
 #include "qnet.h"
 
 #include "qnet_guile_wrap.cxx"
-#include "guile_global.h"
+#include <scm.h>
 
 MainWin * main_window;
 
-SCM init(void *) {
-    return scm_primitive_load(scm_makfrom0str((QDir::homeDirPath() + "/.qnet.scm").ascii()));
-}
-
 void guile_global_init() {
-    guile_chatsession_created_hook=scm_make_hook(SCM_MAKINUM(0));
-    scm_c_define("chatsession-created-hook",guile_chatsession_created_hook);
-    guile_chatsession_output_hook=scm_make_hook(SCM_MAKINUM(1));
-    scm_c_define("chatsession-output-hook",guile_chatsession_output_hook);
+    Scm *scm = Scm::getInstance();
+    scm->createHook("chatsession-created-hook",0);
+    scm->createHook("chatsession-output-hook",1);
 }
 
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
     QString rc;
+    Scm *scm = Scm::getInstance();
 
     scm_init_guile();
     scm_init_internal_module();
@@ -55,12 +51,9 @@ int main( int argc, char ** argv ) {
         }
     }
     main_window = new MainWin(false,false,"main_window",rc);
-
-    scm_internal_catch (SCM_BOOL_T,
-                        init, NULL,
-                        scm_handle_by_message_noexit, NULL);
-
     main_window->setUseDock();
+
+    scm->loadFile(QDir::homeDirPath() + "/.qnet.scm");
 
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     a.connect( main_window, SIGNAL(closeProgram()), &a, SLOT(quit()) );

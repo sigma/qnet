@@ -52,9 +52,10 @@
   (set! font-lock-blocks
         (append font-lock-blocks list)))
 
-
+;; todo: make this function smarter (accept various formats) by pre-formatting l
 (defun font-lock ()
-  (let* ((n (- (qnet-sessions-number mtp) 1))
+  "fontify last opened session"
+  (let* ((n (- (qnet-sessions-number mtp) 1)) ;; fixme
          (lock (chat-page-font-lock (chatsession-chatpage (qnet-session mtp n)))))
     (map (lambda (l)
            (let ((pat (new-pattern (car l))))

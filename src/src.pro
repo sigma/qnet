@@ -48,8 +48,7 @@ HEADERS += ../inc/all.h \
            appearancesettings.ui.h \
            mtpfilterssettings.ui.h \
            trayicon.h \
-           mainwin.h \
-           guile_global.h
+           mainwin.h
 PRECOMPILED_HEADER = ../inc/all.h
 IMAGES += images/filenew \
           images/fileopen \

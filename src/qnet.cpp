@@ -27,8 +27,7 @@
 #include <qprocess.h>
 
 #include <dlfcn.h>
-
-#include <libguile.h>
+#include <scm.h>
 
 #include "qnet.h"
 #include "connectionbox.h"
@@ -620,8 +619,6 @@ void QMtp::loadStyleSheet() {
     QStyleSheet::setDefaultSheet(qnet_style);
 }
 
-extern SCM guile_chatsession_created_hook;
-
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
     session->chatpage()->toggleUserMenu(false);
@@ -633,7 +630,7 @@ void QMtp::launchSession(const QString& name) {
     connect(session->chatpage(), SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
 
-    scm_c_run_hook(guile_chatsession_created_hook, SCM_EOL);
+    Scm::getInstance()->runHook("chatsession-created-hook", SCM_EOL);
 }
 
 void QMtp::launchSession(int index) {

@@ -19,7 +19,7 @@
 #include <qtextedit.h>
 #include <qapplication.h>
 
-#include <libguile.h>
+#include <scm.h>
 
 #include "ChatSession.h"
 #include "telnetmanager.h"
@@ -51,6 +51,7 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
 
     m_filter = new MtpFilter(dom,context());
     m_chatpage = new MainChatPage(parent,name,this);
+    m_scm = Scm::getInstance();
 
     connect(m_chatpage, SIGNAL(destroyed()),
             this, SLOT(deleteLater()));
@@ -66,10 +67,9 @@ void ChatSession::displayStderr(const QString& msg) {
     mtp->system_view->append("["+ host + ":" + port + "]" + msg);
 }
 
-extern SCM guile_chatsession_output_hook;
 void ChatSession::displayStdout(const QString& msg) {
+    m_scm->runHook("chatsession-output-hook", SCM_EOL);
 
-    scm_c_run_hook(guile_chatsession_output_hook, scm_cons(scm_makfrom0str(msg.ascii()),SCM_EOL));
     emit outputMessage(msg);
     QString m(msg);
     QString output;
@@ -172,7 +172,6 @@ void ChatSession::send(const QString& m) {
         QString to_send(prefix + m);
         mng->writeStdin(Filter::expandVars(m_filter->filterIn(to_send),context()));
     }
-
 }
 
 void ChatSession::closeSession() {

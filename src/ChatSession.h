@@ -29,6 +29,7 @@ class QResizeEvent;
 class MtpFilter;
 class MtpContext;
 class Page;
+class Scm;
 
 class ChatSession : public Master {
     Q_OBJECT
@@ -81,6 +82,7 @@ private:
     std::vector<Page *> brothers;
 
     MainChatPage *m_chatpage;
+    Scm *m_scm;
 
 private slots:
 	void deleteProcess();

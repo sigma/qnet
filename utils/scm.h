@@ -1,7 +1,7 @@
 /*
  *  File: scm.h
  *  Created: Saturday, October 2, 2004
- *  Time-stamp: <02/10/2004 10:11:35 Yann Hodique>
+ *  Time-stamp: <24/10/2004 10:17:23 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -18,17 +18,33 @@
 #ifndef _SCM_H_
 #define _SCM_H_
 
+#include <libguile.h>
+
+#include <qstring.h>
+#include <qmap.h>
+
 class Scm {
 public:
 
     static Scm *getInstance();
 
+    typedef QMap<QString,SCM> SymbolsMap;
+
+    SCM loadFile(const QString&);
+    SCM runHook(const QString&, SCM);
+    void createHook(const QString&, unsigned int);
+    SCM resolve(const QString&);
+
 private:
-    Scm(); //the default constructor()
-    ~Scm(); //the destructor
+    Scm();
+    ~Scm() {};
+
+    SCM protect(scm_t_catch_body body, void *body_data);
 
     static Scm *m_scm;
     static bool instantiated;
+
+    SymbolsMap sym;
 };	// end of class Scm
 
 
