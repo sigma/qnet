@@ -4,8 +4,14 @@
 
 %rename(face) Face;
 class Face {
+    %rename(default_face) defaultFace;
+    %rename(set_default_face) setDefaultFace;
 public:
     Face(const QString& family, const QString& color, int size, int weight, int italic);
+
+    static const Face& defaultFace() {return default_face;}
+    static void setDefaultFace(const Face& f) {default_face = f;}
+
 };
 
 %rename(pattern) Pattern;

@@ -28,8 +28,6 @@
 
 #include "launcher.h"
 #include "scm.h"
-#include "fontlock.h"
-#include "mode.h"
 #include "mainwindow.h"
 
 MainWindow * mw;
@@ -72,16 +70,6 @@ int main(int argc, char **argv)
     mw = new MainWindow(0,0,false);
     app.setMainWidget(mw);
     mw->show();
-
-    Face f("fixed","black");
-    Face::setDefaultFace(f);
-    Mode *m = Mode::getMode("MtpBrowser");
-    Pattern p1("Mtp");
-    p1.add(0,Face("fixed","blue"));
-    m->getFontLock()->addPattern(p1);
-    Pattern p2("help");
-    p2.add(0,Face("fixed","red"));
-    m->getFontLock()->addPattern(p2);
 
     app.init();
 

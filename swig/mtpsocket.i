@@ -3,10 +3,9 @@
 %}
 
 %rename(mtpsocket) MtpSocket;
-class MtpSocket {
+class MtpSocket : public QIODevice {
 public:
-    MtpSocket(QObject *parent = 0);
-    ~MtpSocket();
+    MtpSocket(QObject* parent = 0);
 
     %rename(set_host) setHost(const QString& h);
     %rename(set_port) setPort(int p);

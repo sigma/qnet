@@ -25,4 +25,6 @@ QT += network
 MOC_DIR=./.moc
 OBJECTS_DIR=./.obj
 
-LIBS += -lswig -L../swig
+LIBS += -L../swig -lswig
+
+POST_TARGETDEPS += ../swig/libswig.a

@@ -1,7 +1,7 @@
 /*
  *  File: launcher.cpp
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <21/01/2005 14:08:06 Yann Hodique>
+ *  Time-stamp: <22/01/2005 09:24:09 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -22,6 +22,8 @@
 #include "floatingtab.h"
 #include "mtpprotocol.h"
 #include "mtparea.h"
+#include "fontlock.h"
+#include "mode.h"
 
 Launcher::Launcher(int & argc, char ** argv) : QApplication(argc,argv) {
     ed = 0;
@@ -30,6 +32,7 @@ Launcher::Launcher(int & argc, char ** argv) : QApplication(argc,argv) {
 Launcher::~Launcher() {}
 
 void Launcher::init() {
+
     MtpSocket * s = new MtpSocket(this);
     s->setHost("localhost");
     s->setPort(5000);
@@ -48,7 +51,7 @@ void Launcher::init() {
 
     MainWindow * mw = qt_cast<MainWindow*>(mainWidget());
     if(mw) {
-        FloatingTab * ft = qt_cast<FloatingTab*>(mw->centralWidget());
+        FloatingTab * ft = mw->getFloatingTab();
         ed = new MtpArea;
         if(ft) {
             ft->addTab(ed,"plip");
