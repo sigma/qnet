@@ -11,6 +11,7 @@
 #include <iostream>
 #include <qapplication.h>
 #include <qdir.h>
+#include <unistd.h>
 
 #include "mainwin.h"
 #include "qnet.h"
