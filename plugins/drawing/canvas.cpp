@@ -1,5 +1,5 @@
 /****************************************************************************
-** 
+**
 ** Copyright ( C ) 2002 Yann Hodique <Yann.Hodique@lifl.fr>.
 ** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -105,8 +105,10 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
 	    QString text = QInputDialog::getText("Text Input","Enter text");
 	    painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
 			     Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
-	    description = QString("}T 0x%1 %2 %3 fixed %4").arg(penColor().rgb()-0xff000000,0,16)
-			  .arg(min(q.x(),p.x())).arg(min(q.y(),p.y())).arg(text);
+	    description = QString("}T 0x%1 %2 %3 %4 %5 %6").arg(penColor().rgb()-0xff000000,0,16)
+            .arg(min(q.x(),p.x())).arg(min(q.y(),p.y()))
+            .arg(max(q.x(),p.x())).arg(max(q.y(),p.y()))
+            .arg(text);
 	}
 	else {
 	    painter.drawRect(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()));
@@ -139,13 +141,13 @@ void Canvas::draw(Shape s, const QColor & col, const QPoint & q, const QPoint & 
 	buffer.fill( colorGroup().base() );
 	bitBlt( &buffer, 0, 0, &tmp, 0, 0, tmp.width(), tmp.height() );
     }
-    
+
     QPainter painter;
     painter.begin( &buffer );
     QPen mpen(col,width);
     painter.setPen(mpen);
 
-    
+
     QPointArray parray(2);
 
     switch (s) {
@@ -165,10 +167,10 @@ void Canvas::draw(Shape s, const QColor & col, const QPoint & q, const QPoint & 
         }
         break;
     case TEXT:
-	painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
-			 Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
-	parray[1] = q;
-	parray[0] = p;
+        painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
+                         Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
+        parray[1] = q;
+        parray[0] = p;
         break;
     }
 
