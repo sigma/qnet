@@ -1,7 +1,7 @@
 /*
  *  File: MainChatPage.cpp
  *  Created: Wednesday, April 14, 2004
- *  Time-stamp: <22/04/2004 20:27:06 Yann Hodique>
+ *  Time-stamp: <15/05/2004 23:38:36 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -32,7 +32,7 @@ MainChatPage::MainChatPage(QWidget *parent, const char *name, Master *master) :
     connect(reconnect, SIGNAL(activated()),
             this, SLOT(slotReconnect()));
 
-    chat_edit->setUndoRedoEnabled(false);
+//    chat_edit->setUndoRedoEnabled(false);
 }
 
 MainChatPage::~MainChatPage() {}
@@ -42,8 +42,8 @@ void MainChatPage::returnPressed() {
     // delete this $#!@? "\n" we've just inserted
     chat_edit->doKeyboardAction(QTextEdit::ActionBackspace);
 
-    // put in history if and ONLY if password is already set...
-    if (getMaster()->isLogged() && (chat_edit->text() != history[0]))
+    // put in history
+    if (chat_edit->text() != history[0])
         history.push_front(chat_edit->text());
 
     QString m(chat_edit->text());

@@ -29,7 +29,7 @@ Splash::Splash(QWidget * /*parent*/, const char *name, Master * session)
     m_label = new QLabel(this);
     m_label->setPaletteBackgroundColor(QColor("lightgrey"));
 
-    setFocusPolicy(QWidget::NoFocus);
+    m_label->setFocusPolicy(QWidget::NoFocus);
     m_timer = new QTimer(this);
     time = 3000;
 
