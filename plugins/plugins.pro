@@ -12,5 +12,4 @@ SUBDIRS += tell \
            splash \
            id \
            affect \
-           emit \
-           ptime 
+           emit
