@@ -70,4 +70,5 @@ FORMS += qnet_base.ui \
          urlsettingsbase.ui \
          prefixsettingsbase.ui \
          fortunesettings.ui \
-         appearancesettings.ui 
+         appearancesettings.ui \
+         idform.ui 
