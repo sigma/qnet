@@ -33,7 +33,7 @@ int main( int argc, char ** argv ) {
     }
     MainWin* m = new MainWin(false,false,"main_window",rc);
     m->setUseDock();
-    
+
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     a.connect( m, SIGNAL(closeProgram()), &a, SLOT(quit()) );
 

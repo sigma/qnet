@@ -39,7 +39,6 @@ BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
             session, SLOT(slotLinkClicked(const QString &)));
 }
 
-
 BrowserPage::~BrowserPage() {}
 
 void BrowserPage::append(const QString &msg) {

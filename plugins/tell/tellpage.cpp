@@ -23,7 +23,6 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     users_box->hide();
 }
 
-
 TellPage::~TellPage() {}
 
 void TellPage::returnPressed() {
