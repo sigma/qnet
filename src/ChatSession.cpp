@@ -56,10 +56,6 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     chat_view->setWrapPolicy(QTextBrowser::Anywhere);
     chat_view->setLinkUnderline(true);
 
-    item = new QStyleSheetItem(chat_view->styleSheet(),"mypre");
-    item->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
-
-
     login_set = false;
     enable_stdout = true;
     receiving_who = false;

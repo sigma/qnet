@@ -95,7 +95,6 @@ private:
 
     QString doc_source;
 
-    QStyleSheetItem *item;
     QAction *history_up, *history_down, *new_line, *complete, *reconnect, *pgup, *pgdown;
     QStringList history;
     QStringList::Iterator history_iterator;

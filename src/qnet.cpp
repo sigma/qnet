@@ -61,15 +61,18 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotCurrentPageChanged(QWidget*)));
 
+    QStyleSheetItem *item = new QStyleSheetItem(QStyleSheet::defaultSheet(),"mypre");
+    item->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
+    
     if (!loadConfigFile()) {
-	QString default_content("<qnet/>");
-	m_document.setContent(default_content);
+        QString default_content("<qnet/>");
+        m_document.setContent(default_content);
     }
     tabs->setTabPosition((QTabWidget::TabPosition)DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top));
     fortune_page = 0;
     fproc = 0;
     if (DomUtil::readBoolEntry(m_document,"/remote/enabled",false))
-	rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view);
+        rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view);
 
     // plugins
     QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
