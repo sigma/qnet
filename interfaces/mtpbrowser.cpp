@@ -21,7 +21,7 @@
 
 MtpBrowser::MtpBrowser(QWidget *parent, const char *name) : QTextBrowser(parent,name) {
     setTextFormat(Qt::RichText);
-    
+
     m_bookpop = new QPopupMenu(this);
     m_delpop = new QPopupMenu(this);
     connect(m_bookpop,SIGNAL(activated(int)),this,SLOT(slotGoto(int)));
@@ -42,11 +42,11 @@ QPopupMenu* MtpBrowser::createPopupMenu(const QPoint& pos) {
     return m_pop;
 }
 
-void MtpBrowser::slotBookmark() {
+void MtpBrowser::slotBookmark(const QString& name) {
     placeCursor(m_point);
     int para, index;
     getCursorPosition(&para,&index);
-    QString bname = QInputDialog::getText("Bookmark","Enter a name for bookmark :");
+    QString bname = name.isNull()?QInputDialog::getText("Bookmark","Enter a name for bookmark :"):name;
 
     if(m_names.find(bname) == m_names.end()) {
         m_delpop->insertItem(bname);

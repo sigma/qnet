@@ -18,7 +18,7 @@
 class QPopupMenu;
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class MtpBrowser : public QTextBrowser
@@ -30,15 +30,15 @@ public:
   MtpBrowser(QWidget *parent, const char *name);
   ~MtpBrowser();
   QPopupMenu* createPopupMenu(const QPoint& pos);
-  
+
   QString getText() { return text();}
-  
+
   public slots:
       void setSource(const QString &) {}
-  void slotBookmark();
+  void slotBookmark(const QString& = QString::null);
   void slotGoto(int id);
   void slotDelete(int id);
-  
+
 private:
   QPopupMenu *m_pop, *m_bookpop, *m_delpop;
   QPoint m_point;

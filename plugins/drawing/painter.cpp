@@ -107,8 +107,8 @@ void Painter::slotShape(int s) {
 
 void Painter::append(const QString & s) {
     //std::cerr << s << std::endl;
-    if (s.startsWith("}L")) { // Line
-        QRegExp re("\\}L *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+    if (s.startsWith("}L") || s.startsWith("}l")) { // Line
+        QRegExp re("\\}[Ll] *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
         if (re.exactMatch(s)) {
             QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
             QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
@@ -118,8 +118,8 @@ void Painter::append(const QString & s) {
             // TODO : line width
         }
     }
-    else if (s.startsWith("}C")) { // Circle
-        QRegExp re("\\}C *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+    else if (s.startsWith("}C") || s.startsWith("}c")) { // Circle
+        QRegExp re("\\}[Cc] *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
         if (re.exactMatch(s)) {
             QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
             QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
@@ -128,8 +128,8 @@ void Painter::append(const QString & s) {
             canvas->draw(Canvas::CIRCLE,col,s,e,w);
         }
     }
-    else if (s.startsWith("}T")) { // Text
-        QRegExp re("\\}T *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *([\\w ]+) *([\\w ]+) *");
+    else if (s.startsWith("}T") || s.startsWith("}t")) { // Text
+        QRegExp re("\\}[Tt] *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *([\\w ]+) *([\\w ]+) *");
         if (re.exactMatch(s)) {
             QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
             QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
