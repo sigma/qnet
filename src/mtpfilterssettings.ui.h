@@ -222,56 +222,56 @@ void MtpFiltersSettings::updateList( QListBox *box, const QString & path )
 void MtpFiltersSettings::upGlobal()
 {
     up(global_rules);
-    updateList(input_rules,"/general/filters/global");
+    updateList(global_rules,"/general/filters/global");
 }
 
 
 void MtpFiltersSettings::downGlobal()
 {
     down(global_rules);
-    updateList(input_rules,"/general/filters/global");
+    updateList(global_rules,"/general/filters/global");
 }
 
 
 void MtpFiltersSettings::upBlock()
 {
     up(block_rules);
-    updateList(input_rules,"/general/filters/block");
+    updateList(block_rules,"/general/filters/block");
 }
 
 
 void MtpFiltersSettings::downBlock()
 {
     down(block_rules);
-    updateList(input_rules,"/general/filters/block");
+    updateList(block_rules,"/general/filters/block");
 }
 
 
 void MtpFiltersSettings::upLine()
 {
     up(line_rules);
-    updateList(input_rules,"/general/filters/line");
+    updateList(line_rules,"/general/filters/line");
 }
 
 
 void MtpFiltersSettings::downLine()
 {
     down(line_rules);
-    updateList(input_rules,"/general/filters/line");
+    updateList(line_rules,"/general/filters/line");
 }
 
 
 void MtpFiltersSettings::upItem()
 {
     up(item_rules);
-    updateList(input_rules,"/general/filters/item");
+    updateList(item_rules,"/general/filters/item");
 }
 
 
 void MtpFiltersSettings::downItem()
 {
     down(item_rules);
-    updateList(input_rules,"/general/filters/item");
+    updateList(item_rules,"/general/filters/item");
 }
 
 
