@@ -37,6 +37,7 @@ public:
     Policy policy() const;
 
     bool isEnabled() const;
+    void setEnabled(bool);
     void enable();
     void disable();
 

@@ -12,7 +12,7 @@
 
 
 InputFilter::InputFilter(const QString & name, bool memory, MtpContext * ctxt)
-        : Filter(name) {
+        : Filter(name,ctxt) {
     this->memory = memory;
     m_context = ctxt;
 }
@@ -35,9 +35,18 @@ bool InputFilter::memorize() const {
 }
 
 void InputFilter::setRegExp(const QString & exp) {
+    sreg = exp;
     reg = MtpRegExp(exp,m_context);
 }
 
 void InputFilter::setResultPattern(const QString & pat) {
     pattern = pat;
+}
+
+QString InputFilter::getRegExp() const {
+    return sreg;
+}
+
+QString InputFilter::getResultPattern() const {
+    return pattern;
 }

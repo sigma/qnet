@@ -20,8 +20,13 @@ HEADERS += BlockFilter.h \
            MtpFilter.h \
            MtpRegExp.h 
 TEMPLATE = lib 
-CONFIG += release \
+CONFIG += debug \
           warn_on \
+          qt \
+          thread \
           staticlib 
+QMAKE_CXXFLAGS_DEBUG += -g3 
+OBJECTS_DIR = .obj 
+MOC_DIR = .moc 
 INCLUDEPATH = ../utils \
               ../interfaces 

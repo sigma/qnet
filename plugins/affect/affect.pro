@@ -11,6 +11,8 @@ CONFIG += release \
           qt \
           thread \
           plugin 
+OBJECTS_DIR = .obj 
+MOC_DIR = .moc 
 INCLUDEPATH = ../../interfaces 
 LIBS += ../../interfaces/libinterfaces.a 
 TARGETDEPS += ../../interfaces/libinterfaces.a 

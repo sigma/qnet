@@ -61,10 +61,6 @@ public slots:
     void send(const QString &);
 
 private:
-
-    void applyFilters();
-    void applyLine(const QString&,const QString&,const QString&);
-    void applyItem(const QString&,const QString&, const QString&);
     void escape(QString * msg);
     bool filter(QString * msg);
     void getInfo();

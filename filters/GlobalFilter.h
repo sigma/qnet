@@ -21,11 +21,13 @@ class GlobalFilter : public Filter
 {
 
 public:
-  GlobalFilter(const QString & name);
+  GlobalFilter(const QString & name, MtpContext*);
   ~GlobalFilter();  
   
   bool applyTo(QString &);
   void setResultPattern(const QString &);
+  
+  QString getResultPattern() const;
   
   private:
   QString pattern;

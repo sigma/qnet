@@ -14,3 +14,5 @@ CONFIG += release \
           qt \
           thread \
           staticlib 
+OBJECTS_DIR = .obj 
+MOC_DIR = .moc 

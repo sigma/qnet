@@ -31,6 +31,10 @@ bool Filter::isEnabled() const {
     return this->active;
 }
 
+void Filter::setEnabled(bool b) {
+    this->active = b;
+}
+
 void Filter::enable() {
     this->active = true;
 }

@@ -11,8 +11,7 @@
 #include "GlobalFilter.h"
 
 
-GlobalFilter::GlobalFilter(const QString & name) : Filter(name)
-{}
+GlobalFilter::GlobalFilter(const QString & name, MtpContext* ctxt) : Filter(name,ctxt) {}
 
 
 GlobalFilter::~GlobalFilter() {}
@@ -30,4 +29,8 @@ bool GlobalFilter::applyTo(QString & msg) {
 
 void GlobalFilter::setResultPattern(const QString & pat) {
     pattern = pat;
+}
+
+QString GlobalFilter::getResultPattern() const {
+    return pattern;
 }

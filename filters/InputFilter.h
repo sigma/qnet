@@ -30,10 +30,13 @@ public:
     void setRegExp(const QString &);
     void setResultPattern(const QString &);
 
+    QString getRegExp() const;
+    QString getResultPattern() const;
+    
 private:
     bool memory;
     MtpRegExp reg;
-    QString pattern;
+    QString pattern,sreg;
     MtpContext * m_context;
 };
 

@@ -11,7 +11,7 @@
 #include "BlockFilter.h"
 
 
-BlockFilter::BlockFilter(const QString & name, MtpContext * ctxt) : Filter(name) {
+BlockFilter::BlockFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt) {
     dependency = 0;
     m_context = ctxt;
 }
@@ -56,10 +56,12 @@ void BlockFilter::setInputDependency(InputFilter * in) {
 }
 
 void BlockFilter::setBeginRegExp(const QString& reg) {
+    begin = reg;
     this->beg_reg = MtpRegExp(reg,m_context);
 }
 
 void BlockFilter::setEndRegExp(const QString& reg) {
+    end = reg;
     this->end_reg = MtpRegExp(reg,m_context);
 }
 
@@ -73,4 +75,16 @@ bool BlockFilter::isFinished() const {
 
 void BlockFilter::setResultPattern(const QString& pat) {
     this->pattern = pat;
+}
+
+QString BlockFilter::getBeginRegExp() const {
+    return begin;
+}
+
+QString BlockFilter::getEndRegExp() const {
+    return end;
+}
+
+QString BlockFilter::getResultPattern() const {
+    return pattern;
 }

@@ -24,6 +24,9 @@
  * Yann Hodique
  **/
 
+class QDomDocument;
+class MtpContext;
+
 class MtpFilter {
 
     typedef enum {
@@ -34,7 +37,7 @@ class MtpFilter {
     } FilterType;
 
 public:
-    MtpFilter();
+    MtpFilter(QDomDocument*, MtpContext*);
     ~MtpFilter();
 
     QString filterIn(const QString &);
@@ -55,6 +58,9 @@ private:
     std::vector<InputFilter*> input, queue;
 
     BlockFilter *current_block;
+    
+    QDomDocument* m_dom;
+    MtpContext* m_context;
 };
 
 #endif

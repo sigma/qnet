@@ -43,7 +43,7 @@ FORMS += qnet_base.ui \
          fortunesettings.ui \
          appearancesettings.ui 
 TEMPLATE = app 
-CONFIG += release \
+CONFIG += debug \
           warn_on \
           qt \
           thread 
@@ -59,8 +59,8 @@ QMAKE_CXXFLAGS_RELEASE += -Os \
                           -pedantic 
 OBJECTS_DIR = .obj 
 MOC_DIR = .moc 
-INCLUDEPATH = ../utils \
-              ../filters \
+INCLUDEPATH = ../filters \
+              ../utils \
               ../interfaces 
 LIBS += ../interfaces/libinterfaces.a \
         ../filters/libfilters.a \

@@ -64,3 +64,11 @@ void ItemFilter::setRegExp(const QString& reg) {
 void ItemFilter::setResultPattern(const QString& pat) {
     this->pattern = pat;
 }
+
+QString ItemFilter::getRegExp() const {
+    return reg_exp;
+}
+
+QString ItemFilter::getResultPattern() const {
+    return pattern;
+}

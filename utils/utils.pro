@@ -3,11 +3,13 @@
 # Subdir relative project main directory: ./utils
 # Target is a library:  
 
-TEMPLATE = lib
-CONFIG += release \
-warn_on \
-qt \
-thread \
-staticlib
 SOURCES += domutil.cpp 
 HEADERS += domutil.h 
+TEMPLATE = lib 
+CONFIG += release \
+          warn_on \
+          qt \
+          thread \
+          staticlib 
+OBJECTS_DIR = .obj 
+MOC_DIR = .moc 

@@ -9,26 +9,157 @@
  ***************************************************************************/
 
 #include "MtpFilter.h"
+#include "MtpContext.h"
+#include "domutil.h"
+
 #include <iostream>
 
-MtpFilter::MtpFilter() {
+#include <qdom.h>
+
+MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
     current_block = 0;
+    m_dom = dom;
+    m_context = context;
+    
+    QStringList filters;
+    
+    filters = DomUtil::readListEntry(*m_dom,"/general/filters/input","filter");
+    for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+	InputFilter* f = new InputFilter(*it,DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/memorize",false),m_context);
+	f->setRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/regexp"));
+	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
+	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
+	
+	addInputFilter(f);
+    }
+    
+    filters = DomUtil::readListEntry(*m_dom,"/general/filters/item","filter");
+    for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+	ItemFilter* f = new ItemFilter(*it,m_context);
+	f->setRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/regexp"));
+	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
+	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
+	
+	addItemFilter(f);
+    }
+    
+    filters = DomUtil::readListEntry(*m_dom,"/general/filters/line","filter");
+    for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+	LineFilter* f = new LineFilter(*it,m_context);
+	f->setRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/regexp"));
+	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
+	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
+	
+	addLineFilter(f);
+    }
+    
+    filters = DomUtil::readListEntry(*m_dom,"/general/filters/block","filter");
+    for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+	BlockFilter* f = new BlockFilter(*it,m_context);
+	f->setBeginRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/begin"));
+	f->setEndRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/end"));
+	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
+	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
+	
+	QString dep = DomUtil::readEntry(*m_dom,"/filters/" + *it + "/depend",QString::null);
+	if(!dep.isNull()) {
+	    for(std::vector<InputFilter*>::iterator iter = input.begin(); iter != input.end(); ++iter)
+		if((*iter)->getName() == dep) {
+		    f->setInputDependency(*iter);
+		    break;
+		}
+	}
+	addBlockFilter(f);
+    }
+    
+    filters = DomUtil::readListEntry(*m_dom,"/general/filters/global","filter");
+    for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+	GlobalFilter* f = new GlobalFilter(*it,m_context);
+	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
+	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
+	
+	addGlobalFilter(f);
+    }
 }
 
 
 MtpFilter::~MtpFilter() {
-    for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it)
-	delete *it;
-    for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it)
-	delete *it;
-    for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it)
-	delete *it;
-    for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it)
+
+    QDomElement child = DomUtil::elementByPath(*m_dom,"/filters");
+    if(!child.isNull()) child.parentNode().removeChild(child);
+
+    QStringList filters;
+
+    for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it) {
+	QString name((*it)->getName());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	filters << name;
         delete *it;
-    for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it)
+    }
+    DomUtil::writeListEntry(*m_dom,"/general/filters/global","filter",filters);
+    filters.clear();
+    
+    for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it) {
+	QString name((*it)->getName());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/begin",(*it)->getBeginRegExp());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/end",(*it)->getEndRegExp());
+	if((*it)->getInputDependency())
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/depend",(*it)->getInputDependency()->getName());
+	filters << name;
         delete *it;
+    }
+    DomUtil::writeListEntry(*m_dom,"/general/filters/block","filter",filters);
+    filters.clear();
+    
+    for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it) {
+	QString name((*it)->getName());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	filters << name;
+        delete *it;
+    }
+    DomUtil::writeListEntry(*m_dom,"/general/filters/line","filter",filters);
+    filters.clear();
+    
+    for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it) {
+	QString name((*it)->getName());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	filters << name;
+        delete *it;
+    }
+    DomUtil::writeListEntry(*m_dom,"/general/filters/item","filter",filters);
+    filters.clear();
+    
+    for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it) {
+	QString name((*it)->getName());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/memorize",(*it)->memorize());
+	filters << name;
+        delete *it;
+    }
+    DomUtil::writeListEntry(*m_dom,"/general/filters/input","filter",filters);
+    filters.clear();
+    
     for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); ++it)
-	delete *it;
+        delete *it;
 }
 
 QString MtpFilter::filterIn(const QString & arg) {
@@ -38,8 +169,9 @@ QString MtpFilter::filterIn(const QString & arg) {
         if ((*it)->isEnabled()) {
             if ((*it)->applyTo(res)) {
                 res = (*it)->getResult();
-                if ((*it)->memorize()) queue.push_back(*it);
-                }
+                if ((*it)->memorize())
+                    queue.push_back(*it);
+            }
         }
     }
     return res;
@@ -78,7 +210,8 @@ QString MtpFilter::filterOut(const QString & arg) {
                     if ((*it)->applyTo(res,BlockFilter::BEGIN)) {
                         //std::cout << "Beginning of Block" << std::endl;
                         current_block = *it;
-                        if (in) queue.erase(queue.begin());
+                        if (in)
+                            queue.erase(queue.begin());
                         res = (*it)->getResult();
                         if ((*it)->policy() == Filter::Final)
                             return res;

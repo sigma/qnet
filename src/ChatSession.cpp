@@ -104,16 +104,15 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     history_iterator = 0;
 
     //proc = new QProcess(this);
-    m_filter = new MtpFilter();
+    m_filter = new MtpFilter(dom,context());
 //    context() = new MtpContext();
-
-    applyFilters();
 
 }
 
 
 ChatSession::~ChatSession() {
     //delete mng;
+    delete m_filter;
     for (std::vector<Page*>::iterator it = brothers.begin(); it != brothers.end(); ++it)
         delete (*it);
 }
@@ -440,162 +439,6 @@ void ChatSession::executeShellCommand(const QString& com) {
 
 void ChatSession::setDomDocument(QDomDocument * dom) {
     m_dom = dom;
-}
-
-void ChatSession::applyFilters() {
-    applyLine("test_file",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(\\|\\w+\\| \\[Rainbow\\][^<]*)(<.*>)?",
-	      "\\0\\\n:file:File:\\3\\");
-    
-    applyLine("ignore_warning",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  \\w+ is away and may not be hearing you(<.*>)?",
-	      "");
-
-    applyLine("join_dessin",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You join channel Dessin(<.*>)?",
-	      "\\0\\\n:drawing:Dessin:\n:affect:Affectations:channel=Dessin");
-    applyLine("join_others",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You join channel (\\w+)(<.*>)?",
-	      "\\0\\\n:affect:Affectations:channel=\\3\\");
-    applyLine("leave_channel",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You leave channel (\\w+)(<.*>)?",
-	      "\\0\\\n:affect:Affectations:channel=Hall");
-
-    applyLine("draw_other",
-	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt \\w+&gt  )(\\}[LCT][^<]*)(<.*>)?",
-	      ":drawing:Dessin:\\4\\");
-
-    applyLine("tell_receive",
-              "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  )(\\w+) (tells you:|asks you:|replies:)([^<]*)(<.*>)?",
-              ":tell:\\4\\: \\1\\&lt \\4\\&gt \\6\\\\7\\"
-	      "\n:splash:spl:<\\4\\> \\6\\");
-    applyLine("tell_emit",
-              "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You (tell|ask|reply to) (\\w+)(:)(.*)(<.*>)?",
-              ":tell:\\4\\: \\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/mytalk","black") + ">&lt \\Login\\&gt \\6\\</font>\\7\\");
-    applyLine("notify_moves",
-              "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  )(\\w+) (is away|is back|leaves|disconnects|is kicked out|comes in)(.*)(<.*>)?",
-              "\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/server","black") + ">\\2\\\\3\\\\4\\ \\5\\\\6\\\\7\\</font>\n"
-              ":tell\?:\\4\\: \\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/server","black") + ">\\3\\\\4\\ \\5\\\\6\\</font>\\7\\");
-
-    applyLine("mytalk","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt \\login\\&gt .*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/mytalk","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("emote","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  \\*.*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/emote","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("me","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt .*you:.*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/me","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("other","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  You.*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/other","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("server","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt .*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/server","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("aboutme","(:\\w+:\\w+:)?(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt .*\\login\\[^<]*)(<.*>)?",
-	      "\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/aboutme","black") + ">\\2\\\\3\\\\4\\\\5\\</font>"
-	      "\n:splash:spl:\\2\\\\3\\\\4\\");
-    applyLine("aboutme2","(:\\w+:\\w+:)?(.*\\login\\.*)",
-	      "\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/aboutme","black") + ">\\2\\</font>");
-    applyLine("default","(:\\w+:\\w+:)?(.*)","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/default","black") + ">\\2\\</font>");
-
-    QString fname("format");
-    GlobalFilter * f1 = new GlobalFilter(fname);
-    QString pattern("<mypre>\\0\\</mypre>");
-    f1->setResultPattern(pattern);
-    f1->enable();
-    m_filter->addGlobalFilter(f1);
-
-    /*    {QString iname("test");
-        InputFilter * f = new InputFilter(iname,false,context());
-        QString ipat("execute : \\1\\");
-        f->setResultPattern(ipat);
-        QString input("!(.*)");
-        f->setRegExp(input);
-        f->enable();
-        m_filter->addInputFilter(f);}
-      */
-
-    {// Block filter try on "wall" command
-        QString iname("wall_emit");
-        InputFilter * f = new InputFilter(iname,true,context());
-        QString ipat("\\0\\");
-        f->setResultPattern(ipat);
-        QString input("wall");
-        f->setRegExp(input);
-        f->enable();
-        m_filter->addInputFilter(f);
-
-
-        QString bname("wall");
-        BlockFilter * f2 = new BlockFilter(bname,context());
-        QString pat(":browser:Wall: \\1\\<font face=fixed size=3>\\2\\</font>\\3\\");
-        f2->setResultPattern(pat);
-        QString beg("^(<.*>)?(&lt Mtp&gt  Wall :)(<.*>)?");
-        f2->setBeginRegExp(beg);
-        QString end("^(<.*>)?&lt Mtp&gt  End of Wall(<.*>)?");
-        f2->setEndRegExp(end);
-        f2->setInputDependency(f);
-        f2->enable();
-        f2->setPolicy(Filter::Transient);
-        m_filter->addBlockFilter(f2);
-        // end of try
-    }
-
-    {// Block filter try on "finger" command
-        QString iname("finger_emit");
-
-        QString bname("finger");
-        BlockFilter * f2 = new BlockFilter(bname,context());
-        QString pat(":id:Finger: \\0\\");
-        f2->setResultPattern(pat);
-        QString beg("^(<.*>)?(Login *: \\w+)(<.*>)?");
-        f2->setBeginRegExp(beg);
-        QString end("^(<.*>)?&lt Mtp&gt  End of finger(<.*>)?");
-        f2->setEndRegExp(end);
-
-        f2->enable();
-        f2->setPolicy(Filter::Transient);
-        m_filter->addBlockFilter(f2);
-        // end of try
-    }
-    
-    {// Block filter try on info command
-        QString bname("info");
-        BlockFilter * f2 = new BlockFilter(bname,context());
-        QString pat("\\1\\<font face=fixed size=2>\\2\\</font>\\3\\");
-        f2->setResultPattern(pat);
-        QString beg("^(<.*>)?([^&<][^<]*|&lt Mtp&gt  History[^<]*|&lt Mtp&gt  System[^<]*|&lt Mtp&gt  Help[^<]*)(<.*>)?");
-        f2->setBeginRegExp(beg);
-        QString end("^(<.*>)?&lt [^<]*(<.*>)?");
-        f2->setEndRegExp(end);
-        f2->enable();
-        f2->setPolicy(Filter::Transient);
-        m_filter->addBlockFilter(f2);
-        // end of try
-    }
-
-    // Url management
-    QStringList list = DomUtil::readListEntry(*m_dom,"/urls/available","type");
-    if (list.size()) {
-        QString urls = DomUtil::readEntry(*m_dom,"/urls/" + list[0] + "/motif");
-        for(QStringList::Iterator it = ++list.begin(); it != list.end(); ++it)
-            urls += "|" + DomUtil::readEntry(*m_dom,"/urls/" + *it + "/motif");
-
-
-        applyItem("urls",
-                  "(" + urls + ")([^\" <]*)([\" \n<])",
-                  "<font color=\"" + DomUtil::readEntry(*m_dom,"/colors/url","black") + "\"><a href=\"\\1\\\\2\\\">\\1\\\\2\\</a></font>\\3\\");
-
-    }
-
-
-}
-
-void ChatSession::applyLine(const QString& fname, const QString& reg, const QString& pat) {
-    LineFilter * f1 = new LineFilter(fname,context());
-    f1->setRegExp(reg);
-    f1->setResultPattern(pat);
-    f1->enable();
-    m_filter->addLineFilter(f1);
-}
-
-void ChatSession::applyItem(const QString& fname, const QString& reg, const QString& pat) {
-    ItemFilter * f1 = new ItemFilter(fname,context());
-    f1->setRegExp(reg);
-    f1->setResultPattern(pat);
-    f1->enable();
-    m_filter->addItemFilter(f1);
 }
 
 void ChatSession::deleteProcess() {

@@ -25,11 +25,15 @@ public:
 
     void setRegExp(const QString& reg);
     void setResultPattern(const QString& pat);
+    
+    QString getRegExp() const;
+    QString getResultPattern() const;
+    
     bool applyTo(QString &);
 
 private:
     MtpRegExp reg;
-    QString pattern;
+    QString pattern,sreg;
     MtpContext * m_context;
 };
 

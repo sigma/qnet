@@ -39,6 +39,10 @@ public:
     void setEndRegExp(const QString& reg);
     void setResultPattern(const QString& pat);
     
+    QString getBeginRegExp() const;
+    QString getEndRegExp() const;
+    QString getResultPattern() const;
+    
     bool applyTo(QString &, Position pos = IN);
     bool isFinished() const;
     
@@ -47,7 +51,7 @@ private:
     bool finished;
     MtpRegExp beg_reg,end_reg;
     MtpContext * m_context;
-    QString pattern;
+    QString pattern,begin,end;
 };
 
 #endif

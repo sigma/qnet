@@ -240,6 +240,9 @@ void QMtp::fileSessions() {
             l << dlg.sessions_box->text(i);
         DomUtil::writeListEntry(m_document,"/general/sessions","session",l);
 
+	QDomElement child = DomUtil::elementByPath(m_document,"/sessions");
+        if(!child.isNull()) child.parentNode().removeChild(child);
+	
         for (uint i=0; i< dlg.sessions_box->count(); i++) {
             SessionsDialog::SessionItem it = *(dlg.map.find(dlg.sessions_box->text(i)));
             DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/host",it.host);

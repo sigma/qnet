@@ -11,29 +11,36 @@
 #include "LineFilter.h"
 
 
-LineFilter::LineFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt)
-{
-m_context = ctxt;
+LineFilter::LineFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt) {
+    m_context = ctxt;
 }
 
 
-LineFilter::~LineFilter()
-{
-}
+LineFilter::~LineFilter() {}
 
 bool LineFilter::applyTo(QString & msg) {
-MtpRegExp re(reg);
-bool match = re.exactMatch(msg);
+    MtpRegExp re(reg);
+    bool match = re.exactMatch(msg);
 
-if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
+    if (match)
+        setResult(applyProcessedRegexpToPattern(re,pattern));
 
-return match;
+    return match;
 }
 
 void LineFilter::setRegExp(const QString& reg) {
-	this->reg = MtpRegExp(reg,m_context);
+    sreg = reg;
+    this->reg = MtpRegExp(reg,m_context);
 }
 
 void LineFilter::setResultPattern(const QString& pat) {
-	this->pattern = pat;
+    this->pattern = pat;
+}
+
+QString LineFilter::getRegExp() const {
+    return sreg;
+}
+
+QString LineFilter::getResultPattern() const {
+    return pattern;
 }

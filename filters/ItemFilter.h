@@ -30,6 +30,9 @@ public:
     void setResultPattern(const QString& pat);
     bool applyTo(QString &);
 
+    QString getRegExp() const;
+    QString getResultPattern() const;
+    
 private:
     MtpRegExp reg;
     QString pattern,reg_exp;
