@@ -37,7 +37,6 @@ SOURCES += main.cpp \
            qnet.cpp \
            telnetmanager.cpp \
            ChatSession.cpp \
-           SessionsDialog.cpp \
            SessionsSettings.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
@@ -49,7 +48,6 @@ HEADERS += qnet.h \
            telnetmanager.h \
            ChatSession.h \
            version.h \
-           SessionsDialog.h \
            SessionsSettings.h \
            UrlSettings.h \
            PrefixSettings.h \
@@ -70,7 +68,6 @@ IMAGES += images/filenew \
           images/searchfind
 FORMS += qnet_base.ui \
          connectionbox.ui \
-         sessionsdialogbase.ui \
          mtpsettings.ui \
          urlsettingsbase.ui \
          prefixsettingsbase.ui \
