@@ -5,6 +5,32 @@
 
 DBFILE = qnet.db
 LANGUAGE = C++
+TEMPLATE = app
+CONFIG += debug \
+warn_on \
+qt \
+thread
+TARGET = ../bin/qnet
+QMAKE_CXXFLAGS_DEBUG += -g3 \
+-pg \
+-Werror \
+-ansi \
+-pedantic
+QMAKE_CXXFLAGS_RELEASE += -Os \
+-Werror \
+-ansi \
+-pedantic
+OBJECTS_DIR = .obj
+MOC_DIR = .moc
+INCLUDEPATH = ../filters \
+../utils \
+../interfaces
+LIBS += ../interfaces/libinterfaces.a \
+../filters/libfilters.a \
+../utils/libutils.a
+TARGETDEPS += ../interfaces/libinterfaces.a \
+../filters/libfilters.a \
+../utils/libutils.a
 SOURCES += main.cpp \
            qnet.cpp \
            telnetmanager.cpp \
@@ -22,7 +48,9 @@ HEADERS += qnet.h \
            UrlSettings.h \
            PrefixSettings.h \
            remotecontrol.h \
-           chatpage.h 
+           chatpage.h \
+           appearancesettings.ui.h \
+           mtpfilterssettings.ui.h 
 IMAGES += images/filenew \
           images/fileopen \
           images/filesave \
@@ -36,35 +64,9 @@ IMAGES += images/filenew \
 FORMS += qnet_base.ui \
          connectionbox.ui \
          sessionsdialogbase.ui \
-         mtpfilterssettings.ui \
          mtpsettings.ui \
          urlsettingsbase.ui \
          prefixsettingsbase.ui \
          fortunesettings.ui \
-         appearancesettings.ui 
-TEMPLATE = app 
-CONFIG += debug \
-          warn_on \
-          qt \
-          thread 
-TARGET = ../bin/qnet 
-QMAKE_CXXFLAGS_DEBUG += -g3 \
-                        -pg \
-                        -Werror \
-                        -ansi \
-                        -pedantic 
-QMAKE_CXXFLAGS_RELEASE += -Os \
-                          -Werror \
-                          -ansi \
-                          -pedantic 
-OBJECTS_DIR = .obj 
-MOC_DIR = .moc 
-INCLUDEPATH = ../filters \
-              ../utils \
-              ../interfaces 
-LIBS += ../interfaces/libinterfaces.a \
-        ../filters/libfilters.a \
-        ../utils/libutils.a 
-TARGETDEPS += ../interfaces/libinterfaces.a \
-              ../filters/libfilters.a \
-              ../utils/libutils.a 
+         appearancesettings.ui \
+         mtpfilterssettings.ui 
