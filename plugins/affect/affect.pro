@@ -11,7 +11,6 @@ CONFIG += release \
           qt \
           thread \
           plugin 
-TARGET = ../../interfaces/libinterfaces.a 
 INCLUDEPATH = ../../interfaces 
 LIBS += ../../interfaces/libinterfaces.a 
 TARGETDEPS += ../../interfaces/libinterfaces.a 
