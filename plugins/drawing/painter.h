@@ -43,6 +43,7 @@ public slots:
     void slotWidth(int);
     void slotShape(int);
     void append(QString &);
+  void sendOutput(QString&);
     
 protected:
     QGridLayout* PainterLayout;

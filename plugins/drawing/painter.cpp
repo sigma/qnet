@@ -62,7 +62,7 @@ Painter::Painter( QWidget* parent, const char* name, Master * session )
 
     connect( size_box, SIGNAL( valueChanged( int ) ), this, SLOT( slotWidth( int ) ) );
     
-    connect(canvas,SIGNAL(drawing(QString&)),session,SLOT(send(QString&)));
+    connect(canvas,SIGNAL(drawing(QString&)),SLOT(sendOutput(QString&)));
 }
 
 /*
@@ -135,4 +135,9 @@ void Painter::append(QString & s) {
 	    canvas->draw(Canvas::TEXT,col,s,e,0,text);
 	}
     }
+}
+
+void Painter::sendOutput(QString& msg) {
+  if(getMaster()->context()->getValue("channel") == "Dessin")
+    getMaster()->send(msg);
 }

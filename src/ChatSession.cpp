@@ -132,6 +132,7 @@ void ChatSession::displayStdout(QString msg) {
 
         context()->setVar("login",caseUnsensitive(this->login));
         context()->setVar("Login",this->login);
+	context()->setVar("channel","Hall");
 
         QString new_msg("<Mtp> Welcome, " + login + ".");
 
@@ -448,12 +449,21 @@ void ChatSession::applyFilters() {
     applyLine("ignore_warning",
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  \\w+ is away and may not be hearing you(<.*>)?",
 	      "");
+
     applyLine("join_dessin",
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You join channel Dessin(<.*>)?",
-	      "\\0\\\n:drawing:Dessin:\n:affect::channel=Dessin");
+	      "\\0\\\n:drawing:Dessin:\n:affect:Affectations:channel=Dessin");
+    applyLine("join_others",
+	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You join channel (\\w+)(<.*>)?",
+	      "\\0\\\n:affect:Affectations:channel=\\3\\");
+    applyLine("leave_channel",
+	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You leave channel (\\w+)(<.*>)?",
+	      "\\0\\\n:affect:Affectations:channel=Hall");
+
     applyLine("draw_other",
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt \\w+&gt  )(\\}[LCT][^<]*)(<.*>)?",
 	      ":drawing:Dessin:\\4\\");
+
     applyLine("tell_receive",
               "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  )(\\w+) (tells you:|asks you:|replies:)([^<]*)(<.*>)?",
               ":tell:\\4\\: \\1\\&lt \\4\\&gt \\6\\\\7\\"
