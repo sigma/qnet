@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PrefixSettingsBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -155,8 +155,8 @@ contains several lines
     </connection>
 </connections>
 <tabstops>
-    <tabstop>name_edit</tabstop>
     <tabstop>prefix_box</tabstop>
+    <tabstop>name_edit</tabstop>
 </tabstops>
 <slots>
     <slot>slotDel()</slot>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MtpFiltersSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -1133,6 +1133,41 @@
         <slot>activateGlobal(int)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>tab</tabstop>
+    <tabstop>global_rules</tabstop>
+    <tabstop>global_active_check</tabstop>
+    <tabstop>global_subrules_check</tabstop>
+    <tabstop>global_name</tabstop>
+    <tabstop>global_result</tabstop>
+    <tabstop>block_rules</tabstop>
+    <tabstop>block_active_check</tabstop>
+    <tabstop>block_subrules_check</tabstop>
+    <tabstop>block_name</tabstop>
+    <tabstop>block_begin</tabstop>
+    <tabstop>block_main</tabstop>
+    <tabstop>block_end</tabstop>
+    <tabstop>block_input</tabstop>
+    <tabstop>block_begin_result</tabstop>
+    <tabstop>block_result</tabstop>
+    <tabstop>block_end_result</tabstop>
+    <tabstop>line_rules</tabstop>
+    <tabstop>line_active_check</tabstop>
+    <tabstop>line_subrules_check</tabstop>
+    <tabstop>line_name</tabstop>
+    <tabstop>line_regexp</tabstop>
+    <tabstop>line_result</tabstop>
+    <tabstop>item_rules</tabstop>
+    <tabstop>item_active_check</tabstop>
+    <tabstop>item_name</tabstop>
+    <tabstop>item_regexp</tabstop>
+    <tabstop>item_result</tabstop>
+    <tabstop>input_rules</tabstop>
+    <tabstop>input_active_check</tabstop>
+    <tabstop>input_name</tabstop>
+    <tabstop>input_regexp</tabstop>
+    <tabstop>input_result</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">qinputdialog.h</include>
     <include location="local" impldecl="in implementation">mtpfilterssettings.ui.h</include>
