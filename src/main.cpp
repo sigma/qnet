@@ -21,6 +21,6 @@ int main( int argc, char ** argv ) {
     
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     a.connect( m, SIGNAL(closeProgram()), &a, SLOT(quit()) );
-    
+
     return a.exec();
 }

@@ -12,6 +12,8 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qcolor.h>
+#include <qregexp.h>
+#include <qpoint.h>
 
 #include "splash.h"
 
@@ -28,6 +30,10 @@ Splash::Splash(QWidget * /*parent*/, const char *name, Master * session)
     label.setPaletteBackgroundColor(color1);
     m_timer = new QTimer(this);
     time = 2000;
+
+    connect(m_timer, SIGNAL(timeout()),
+            SLOT(timeout()));
+
 }
 
 Splash::~Splash() {}
@@ -50,22 +56,37 @@ void Splash::timeout() {
 }
 
 void Splash::append(const QString & msg) {
+
+    QRegExp re("\\[([NS]?)([EO]?)\\](.*)");
+    if(re.exactMatch(msg)) {
+        m_timer->stop();
+        label.setText(re.cap(3));
+        label.adjustSize();
+        resize(label.size());
+        QRect scr = QApplication::desktop()->screenGeometry();
+
+        QPoint pt = scr.center();
+
+        if(re.cap(1) == "S") {
+            pt.setY(scr.height() - rect().height());
+        } else if(re.cap(1) == "N") {
+            pt.setY(0);
+        } else {
+            pt.setY(pt.y() - rect().height()/2);
+        }
+        
+        if(re.cap(2) == "E") {
+            pt.setX(scr.width() - rect().width());
+        } else if(re.cap(2) == "O") {
+            pt.setX(0);
+        } else {
+            pt.setX(pt.x() - rect().width()/2);
+        }
+        
+        move(pt);
+        show();
+        repaint();
     
-    m_timer->stop();
-    label.setText(msg);
-    label.adjustSize();
-    resize(label.size());
-    QRect scr = QApplication::desktop()->screenGeometry();
-    
-    move( scr.bottomRight() - rect().center() - rect().center());
-    show();
-    repaint();
-    
-    m_timer = new QTimer();
-    
-    connect(m_timer, SIGNAL(timeout()),
-	    SLOT(timeout()));
-    
-    m_timer->start(time,true);
-    
+        m_timer->start(time,true);
+    }
 }
