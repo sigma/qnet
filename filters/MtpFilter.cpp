@@ -180,9 +180,6 @@ MtpFilter::~MtpFilter() {
 	DomUtil::writeListEntry(*m_dom,"/general/filters/input","filter",filters);
 	filters.clear();
     }
-    
-    for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); ++it)
-        delete *it;
 }
 
 QString MtpFilter::filterIn(const QString & arg) {
