@@ -3,7 +3,8 @@
 # Subdir relative project main directory: ./interfaces
 # Target is a library:  
 
-SOURCES += MtpContext.cpp 
+SOURCES += MtpContext.cpp \
+           mtpbrowser.cpp
 HEADERS += master.h \
            mtpbrowser.h \
            page.h \

@@ -15,6 +15,8 @@
 #include <qstring.h>
 #include <qtextbrowser.h>
 
+class QPopupMenu;
+
 /**
  * 
  * Yann Hodique
@@ -24,15 +26,24 @@ class MtpBrowser : public QTextBrowser
   Q_OBJECT
 
 public:
-    MtpBrowser(QWidget *parent, const char *name) : QTextBrowser(parent,name) {
-	setTextFormat(Qt::RichText);
-    }
-    ~MtpBrowser() {}
 
-    QString getText() { return text();}
-    
-public slots:
-    void setSource(const QString &) {}
+  MtpBrowser(QWidget *parent, const char *name);
+  ~MtpBrowser();
+  QPopupMenu* createPopupMenu(const QPoint& pos);
+  
+  QString getText() { return text();}
+  
+  public slots:
+      void setSource(const QString &) {}
+  void slotBookmark();
+  void slotGoto(int id);
+  void slotDelete(int id);
+  
+private:
+  QPopupMenu *m_pop, *m_bookpop, *m_delpop;
+  QPoint m_point;
+  QMap<QString, QPair<int,int> > m_marks;
+  QMap<QString,int> m_names;
 };
 
 #endif
