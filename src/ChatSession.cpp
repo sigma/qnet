@@ -347,7 +347,7 @@ bool ChatSession::filter(QString * msg) {
         *msg = msg->replace(QRegExp("^\a"),"");
     }
 
-    QRegExp beep("^[0-9: ]*<Mtp> ([^ ]*) beeps you");
+    QRegExp beep("^[0-9: ]*<Mtp> ([^ ]*) beeps you.*");
     if (beep.exactMatch(*msg))
         QApplication::beep();
 

@@ -83,7 +83,7 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
-	
+
 	addGlobalFilter(f);
     }
 }
