@@ -3,7 +3,8 @@
  <general>
   <sessions>
    <session>zen</session>
-   <session>servermms</session>
+   <session>backup</session>
+   <session>beta</session>
    <session>local</session>
   </sessions>
   <plugins>
@@ -12,8 +13,8 @@
    <file>/usr/lib/qnet/libdrawing.so</file>
    <file>/usr/lib/qnet/libsplash.so</file>
    <file>/usr/lib/qnet/libid.so</file>
-   <file>/usr/lib/qnet/libemit.so</file>
    <file>/usr/lib/qnet/libaffect.so</file>
+   <file>/usr/lib/qnet/libemit.so</file>
    <file>/usr/lib/qnet/libptime.so</file>
    <file>/usr/lib/qnet/libpformat.so</file>
    <file>/usr/lib/qnet/libcron.so</file>
@@ -33,6 +34,9 @@
    <line>
     <filter>incoming</filter>
     <filter>pong</filter>
+    <filter>listen</filter>
+    <filter>version</filter>
+    <filter>test_file</filter>
     <filter>ignore_warning</filter>
     <filter>join_dessin</filter>
     <filter>join_others</filter>
@@ -43,9 +47,9 @@
     <filter>notify_moves</filter>
     <filter>mytalk</filter>
     <filter>emote</filter>
+    <filter>me</filter>
     <filter>mywall</filter>
     <filter>otherwall</filter>
-    <filter>me</filter>
     <filter>other</filter>
     <filter>server</filter>
     <filter>aboutme</filter>
@@ -55,32 +59,40 @@
     <filter>urls</filter>
    </item>
   </filters>
+  <tags>
+   <tag>mypre</tag>
+   <tag>block</tag>
+   <tag>aboutme</tag>
+   <tag>server</tag>
+   <tag>other</tag>
+   <tag>emote</tag>
+   <tag>me</tag>
+   <tag>url</tag>
+   <tag>default</tag>
+  </tags>
  </general>
  <urls>
   <available>
    <type>mailto</type>
    <type>ftp</type>
    <type>http</type>
-   <type>https</type>
   </available>
   <http>
    <motif>http://</motif>
    <command>konqueror %l</command>
   </http>
+  <ftp>
+   <motif>ftp://</motif>
+   <command>galeon -n %l</command>
+  </ftp>
+  <mailto>
+   <motif>mailto:</motif>
+   <command>sylpheed --compose %l</command>
+  </mailto>
   <https>
    <motif>https://</motif>
    <command>konqueror %l</command>
   </https>
-  <ftp>
-   <motif>ftp://</motif>
-   <command>konqueror %l</command>
-  </ftp>
-  <mailto>
-   <motif>mailto:</motif>
-   <command>kmail --composer %l</command>
-  </mailto>
-  <motif/>
-  <command/>
  </urls>
  <prefixes>
   <item>reply</item>
@@ -89,11 +101,94 @@
   <item>sendmsg %l</item>
   <item>shout</item>
  </prefixes>
- <fortune>dune</fortune>
+ <fortune>dune dune-messiah children-of-dune god-emperor  heretics-of-dune chapterhouse-dune house-atreides house-harkonnen</fortune>
  <appearance>
   <tabs>
-   <position>0</position>
+   <position>1</position>
   </tabs>
+  <tags>
+   <mypre>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-16777216</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </mypre>
+   <block>
+    <family>Monospace</family>
+    <style>Normal</style>
+    <color>-16777216</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </block>
+   <aboutme>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-65536</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </aboutme>
+   <server>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-11184641</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </server>
+   <other>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-65281</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </other>
+   <emote>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-11163136</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </emote>
+   <me>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-16777089</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </me>
+   <url>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>-43649</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </url>
+   <default>
+    <family>Verdana</family>
+    <style>Normal</style>
+    <color>0</color>
+    <strike>false</strike>
+    <underline>false</underline>
+    <spaces>false</spaces>
+    <size>2</size>
+   </default>
+  </tags>
  </appearance>
  <sessions>
   <zen>
@@ -103,13 +198,20 @@
    <password/>
    <autoconnect>false</autoconnect>
   </zen>
-  <servermms>
-   <host>servermms.org</host>
-   <port>4000</port>
+  <backup>
+   <host>www.danstesoreilles.com</host>
+   <port>4500</port>
    <login/>
    <password/>
    <autoconnect>false</autoconnect>
-  </servermms>
+  </backup>
+  <beta>
+   <host>hodique.net1.nerim.net</host>
+   <port>5000</port>
+   <login/>
+   <password/>
+   <autoconnect>false</autoconnect>
+  </beta>
   <local>
    <host>localhost</host>
    <port>5000</port>
@@ -127,12 +229,11 @@
   <wall>
    <active>true</active>
    <policy>0</policy>
-   <result>:browser:Wall: \1\&lt;font face=fixed size=3>\2\&lt;/font>\3\</result>
-   <beginresult>:browser:Wall:</beginresult>
-   <endresult>:browser:Wall:</endresult>
+   <result>:browser:Wall: \1\&lt;block>\2\&lt;/block>\3\</result>
+   <beginresult>:browser:Wall: &lt;hr></beginresult>
+   <endresult/>
    <begin>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  Wall :)(&lt;.*>)?</begin>
    <end>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  End of Wall)(&lt;.*>)?</end>
-   <depend>wall_emit</depend>
   </wall>
   <finger>
    <active>true</active>
@@ -141,22 +242,22 @@
    <beginresult>:browser:Finger: \0\</beginresult>
    <endresult>:browser:Finger: \0\</endresult>
    <begin>^(&lt;.*>)?(Login *: \w+)(&lt;.*>)?</begin>
-   <end>^(&lt;.*>)?&amp;lt Mtp&amp;gt  End of finger(&lt;.*>)?</end>
+   <end>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  End of finger)(&lt;.*>)?</end>
   </finger>
   <info>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font face=fixed size=2>\2\&lt;/font>\3\</result>
-   <beginresult>\1\&lt;font face=fixed size=2>\2\&lt;/font>\3\</beginresult>
-   <endresult>\1\&lt;font face=fixed size=2>\2\&lt;/font>\3\</endresult>
-   <begin>^(&lt;.*>)?([^&amp;&lt;][^&lt;]*|&amp;lt Mtp&amp;gt  History[^&lt;]*|&amp;lt Mtp&amp;gt  System[^&lt;]*|&amp;lt Mtp&amp;gt  Help[^&lt;]*)(&lt;.*>)?</begin>
+   <result>\1\&lt;block>\2\&lt;/block>\3\</result>
+   <beginresult>\1\&lt;block>\2\&lt;/block>\3\</beginresult>
+   <endresult>\1\\2\\3\</endresult>
+   <begin>^(&lt;.*>)?([^|&amp;&lt;][^&lt;]*|&amp;lt Mtp&amp;gt  History[^&lt;]*|&amp;lt Mtp&amp;gt  System[^&lt;]*|&amp;lt Mtp&amp;gt  Help[^&lt;]*)(&lt;.*>)?</begin>
    <end>^(&lt;.*>)?(&amp;lt [^&lt;]*)(&lt;.*>)?</end>
   </info>
   <incoming>
-   <active>false</active>
+   <active>true</active>
    <policy>0</policy>
-   <result>\0\
-:cron:Cron:start 300000 sendmsg \Login\ ping
+   <result>&lt;other>\0\&lt;/other>
+:emit:Emit:wall
 </result>
    <regexp>(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  (Your client is now |You set client to ).*(&lt;.*>)?</regexp>
   </incoming>
@@ -166,6 +267,25 @@
    <result>:cron:Cron:restart</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|\w+\| ping(&lt;.*>)?</regexp>
   </pong>
+  <listen>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:emit:Emit:senddata \3\ [Rainbow][Song][\3\ en slip.ogg]</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| \[Rainbow\]\[Listen\](&lt;.*>)?</regexp>
+  </listen>
+  <version>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:emit:Emit:senddata \3\ KACK VERSION Win95 Telnet (Ultimate Edition)</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| KREQ VERSION(&lt;.*>)?</regexp>
+  </version>
+  <test_file>
+   <active>false</active>
+   <policy>0</policy>
+   <result>\0\
+:file:File:\3\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(\|\w+\| \[Rainbow\][^&lt;]*)(&lt;.*>)?</regexp>
+  </test_file>
   <ignore_warning>
    <active>true</active>
    <policy>0</policy>
@@ -203,71 +323,89 @@
   <tell_receive>
    <active>true</active>
    <policy>0</policy>
-   <result>:tell:\4\: \1\&amp;lt \4\&amp;gt \6\\7\
-:splash:spl:[SE]&lt;\4\> \6\</result>
+   <result>-:tell:\4\: \1\&amp;lt \4\&amp;gt \6\\7\
+-:splash:spl:[SE]&lt;\4\> \6\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (tells you:|asks you:|replies:)([^&lt;]*)(&lt;.*>)?</regexp>
   </tell_receive>
   <tell_emit>
    <active>true</active>
    <policy>0</policy>
-   <result>:tell:\4\: \1\&lt;font color=darkblue>&amp;lt \Login\&amp;gt \6\&lt;/font>\7\</result>
+   <result>-:tell:\4\: \1\&lt;me>&amp;lt \Login\&amp;gt \6\&lt;/me>\7\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You (tell|ask|reply to) (\w+)(:)(.*)(&lt;.*>)?</regexp>
   </tell_emit>
   <notify_moves>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=blue>\2\\3\\4\ \5\\6\\7\&lt;/font>
-:tell?:\4\: \1\&lt;font color=blue>\3\\4\ \5\\6\&lt;/font>\7\</result>
+   <result>\1\&lt;server>\2\\3\\4\ \5\\6\\7\&lt;/server>
+:tell?:\4\: \1\&lt;server>\3\\4\ \5\\6\&lt;/server>\7\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (is away|is back|leaves|disconnects|is kicked out|comes in)(.*)(&lt;.*>)?</regexp>
   </notify_moves>
   <mytalk>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=darkblue>\2\\3\&lt;/font>\4\</result>
+   <result>\1\&lt;me>\2\\3\&lt;/me>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \login\&amp;gt .*)(&lt;.*>)?</regexp>
   </mytalk>
   <emote>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=darkgreen>\2\\3\&lt;/font>\4\</result>
+   <result>\1\&lt;emote>\2\\3\&lt;/emote>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  \*.*)(&lt;.*>)?</regexp>
   </emote>
   <me>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=red>\2\\3\&lt;/font>\4\</result>
+   <result>\1\&lt;aboutme>\2\\3\&lt;/aboutme>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt .*you:.*)(&lt;.*>)?</regexp>
   </me>
+  <mywall>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yy
+:ptime:ok:TIME&lt;-[time]hh:mm:ss
+:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\Login\&quot;:-8)
+:browser:Wall:\1\ &lt;block>\DATE\ \TIME\ \LOGIN\ \3\&lt;/block>\4\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You write to the wall: (.*)(&lt;.*>)?</regexp>
+  </mywall>
+  <otherwall>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yy
+:ptime:ok:TIME&lt;-[time]hh:mm:ss
+:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\3\&quot;:-8)
+:browser:Wall:\1\ &lt;block>\DATE\ \TIME\ \LOGIN\ \4\&lt;/block>\5\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  (\w+) writes to the wall: (.*)(&lt;.*>)?</regexp>
+  </otherwall>
   <other>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=magenta>\2\\3\&lt;/font>\4\</result>
+   <result>\1\&lt;other>\2\\3\&lt;/other>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  You.*)(&lt;.*>)?</regexp>
   </other>
   <server>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=blue>\2\\3\&lt;/font>\4\</result>
+   <result>\1\&lt;server>\2\\3\&lt;/server>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt .*)(&lt;.*>)?</regexp>
   </server>
   <aboutme>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=red>\2\\3\\4\\5\&lt;/font>
-:splash:spl:[SE]\2\\3\\4\</result>
-   <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt .*\login\[^&lt;]*)(&lt;.*>)?</regexp>
+   <result>\1\&lt;aboutme>\2\\3\\4\&lt;/aboutme>\6\
+-:splash:spl:[SE]\2\\3\\4\</result>
+   <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt .*(\login\)[^&lt;]*)(&lt;.*>)?</regexp>
   </aboutme>
   <default>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;font color=black>\2\&lt;/font></result>
+   <result>\1\&lt;default>\2\&lt;/default></result>
    <regexp>(:\w+:\w+:)?(.*)</regexp>
   </default>
   <urls>
    <active>true</active>
    <policy>1</policy>
-   <result>&lt;font color=&quot;blue&quot;>&lt;a href=&quot;\1\\2\&quot;>\1\\2\&lt;/a>&lt;/font>\3\</result>
-   <regexp>(mailto:|ftp://|http://)([^&quot; &lt;]*)([&quot; 
+   <result>&lt;url>&lt;a href=&quot;\1\\2\&quot;>\1\\2\&lt;/a>&lt;/url>\3\</result>
+   <regexp>(mailto:|ftp://|http://)([^&quot; &lt;]*)([&quot;
 &lt;])</regexp>
   </urls>
   <wall_emit>
@@ -277,23 +415,5 @@
    <regexp>wall</regexp>
    <memorize>true</memorize>
   </wall_emit>
-  <mywall>
-   <active>true</active>
-   <policy>0</policy>
-   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yyyy
-:ptime:ok:TIME&lt;-[time]hh:mm:ss
-:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\Login\&quot;:-8)
-:browser:Wall:\1\&lt;font face=fixed size=3>\DATE\ \TIME\ \LOGIN\ \3\&lt;/font>\4\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt You write to the wall: (.*)(&lt;.*>)?</regexp>
-  </mywall>
-  <otherwall>
-   <active>true</active>
-   <policy>0</policy>
-   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yyyy
-:ptime:ok:TIME&lt;-[time]hh:mm:ss
-:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\3\&quot;:-8)
-:browser:Wall:\1\&lt;font face=fixed size=3>\DATE\ \TIME\ \LOGIN\ \4\&lt;/font>\5\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt (\w+) writes to the wall: (.*)(&lt;.*>)?</regexp>
-  </otherwall>
  </filters>
 </qnet>
