@@ -142,7 +142,8 @@ void ChatSession::displayStdout(const QString& msg) {
         new_m += "<br>";
 #endif
 
-        chat_view->append(new_m);
+        chat_view->append(Filter::expandVars(new_m,context()));
+//        chat_view->append(new_m);
 
         position += new_m.length();
         login_set = true;
@@ -173,23 +174,24 @@ void ChatSession::displayStdout(const QString& msg) {
                 for (std::vector<Page*>::iterator it = brothers.begin(); it != brothers.end(); ++it)
                     if ((*it)->name() == rx.cap(2)) {
 
-                        (*it)->append(m);
-
+//                        (*it)->append(m);
+                        (*it)->append(Filter::expandVars(m,context()));
                         ok = false;
                     }
                 if (ok) {
 
-		    Page * edit = mtp->getNewPage(abbrev,rx.cap(2),this);
-		    if(edit) {
-			brothers.push_back(edit);
-			edit->append(m);
-		    }
-		    else
-			displayStderr("Don't know what to do with : " + mm);
+                    Page * edit = mtp->getNewPage(abbrev,rx.cap(2),this);
+                    if(edit) {
+                        brothers.push_back(edit);
+//                        edit->append(m);
+                        edit->append(Filter::expandVars(m,context()));
+                    }
+                    else
+                        displayStderr("Don't know what to do with : " + mm);
                 }
             } else {
-                chat_view->append(mm);
-
+//                chat_view->append(mm);
+                chat_view->append(Filter::expandVars(mm,context()));
                 emit textDisplayed(this);
             }
         }
