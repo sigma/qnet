@@ -108,7 +108,8 @@ void QMtp_base::slotDisplayFortune()
 void QMtp_base::slotToggleMenu()
 {
     if(menuBar()->isVisible())
-	menuBar()->hide();
+        menuBar()->hide();
     else
-	menuBar()->show();
+        menuBar()->show();
+    adjustSize();
 }
