@@ -15,6 +15,10 @@
 
 #include "splash.h"
 
+#if QT_VERSION < 0x030100
+#define WStyle_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
+#endif
+
 PLUGIN_FACTORY(Splash,"splash");
 
 Splash::Splash(QWidget * /*parent*/, const char *name, Master * session) 
