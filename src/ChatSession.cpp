@@ -361,7 +361,7 @@ bool ChatSession::filter(QString * msg) {
     if (user_kick.exactMatch(*msg))
         removeUser(user_kick.cap(1));
 
-    QRegExp user_in("^[0-9: ]*<Mtp> ([^ ]*) (comes in !).*");
+    QRegExp user_in("^[0-9: ]*<Mtp> ([^ ]*) (comes in ?!).*");
     if (user_in.exactMatch(*msg))
         addUser(user_in.cap(1));
 
