@@ -386,7 +386,7 @@ void QMtp::closeTab(QWidget *w) {
             (*it)->kill((Page*)w);
             tab_map.remove(it);
         } else // session tab
-            sessions.remove((ChatSession*)w);
+            sessions.remove((ChatSession*)((Page*)w)->getMaster());
         delete w;
     }
 }

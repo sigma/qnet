@@ -14,6 +14,7 @@
 
 #include <qvariant.h>
 #include <qpixmap.h>
+#include <qmap.h>
 
 #include "master.h"
 #include "page.h"
@@ -38,6 +39,8 @@ public:
     QSpinBox* size_box;
     QComboBox* shape_combo;
 
+    void updateDim(const QString&, const QPoint&);
+
 public slots:
     void slotColor();
     void slotWidth(int);
@@ -52,7 +55,9 @@ protected slots:
     virtual void languageChange();
 
 private:
-QString m_prefix;
+    QString m_prefix;
+    QMap<QString,QPoint> common;
+    QPoint limit;
 };
 
 #endif // PAINTER_H

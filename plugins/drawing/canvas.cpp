@@ -87,34 +87,34 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
         parray[0] = p;
         break;
     case CIRCLE:
-        {
-            int dist = (int)sqrt(pow(q.x() - p.x(),2) + pow(q.y() - p.y(),2));
-            painter.drawEllipse(q.x()-dist,q.y()-dist,2*dist,2*dist);
-            QPoint tmp1(q.x()-dist, q.y()-dist);
-            QPoint tmp2(q.x()+dist, q.y()+dist);
-            parray[1] = tmp1;
-            parray[0] = tmp2;
+    {
+            painter.drawEllipse(QRect(p,q));
+            parray[1] = q;
+            parray[0] = p;
             if(definitive)
-		description = QString("}C 0x%1 %2 %3 %4 %5").arg(penColor().rgb()-0xff000000,0,16)
-                              .arg(q.x()).arg(q.y()).arg(dist).arg(penWidth());
+                description = QString("}C 0x%1 %2 %3 %4 %5 %6")
+                    .arg(penColor().rgb()-0xff000000,0,16)
+                    .arg(q.x()).arg(q.y())
+                    .arg(p.x()).arg(p.y())
+                    .arg(penWidth());
 
-        }
-        break;
+    }
+    break;
     case TEXT:
-	if(definitive) {
-	    QString text = QInputDialog::getText("Text Input","Enter text");
-	    painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
-			     Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
-	    description = QString("}T 0x%1 %2 %3 %4 %5 %6").arg(penColor().rgb()-0xff000000,0,16)
-            .arg(min(q.x(),p.x())).arg(min(q.y(),p.y()))
-            .arg(max(q.x(),p.x())).arg(max(q.y(),p.y()))
-            .arg(text);
-	}
-	else {
-	    painter.drawRect(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()));
-	}
-	parray[1] = q;
-	parray[0] = p;
+        if(definitive) {
+            QString text = QInputDialog::getText("Text Input","Enter text");
+            painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
+                             Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
+            description = QString("}T 0x%1 %2 %3 %4 %5 %6").arg(penColor().rgb()-0xff000000,0,16)
+                .arg(min(q.x(),p.x())).arg(min(q.y(),p.y()))
+                .arg(max(q.x(),p.x())).arg(max(q.y(),p.y()))
+                .arg(text);
+        }
+        else {
+            painter.drawRect(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()));
+        }
+        parray[1] = q;
+        parray[0] = p;
         break;
     }
 
@@ -158,12 +158,9 @@ void Canvas::draw(Shape s, const QColor & col, const QPoint & q, const QPoint & 
         break;
     case CIRCLE:
         {
-            int dist = (int)sqrt(pow(q.x() - p.x(),2) + pow(q.y() - p.y(),2));
-            painter.drawEllipse(q.x()-dist,q.y()-dist,2*dist,2*dist);
-            QPoint tmp1(q.x()-dist, q.y()-dist);
-            QPoint tmp2(q.x()+dist, q.y()+dist);
-            parray[1] = tmp1;
-            parray[0] = tmp2;
+            painter.drawEllipse(QRect(p,q));
+            parray[1] = p;
+            parray[0] = q;
         }
         break;
     case TEXT:
@@ -206,6 +203,9 @@ void Canvas::resizeEvent( QResizeEvent *e ) {
     buffer.resize( w, h );
     buffer.fill( colorGroup().base() );
     bitBlt( &buffer, 0, 0, &tmp, 0, 0, tmp.width(), tmp.height() );
+
+    QString description = QString("}E %1 %2").arg(buffer.width()).arg(buffer.height());
+    emit drawing(description);
 }
 
 void Canvas::paintEvent( QPaintEvent *e ) {

@@ -60,6 +60,7 @@ public slots:
 
 signals:
 	void outputMessage(const QString& );
+    void closedSession();
 
 private:
     void escape(QString * msg);

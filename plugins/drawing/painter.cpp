@@ -30,7 +30,7 @@ PLUGIN_FACTORY(Painter,"drawing");
  *  name 'name' and widget flags set to 'f'.
  */
 Painter::Painter( QWidget* parent, const char* name, Master * session )
-        : Page( parent, name, session ) {
+        : Page( parent, name, session ), limit(0,0) {
     if ( !name )
         setName( "Painter" );
     PainterLayout = new QGridLayout( this, 1, 1, 6, 6, "PainterLayout");
@@ -69,6 +69,8 @@ Painter::Painter( QWidget* parent, const char* name, Master * session )
         m_prefix="senddata " + re.cap(1) + " ";
     else
         m_prefix=QString::null;
+
+    session->context()->setVar("PainterCommands","[EeLlCcTt]");
 }
 
 /*
@@ -105,37 +107,51 @@ void Painter::slotShape(int s) {
     canvas->setDrawingShape((Canvas::Shape)s);
 }
 
-void Painter::append(const QString & s) {
+void Painter::append(const QString & str) {
     //std::cerr << s << std::endl;
-    if (s.startsWith("}L") || s.startsWith("}l")) { // Line
-        QRegExp re("\\}[Ll] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
-        if (re.exactMatch(s)) {
-            QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
-            QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
-            QPoint e(re.cap(5).toInt(),re.cap(6).toInt());
-            int w = re.cap(7).toInt();
-            canvas->draw(Canvas::LINE,col,s,e,w);
-            // TODO : line width
+    QString login,s;
+    QRegExp rx("(\\w+) *(\\}.*)");
+    if (rx.exactMatch(str)) {
+        login = rx.cap(1);
+        s = rx.cap(2);
+
+        if (s.startsWith("}L") || s.startsWith("}l")) { // Line
+            QRegExp re("\\}[Ll] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+            if (re.exactMatch(s)) {
+                QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
+                QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
+                QPoint e(re.cap(5).toInt(),re.cap(6).toInt());
+                int w = re.cap(7).toInt();
+                canvas->draw(Canvas::LINE,col,s,e,w);
+                // TODO : line width
+            }
         }
-    }
-    else if (s.startsWith("}C") || s.startsWith("}c")) { // Circle
-        QRegExp re("\\}[Cc] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
-        if (re.exactMatch(s)) {
-            QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
-            QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
-            QPoint e(re.cap(5).toInt(),re.cap(6).toInt()+re.cap(4).toInt());
-            int w = re.cap(7).toInt();
-            canvas->draw(Canvas::CIRCLE,col,s,e,w);
+        else if (s.startsWith("}C") || s.startsWith("}c")) { // Circle
+            QRegExp re("\\}[Cc] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+            if (re.exactMatch(s)) {
+                QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
+                QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
+                QPoint e(re.cap(5).toInt(),re.cap(6).toInt());
+                int w = re.cap(7).toInt();
+                canvas->draw(Canvas::CIRCLE,col,s,e,w);
+            }
         }
-    }
-    else if (s.startsWith("}T") || s.startsWith("}t")) { // Text
-        QRegExp re("\\}[Tt] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *([\\w ]+) *");
-        if (re.exactMatch(s)) {
-            QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
-            QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
-            QPoint e(re.cap(5).toInt(),re.cap(6).toInt());
-            QString text = re.cap(7);
-            canvas->draw(Canvas::TEXT,col,s,e,0,text);
+        else if (s.startsWith("}T") || s.startsWith("}t")) { // Text
+            QRegExp re("\\}[Tt] *(0x)?([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *([\\w ]+) *");
+            if (re.exactMatch(s)) {
+                QColor col(re.cap(2).toUInt(0,16) + 0xff000000);
+                QPoint s(re.cap(3).toInt(),re.cap(4).toInt());
+                QPoint e(re.cap(5).toInt(),re.cap(6).toInt());
+                QString text = re.cap(7);
+                canvas->draw(Canvas::TEXT,col,s,e,0,text);
+            }
+        }
+        else if (s.startsWith("}E") || s.startsWith("}e")) { // Edge
+            QRegExp re("\\}[Ee] *(\\d+) *(\\d+) *");
+            if (re.exactMatch(s)) {
+                QPoint e(re.cap(1).toInt(),re.cap(2).toInt());
+                updateDim(login,e);
+            }
         }
     }
 }
@@ -147,4 +163,27 @@ void Painter::sendOutput(const QString& msg) {
       getMaster()->send(msg);
   else
       getMaster()->displayStderr("not in Dessin channel");
+}
+
+void Painter::updateDim(const QString& login, const QPoint& point) {
+    if(common.find(login) == common.end()) {
+        sendOutput(QString("}E %1 %2").arg(canvas->bufferWidth()).arg(canvas->bufferHeight()));
+    } else if(common[login] == point) {
+        return;
+    }
+
+    common[login] = point;
+    int x=canvas->bufferWidth(),y=canvas->bufferHeight();
+    canvas->draw(Canvas::LINE,colorGroup().base(),QPoint(limit.x(),0),limit,1);
+    canvas->draw(Canvas::LINE,colorGroup().base(),limit,QPoint(0,limit.y()),1);
+    for(QMap<QString,QPoint>::ConstIterator it = common.begin(); it != common.end(); ++it) {
+        if((*it).x() < x)
+            x = (*it).x();
+        if((*it).y() < y)
+            y = (*it).y();
+    }
+    limit = QPoint(x,y);
+    canvas->draw(Canvas::LINE,QColor(0,0,0),QPoint(x,0),QPoint(x,y),1);
+    canvas->draw(Canvas::LINE,QColor(0,0,0),QPoint(x,y),QPoint(0,y),1);
+    canvas->repaint(true);
 }

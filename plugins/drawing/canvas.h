@@ -1,5 +1,5 @@
 /****************************************************************************
-** 
+**
 ** Copyright ( C ) 2002 Yann Hodique <Yann.Hodique@lifl.fr>.
 ** Copyright ( C ) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -64,6 +64,14 @@ public:
     void save( const QString &filename, const QString &format );
 
     void clearScreen();
+
+    int bufferWidth() {
+        return buffer.width();
+    }
+
+    int bufferHeight() {
+        return buffer.height();
+    }
 
 protected:
     void mousePressEvent( QMouseEvent *e );

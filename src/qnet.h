@@ -71,6 +71,7 @@ public slots:
 
     void refreshMenu();
     void loadStyleSheet();
+
 private:
     QDomDocument m_document;
     QDomDocument temporary_dom;
