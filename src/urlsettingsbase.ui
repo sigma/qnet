@@ -1,0 +1,207 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>UrlSettingsBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>UrlSettingsBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>395</width>
+            <height>275</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLineEdit" row="2" column="4">
+            <property name="name">
+                <cstring>prefix_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="4">
+            <property name="name">
+                <cstring>command_edit</cstring>
+            </property>
+        </widget>
+        <spacer row="4" column="2">
+            <property name="name">
+                <cstring>Spacer24</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>37</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="1" column="3">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Name</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="3">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Prefix</string>
+            </property>
+        </widget>
+        <widget class="QListBox" row="1" column="0" rowspan="4" colspan="1">
+            <property name="name">
+                <cstring>urls_box</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="4">
+            <property name="name">
+                <cstring>name_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="3">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Command</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="4" column="1">
+            <property name="name">
+                <cstring>Layout8</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>add_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>del_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Del</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer row="3" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Spacer12</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>72</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="1" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Spacer12_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>72</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>TextLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>Here you can define your own url's, with associated action,
+executed from a shell.
+(%l is a joker for the url)</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>urls_box</sender>
+        <signal>highlighted(const QString&amp;)</signal>
+        <receiver>UrlSettingsBase</receiver>
+        <slot>slotUpdateInfo(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>add_button</sender>
+        <signal>pressed()</signal>
+        <receiver>UrlSettingsBase</receiver>
+        <slot>slotAdd()</slot>
+    </connection>
+    <connection>
+        <sender>del_button</sender>
+        <signal>pressed()</signal>
+        <receiver>UrlSettingsBase</receiver>
+        <slot>slotDel()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>name_edit</tabstop>
+    <tabstop>prefix_edit</tabstop>
+    <tabstop>command_edit</tabstop>
+    <tabstop>urls_box</tabstop>
+</tabstops>
+<slots>
+    <slot>slotDel()</slot>
+    <slot>slotAdd()</slot>
+    <slot>slotUpdateInfo(const QString&amp;)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

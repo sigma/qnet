@@ -1,0 +1,52 @@
+QNet
+~~~~
+QNet est un nième client pour <Mtp> Chat! écrit en Qt (enfin c'est le
+premier en Qt et le nième en général... enfin je me comprends)
+Version actuelle : 0.42
+
+Compiler
+~~~~~~~~
+pré-requis : 
+- libqt3 + headers (je fonctionne avec la 3.1, si
+il y a des problèmes avec les versions 3.0.x c'est gentil de me
+prévenir, a priori ce n'est pas la peine d'essayer avec les 2.x)
+- qmake
+
+pour la compilation proprement dite, il faut positionner les variables
+d'environnements QTDIR et QMAKESPEC
+(ex : 
+    "export QTDIR=/usr/lib/qt3" (mandrake) ou "export QTDIR=/usr/share/qt" (debian)
+    "export QMAKESPEC=linux-g++"
+)
+
+puis un "qmake && make" devrait suffire... (là un café s'impose, en
+plus ça compile en mode debug)
+
+J'insiste sur le fait qu'il faut positionner les variables *avant* le
+qmake, sinon make vous insulte. Dans ce cas, outre le fait que ce
+n'est pas bien de ne pas lire le README, il faut effacer le Makefile
+de *chaque* répertoire avant de recommencer (bien fait pour vous)
+
+Après ça, si tout s'est bien passé (mouahaha je n'y crois pas un instant) le joli exécutable se trouve dans bin/
+
+Reste à copier le qnetrc en ~/.qnetrc et à lancer le monstre.
+
+Sigma.
+
+Fonctionnalités
+~~~~~~~~~~~~~~~
+Toutes les fonctionnalités ou presque sont liées à la notion de filtre (entrée/sortie). Les filtres ne sont pas encore directement accessibles à l'utilisateurs pour configuration dynamique, mais c'est prévu ;-)
+
+Exemples de fonctionnalités :
+- multi-sessions (seul le protocole "Mtp" est supporté pour l'heure)
+- coloration/formatage de la sortie
+- support des urls, configuration des applications à lancer (attention aux trous de sécurité, aucun contrôle n'est effectué au niveau des urls)
+- onglets de tell / wall
+- fenêtres des utilisateurs présents
+- historique des commandes entrées au clavier
+- zone d'entrée multilignes (Ctrl-Entrée pour aller à la ligne, flèches pour naviguer)
+- redimensionnage des messages trop longs (avec respect des commandes préfixes : tell, senddata ...)
+- mode fortune (indispensable)
+- complétion des logins (Tab après au moins une lettre de login)
+- support dessin (expérimental -- norme à définir avec les autres implémenteurs)
+- contrôle distant (en cours, utilité indéniable ;-))

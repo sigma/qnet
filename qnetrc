@@ -1,0 +1,46 @@
+<!DOCTYPE qnet>
+<qnet>
+<general>
+<sessions>
+<session>lof</session>
+   <session>zen</session>
+</sessions> </general>
+ <sessions>
+<lof>
+<host>lof.hn.org</host>
+   <port>4000</port>  </lof>
+  <zen>
+<host>zen.dtdns.net</host>
+   <port>4000</port>  </zen>
+</sessions>
+ <urls>
+<available>
+<type>http</type>
+   <type>mailto</type>
+   <type>ftp</type>  </available>
+  <http>
+<motif>http://</motif>
+   <command>galeon -n %l</command>  </http>
+  <ftp>
+<motif>ftp://</motif>
+   <command>galeon -n %l</command>  </ftp>
+  <mailto>
+<motif>mailto:</motif>
+   <command>sylpheed --compose %l</command>  </mailto> </urls>
+ <prefixes>
+<item>reply</item>
+  <item>tell %l</item>
+  <item>senddata %l</item>
+  <item>sendmsg %l</item>
+  <item>shout</item> </prefixes>
+<colors>
+	<mytalk>darkblue</mytalk>
+	<emote>darkgreen</emote>
+	<me>red</me>
+	<other>magenta</other>
+	<server>blue</server>
+	<aboutme>red</aboutme>
+	<default>black</default>
+	<url>blue</url>
+</colors>
+</qnet>

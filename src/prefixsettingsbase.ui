@@ -1,0 +1,166 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>PrefixSettingsBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PrefixSettingsBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>485</width>
+            <height>276</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
+            <property name="name">
+                <cstring>prefix_box</cstring>
+            </property>
+        </widget>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>Spacer11</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>0</width>
+                    <height>134</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="2" column="1">
+            <property name="name">
+                <cstring>Layout4</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>add_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>del_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Del</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer row="0" column="1">
+            <property name="name">
+                <cstring>Spacer12_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>32</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="2" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Spacer14</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>189</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="0" column="2">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Prefix</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="3">
+            <property name="name">
+                <cstring>name_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="3">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>This is for commands you would like
+to be automatically re-executed when 
+your line is too long or your post
+contains several lines
+(%l is a joker for a following login)</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>add_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PrefixSettingsBase</receiver>
+        <slot>slotAdd()</slot>
+    </connection>
+    <connection>
+        <sender>del_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PrefixSettingsBase</receiver>
+        <slot>slotDel()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>name_edit</tabstop>
+    <tabstop>prefix_box</tabstop>
+</tabstops>
+<slots>
+    <slot>slotDel()</slot>
+    <slot>slotAdd()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
