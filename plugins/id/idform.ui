@@ -151,9 +151,7 @@
 </variables>
 <slots>
     <slot>append( const QString &amp; msg )</slot>
+    <slot>init()</slot>
 </slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-</functions>
-<layoutdefaults spacing="6" margin="11"/>
+<layoutdefaults spacing="6" margin="6"/>
 </UI>
