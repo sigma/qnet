@@ -77,6 +77,8 @@ private:
     QPopupMenu *trayMenu;
     QString icon_path;
 
+  QPoint m_pos;
+
 private slots:
     void buildTrayMenu();
 
