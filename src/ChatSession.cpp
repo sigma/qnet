@@ -75,6 +75,10 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     complete->setAccel(QKeySequence(Key_Tab));
     reconnect = new QAction(this,"reconnect");
     reconnect->setAccel(QKeySequence(CTRL + Key_R));
+    pgup = new QAction(chat_edit,"pgup");
+    pgup->setAccel(QKeySequence(Key_PageUp));
+    pgdown = new QAction(chat_edit,"pgdown");
+    pgdown->setAccel(QKeySequence(Key_PageDown));
 
     connect(history_up, SIGNAL(activated()),
             this, SLOT(slotHistoryUp()));
@@ -96,6 +100,11 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     connect(chat_edit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
 
+    connect(pgup,SIGNAL(activated()),
+            this,SLOT(slotPageUp()));
+    connect(pgdown,SIGNAL(activated()),
+            this,SLOT(slotPageDown()));
+    
     chat_edit->setFocus();
     chat_edit->setWordWrap(QTextEdit::NoWrap);
     chat_edit->setTextFormat(Qt::PlainText);
@@ -125,6 +134,7 @@ void ChatSession::displayStdout(const QString& msg) {
 
     emit outputMessage(msg);
     QString m(msg);
+    QString output;
     
     if (m.startsWith("<Mtp> Welcome")) {
         this->login = m.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
@@ -142,8 +152,9 @@ void ChatSession::displayStdout(const QString& msg) {
         new_m += "<br>";
 #endif
 
-        chat_view->append(Filter::expandVars(new_m,context()));
-//        chat_view->append(new_m);
+        output = Filter::expandVars(new_m,context());
+        unescape(&output);
+        chat_view->append(output);
 
         position += new_m.length();
         login_set = true;
@@ -153,7 +164,6 @@ void ChatSession::displayStdout(const QString& msg) {
         escape(&m);
         m = m_filter->filterOut(m);
 
-
         QStringList list = QStringList::split("\n",m);
         for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
             QString mm = *it;
@@ -161,37 +171,40 @@ void ChatSession::displayStdout(const QString& msg) {
             mm += "<br>";
 #endif
 
-            QRegExp rx("^:(\\w+\\?" "?):(\\w+):(.*)");
+            QRegExp rx("^(-?):(\\w+\\?" "?):(\\w+):(.*)");
             if (rx.exactMatch(mm)) {
-                QString m(rx.cap(3));
+                QString m(rx.cap(4));
 #if (QT_VERSION < 305)
                 m += "<br>";
 #endif
 
-                bool ok(!(rx.cap(1).endsWith("?")));
-                QString abbrev = ok ? rx.cap(1) : rx.cap(1).left(rx.cap(1).length()-1);
+                bool ok(!(rx.cap(2).endsWith("?")));
+                QString abbrev = ok ? rx.cap(2) : rx.cap(2).left(rx.cap(2).length()-1);
 
                 for (std::vector<Page*>::iterator it = brothers.begin(); it != brothers.end(); ++it)
-                    if ((*it)->name() == rx.cap(2)) {
+                    if ((*it)->name() == rx.cap(3)) {
 
-//                        (*it)->append(m);
-                        (*it)->append(Filter::expandVars(m,context()));
+                        output = Filter::expandVars(m,context());
+                        unescape(&output);
+                        (*it)->append(output);
                         ok = false;
                     }
                 if (ok) {
 
-                    Page * edit = mtp->getNewPage(abbrev,rx.cap(2),this);
+                    Page * edit = mtp->getNewPage(abbrev,rx.cap(3),this,rx.cap(1)!="-");
                     if(edit) {
                         brothers.push_back(edit);
-//                        edit->append(m);
-                        edit->append(Filter::expandVars(m,context()));
+                        output = Filter::expandVars(m,context());
+                        unescape(&output);
+                        edit->append(output);
                     }
                     else
                         displayStderr("Don't know what to do with : " + mm);
                 }
             } else {
-//                chat_view->append(mm);
-                chat_view->append(Filter::expandVars(mm,context()));
+                output = Filter::expandVars(mm,context());
+                unescape(&output);
+                chat_view->append(output);
                 emit textDisplayed(this);
             }
         }
@@ -265,6 +278,10 @@ void ChatSession::send(const QString & m) {
     }
 
 
+}
+
+void ChatSession::ensureFocus() {
+    chat_edit->setFocus();
 }
 
 void ChatSession::closeSession() {
@@ -342,11 +359,23 @@ void ChatSession::slotReconnect() {
     emit active();
 }
 
+void ChatSession::slotPageUp() {
+    chat_view->moveCursor(QTextEdit::MovePgUp,false);
+}
+
+void ChatSession::slotPageDown() {
+    chat_view->moveCursor(QTextEdit::MovePgDown,false);
+}
+
 void ChatSession::escape(QString * msg) {
+    *msg = msg->replace(QRegExp("&"),"&amp ")
+        .replace(QRegExp("<"),"&lt ")
+        .replace(QRegExp(">"),"&gt ")
+        .replace(QRegExp("\\\\"),"&bks ");
+}
 
-    *msg = msg->replace(QRegExp("<"),"&lt ").replace(QRegExp(">"),"&gt ");
-
-
+void ChatSession::unescape(QString * msg) {
+    *msg = msg->replace(QRegExp("&bks "),"\\");
 }
 
 bool ChatSession::filter(QString * msg) {

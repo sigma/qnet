@@ -57,13 +57,18 @@ public slots:
     void slotNewLine();
     void slotComplete();
     void slotReconnect();
+    void slotPageUp();
+    void slotPageDown();
 
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString &);
 
+    void ensureFocus();
+    
 private:
     void escape(QString * msg);
+    void unescape(QString * msg);
     bool filter(QString * msg);
     void getInfo();
 
@@ -89,7 +94,7 @@ private:
     QString doc_source;
 
     QStyleSheetItem *item;
-    QAction *history_up, *history_down, *new_line, *complete, *reconnect;
+    QAction *history_up, *history_down, *new_line, *complete, *reconnect, *pgup, *pgdown;
     QStringList history;
     QStringList::Iterator history_iterator;
     QString host, port, session_name;
