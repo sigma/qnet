@@ -17,20 +17,18 @@
 
 #include "splash.h"
 
-#if QT_VERSION < 0x030100
-#define WStyle_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
-#endif
+#define Style_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
 
 PLUGIN_FACTORY(Splash,"splash");
 
 Splash::Splash(QWidget * /*parent*/, const char *name, Master * session) 
-    : Page(0, name, session, WStyle_Customize | WStyle_Splash), label(this) {
+    : Page(0, name, session, WStyle_Customize | Style_Splash), label(this) {
     setFocusPolicy(QWidget::NoFocus);
     QColor color1("lightgrey");
 //    QColor color2("white");
     label.setPaletteBackgroundColor(color1);
     m_timer = new QTimer(this);
-    time = 2000;
+    time = 3000;
 
     connect(m_timer, SIGNAL(timeout()),
             SLOT(timeout()));
