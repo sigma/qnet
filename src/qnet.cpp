@@ -53,21 +53,21 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
 
     m_rcpath = rcpath;
     m_settings = 0;
-    
+
     QAction *fileNewAction = new QAction( this, "fileNewAction" );
     connect( fileNewAction, SIGNAL( activated() ), this, SLOT( fileNew() ) );
     fileNewAction->setAccel( tr( "Ctrl+N" ) );
-    
+
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotCurrentPageChanged(QWidget*)));
 
-    QStyleSheetItem *item = new QStyleSheetItem(QStyleSheet::defaultSheet(),"mypre");
-    item->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
-    
     if (!loadConfigFile()) {
         QString default_content("<qnet/>");
         m_document.setContent(default_content);
     }
+
+    loadStyleSheet();
+
     tabs->setTabPosition((QTabWidget::TabPosition)DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top));
     fortune_page = 0;
     fproc = 0;
@@ -78,7 +78,7 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
     QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
     for(QStringList::Iterator it = plugs.begin(); it != plugs.end(); ++it)
 	loadPlugin(*it);
-    
+
     // autoconnect
     QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
@@ -94,7 +94,7 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
 
 QMtp::~QMtp() {
     saveConfigFile();
-    
+
     // unload plugins :
     for (QMap<QString,void*>::Iterator it = plugins_map.begin(); it != plugins_map.end(); ++it)
 	dlclose(*it);
@@ -106,7 +106,7 @@ QString QMtp::iconPath() {
 
 void QMtp::slotConfigure() {
     m_settings = new MtpSettings(this);
-    
+
     temporary_dom.setContent(m_document.toString());
 
     // Select the right widget
@@ -169,10 +169,23 @@ void QMtp::slotConfigure() {
 
     // Stylesheet :
     TagsSettings * tags_settings = new TagsSettings(m_settings->stack);
-    tags_settings->setEnabled(false);
     m_settings->stack->addWidget(tags_settings,5);
     m_settings->prop_list->insertItem("StyleSheet",5);
-
+    {
+        QStringList tags = DomUtil::readListEntry(m_document,"/general/tags","tag");
+        for(QStringList::ConstIterator it = tags.begin(); it != tags.end(); ++it) {
+            QString name = *it;
+            QString family = DomUtil::readEntry(m_document,"/appearance/tags/" + *it + "/family");
+            QString style = DomUtil::readEntry(m_document,"/appearance/tags/" + *it + "/style");
+            int color = DomUtil::readIntEntry(m_document,"/appearance/tags/" + *it + "/color");
+            bool strike = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/strike");
+            bool underline = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/underline");
+            bool spaces = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/spaces");
+            int size = DomUtil::readIntEntry(m_document,"/appearance/tags/" + *it + "/size");
+            TagItem tag(name,family,style,color,strike,underline,spaces,size);
+            tags_settings->addTagItem(tag);
+        }
+    }
     connect(m_settings, SIGNAL(end()),
             SLOT(slotStoreConfig()));
 
@@ -187,29 +200,30 @@ void QMtp::slotStoreConfig() {
         PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(2);
         FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
         AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
+        TagsSettings * tags_settings = (TagsSettings *)m_settings->stack->widget(5);
 
         filters_settings->apply();
-        
+
         m_document.setContent(temporary_dom.toString());
-	
+
         for(QValueList<ChatSession*>::Iterator it = sessions.begin(); it != sessions.end(); ++it) {
             (*it)->updateFilters();
         }
-        
+
         // Urls
         {
             QStringList l;
             for (uint i=0; i< url_settings->urls_box->count(); i++)
                 l << url_settings->urls_box->text(i);
             DomUtil::writeListEntry(m_document,"/urls/available","type",l);
-            
+
             for (uint i=0; i< url_settings->urls_box->count(); i++) {
                 UrlSettings::UrlItem it = *(url_settings->map.find(url_settings->urls_box->text(i)));
                 DomUtil::writeEntry(m_document,"/urls/" + it.name + "/motif",it.prefix);
                 DomUtil::writeEntry(m_document,"/urls/" + it.name + "/command",it.command);
             }
         }
-        
+
         // Prefixes
         {
             QStringList l;
@@ -217,18 +231,38 @@ void QMtp::slotStoreConfig() {
                 l << prefix_settings->prefix_box->text(i);
             DomUtil::writeListEntry(m_document,"/prefixes","item",l);
         }
-        
+
         // Fortune :
         {
             DomUtil::writeEntry(m_document,"/fortune",fortune_settings->fortune_edit->text());
         }
-        
+
         // Appearance :
         {
             int position = appearance_settings->rbTop->isChecked()?QTabWidget::Top : QTabWidget::Bottom;
             DomUtil::writeIntEntry(m_document,"appearance/tabs/position",position);
             tabs->setTabPosition((QTabWidget::TabPosition)position);
-        }	
+        }
+
+        // StyleSheet :
+        {
+            QStringList l;
+            for (uint i=0; i< tags_settings->tags_box->count(); i++)
+                l << tags_settings->tags_box->text(i);
+            DomUtil::writeListEntry(m_document,"/general/tags","tag",l);
+
+            for(uint i=0; i<tags_settings->tags_box->count(); i++) {
+                TagItem it = *(tags_settings->map.find(tags_settings->tags_box->text(i)));
+                DomUtil::writeEntry(m_document,"/appearance/tags/" + it.name + "/family",it.family);
+                DomUtil::writeEntry(m_document,"/appearance/tags/" + it.name + "/style",it.style);
+                DomUtil::writeIntEntry(m_document,"/appearance/tags/" + it.name + "/color",it.color);
+                DomUtil::writeBoolEntry(m_document,"/appearance/tags/" + it.name + "/strike",it.strike);
+                DomUtil::writeBoolEntry(m_document,"/appearance/tags/" + it.name + "/underline",it.underline);
+                DomUtil::writeBoolEntry(m_document,"/appearance/tags/" + it.name + "/spaces",it.collapse);
+                DomUtil::writeIntEntry(m_document,"/appearance/tags/" + it.name + "/size",it.size);
+            }
+        }
+
         saveConfigFile();
     }
     delete m_settings;
@@ -250,18 +284,22 @@ void QMtp::fileNew() {
 Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * ref, bool pop) {
     QMap<QString,void*>::Iterator it;
     if((it = plugins_map.find(type)) != plugins_map.end()) {
-	create_t* create_plugin = (create_t*) dlsym(*it, "create");
-	Page* page = create_plugin(tabs,name,ref);
-	if (page->isSlave()) {
-	    tabs->insertTab(page,name);
-        if(pop)
-            tabs->showPage(page);
-        tabs->currentPage()->setFocus();
-	}
-	tab_map.insert(page,ref);
-	connect(page, SIGNAL(textDisplayed(QWidget *)),
-		this, SLOT(slotTextDisplayed(QWidget *)));
-	return page;
+        create_t* create_plugin = (create_t*) dlsym(*it, "create");
+        Page* page = create_plugin(tabs,name,ref);
+        int index=tabs->indexOf(ref);
+        for(QMap<QWidget*,ChatSession*>::ConstIterator iter = tab_map.begin(); iter != tab_map.end(); ++iter) {
+            if(*it == ref) index++;
+        }
+        if (page->isSlave()) {
+            tabs->insertTab(page,name,index+1);
+            if(pop)
+                tabs->showPage(page);
+            tabs->currentPage()->setFocus();
+        }
+        tab_map.insert(page,ref);
+        connect(page, SIGNAL(textDisplayed(QWidget *)),
+                this, SLOT(slotTextDisplayed(QWidget *)));
+        return page;
     }
     system_view->append("No type \"" + type + "\" available\n");
     return 0;
@@ -290,7 +328,7 @@ void QMtp::fileSessions() {
 
 	QDomElement child = DomUtil::elementByPath(m_document,"/sessions");
         if(!child.isNull()) child.parentNode().removeChild(child);
-	
+
         for (uint i=0; i< dlg.sessions_box->count(); i++) {
             SessionsDialog::SessionItem it = *(dlg.map.find(dlg.sessions_box->text(i)));
             DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/host",it.host);
@@ -335,7 +373,7 @@ void QMtp::fileSaveAs() {
     if(w != tab && w != fortune_page) {
 
         QString log = QString::null;
- 
+
         QMap<QWidget*,ChatSession*>::Iterator it;
         if ((it = tab_map.find(w)) != tab_map.end()) {
             log = (static_cast<Page*>(w))->getText();
@@ -343,7 +381,7 @@ void QMtp::fileSaveAs() {
         else {// session tab
             log = (static_cast<ChatSession*>(w))->chat_view->getText();
         }
-            
+
         if(log != QString::null) {
             QString filename(QFileDialog::getSaveFileName());
             if(!filename.isNull()) {
@@ -470,7 +508,7 @@ void QMtp::endFortune() {
 
 void QMtp::loadPlugin(const QString& file_name) {
     system_view->append("Loading " + file_name);
-    
+
     void* plug = dlopen(file_name, RTLD_LAZY);
     if (!plug) {
         system_view->append(QString("Cannot load library: ") + dlerror() + "\n");
@@ -484,7 +522,7 @@ void QMtp::loadPlugin(const QString& file_name) {
         system_view->append(QString("Cannot load symbols: ") + dlerror() + "\n");
 	return;
     }
-    
+
     plugins_map.insert(name_plugin(),plug);
 }
 
@@ -497,12 +535,36 @@ void QMtp::refreshMenu() {
 
 }
 
+void QMtp::loadStyleSheet() {
+    QStyleSheet * qnet_style = new QStyleSheet(this);
+    QStringList tags = DomUtil::readListEntry(m_document,"/general/tags","tag");
+    for(QStringList::ConstIterator it = tags.begin(); it != tags.end(); ++it) {
+        QStyleSheetItem *item = new QStyleSheetItem(qnet_style,*it);
+        QString family = DomUtil::readEntry(m_document,"/appearance/tags/" + *it + "/family");
+        QString style = DomUtil::readEntry(m_document,"/appearance/tags/" + *it + "/style");
+        int color = DomUtil::readIntEntry(m_document,"/appearance/tags/" + *it + "/color");
+        bool strike = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/strike");
+        bool underline = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/underline");
+        bool spaces = DomUtil::readBoolEntry(m_document,"/appearance/tags/" + *it + "/spaces");
+        int size = DomUtil::readIntEntry(m_document,"/appearance/tags/" + *it + "/size");
+
+        item->setFontFamily(family);
+        item->setColor(color);
+        item->setFontStrikeOut(strike);
+        item->setFontUnderline(underline);
+        if(!spaces)
+            item->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
+        item->setLogicalFontSize(size);
+    }
+    QStyleSheet::setDefaultSheet(qnet_style);
+}
+
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
 
     sessions.push_back(session);
 
-    tabs->insertTab(session,name);
+    tabs->insertTab(session,"@" + name);
     tabs->showPage(session);
 
     connect(session, SIGNAL(textDisplayed(QWidget *)),

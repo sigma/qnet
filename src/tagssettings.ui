@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>549</width>
-            <height>318</height>
+            <height>320</height>
         </rect>
     </property>
     <property name="caption">
@@ -35,14 +35,6 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>subs_button</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Subs</string>
-                            </property>
-                        </widget>
                         <widget class="QToolButton">
                             <property name="name">
                                 <cstring>add_button</cstring>
@@ -109,24 +101,33 @@
                 </spacer>
             </grid>
         </widget>
-        <spacer row="1" column="1">
+        <widget class="QLayoutWidget" row="0" column="1">
             <property name="name">
-                <cstring>spacer19</cstring>
+                <cstring>layout10</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>30</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QGroupBox" row="0" column="1">
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>nameEdit</cstring>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="1">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -141,11 +142,11 @@
             <property name="title">
                 <string>Font</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="0" column="0">
                     <property name="name">
                         <cstring>layout3</cstring>
                     </property>
@@ -168,7 +169,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="1" column="0">
                     <property name="name">
                         <cstring>layout4</cstring>
                     </property>
@@ -191,67 +192,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Color</string>
-                            </property>
-                        </widget>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>toolButton12</cstring>
-                            </property>
-                            <property name="text">
-                                <string>select</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Effects</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>checkStrikeout</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Strikeout</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>checkUnderline</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Underline</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="4" column="0">
                     <property name="name">
                         <cstring>layout7</cstring>
                     </property>
@@ -283,7 +224,7 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="QLineEdit" row="5" column="0">
                     <property name="name">
                         <cstring>editPreview</cstring>
                     </property>
@@ -294,7 +235,75 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-            </vbox>
+                <widget class="QLayoutWidget" row="2" column="0">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Color</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>toolButton12</cstring>
+                            </property>
+                            <property name="text">
+                                <string>select</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="3" column="0">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Effects</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkStrikeout</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Strikeout</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkUnderline</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Underline</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkSpaces</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Collapse spaces</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
@@ -341,23 +350,63 @@
         <receiver>TagsSettings</receiver>
         <slot>slotUpdatePreview()</slot>
     </connection>
+    <connection>
+        <sender>tags_box</sender>
+        <signal>highlighted(const QString&amp;)</signal>
+        <receiver>TagsSettings</receiver>
+        <slot>slotUpdateInfo(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>add_button</sender>
+        <signal>clicked()</signal>
+        <receiver>TagsSettings</receiver>
+        <slot>addTag()</slot>
+    </connection>
+    <connection>
+        <sender>del_button</sender>
+        <signal>clicked()</signal>
+        <receiver>TagsSettings</receiver>
+        <slot>delTag()</slot>
+    </connection>
+    <connection>
+        <sender>up_button</sender>
+        <signal>clicked()</signal>
+        <receiver>TagsSettings</receiver>
+        <slot>up()</slot>
+    </connection>
+    <connection>
+        <sender>down_button</sender>
+        <signal>clicked()</signal>
+        <receiver>TagsSettings</receiver>
+        <slot>down()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in implementation">qcolordialog.h</include>
     <include location="global" impldecl="in implementation">qfontdatabase.h</include>
+    <include location="local" impldecl="in declaration">tagitem.h</include>
     <include location="local" impldecl="in implementation">tagssettings.ui.h</include>
 </includes>
 <forwards>
     <forward>class QFontDatabase</forward>
+    <forward>class TagItem</forward>
 </forwards>
 <variables>
-    <variable access="private">QFontDatabase *m_db;</variable>
+    <variable access="public">QMap&lt;QString,TagItem&gt; map;</variable>
     <variable access="private">int default_size;</variable>
+    <variable access="private">QFontDatabase *m_db;</variable>
 </variables>
 <slots>
+    <slot>addTagItem( TagItem &amp; it )</slot>
+    <slot>delTagItem( const QString &amp; name )</slot>
+    <slot>slotUpdateInfo( const QString &amp; name )</slot>
     <slot>slotSelectFamily()</slot>
     <slot>slotUpdatePreview()</slot>
     <slot>slotSelectColor()</slot>
+    <slot>addTag()</slot>
+    <slot>delTag()</slot>
+    <slot>up()</slot>
+    <slot>down()</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
