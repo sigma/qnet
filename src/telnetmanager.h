@@ -19,14 +19,14 @@ class ChatSession;
 class QChar;
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class TelnetManager : public QObject {
     Q_OBJECT
 
 public:
-    TelnetManager(QWidget *parent=0, const char *name=0);
+    TelnetManager(QObject *parent=0, const char *name=0);
     ~TelnetManager();
 
     void setArgs(const QString&, const QString&);
@@ -39,7 +39,7 @@ public slots:
     void writeStdin(const QString&);
     void slotProcessExited();
     void slotError(int);
-    
+
 private:
     QSocket * socket;
     ChatSession * mtp;

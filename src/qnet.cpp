@@ -353,7 +353,7 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
     if((it = plugins_map.find(type)) != plugins_map.end()) {
         create_t* create_plugin = (create_t*) dlsym(*it, "create");
         Page* page = create_plugin(tabs,name,ref);
-        int index=tabs->indexOf(ref);
+        int index=tabs->indexOf(ref->chatpage());
         if (page->isSlave()) {
             tabs->insertTab(page,name,index+1);
             if(pop)
@@ -408,7 +408,7 @@ void QMtp::fileSaveAs() {
             log = (static_cast<Page*>(w))->getText();
         }
         else {// session tab
-            log = (static_cast<ChatSession*>(w))->chat_view->getText();
+            log = (static_cast<MainChatPage*>(w))->chat_view->getText();
         }
 
         if(log != QString::null) {
@@ -582,13 +582,13 @@ void QMtp::loadStyleSheet() {
 
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
-    session->toggleUserMenu(false);
+    session->chatpage()->toggleUserMenu(false);
     sessions.push_back(session);
 
-    tabs->insertTab(session,"@" + name);
-    tabs->showPage(session);
+    tabs->insertTab(session->chatpage(),"@" + name);
+    tabs->showPage(session->chatpage());
 
-    connect(session, SIGNAL(textDisplayed(QWidget *)),
+    connect(session->chatpage(), SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
 }
 

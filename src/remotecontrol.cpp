@@ -65,7 +65,7 @@ RemoteControlServerInfo::RemoteControlServerInfo(QMtp * mtp, int port, QTextBrow
     remote_pass = pass;
     connect( server, SIGNAL(newConnect(RemoteControlClientSocket*)),
              SLOT(newConnect(RemoteControlClientSocket*)) );
-    
+
     // Commands :
     commands.insert("list",&RemoteControlServerInfo::listCommand);
     commands.insert("exit",&RemoteControlServerInfo::exitCommand);
@@ -93,7 +93,7 @@ void RemoteControlServerInfo::newConnect( RemoteControlClientSocket *s ) {
         connect( s, SIGNAL(logText(const QString&)),
                  infoText, SLOT(append(const QString&)) );
         connect( s, SIGNAL(processText(const QString&)),
-                 SLOT(processText(const QString&)));	
+                 SLOT(processText(const QString&)));
     }
     connect( s, SIGNAL(connectionClosed()),
              SLOT(connectionClosed()) );
@@ -174,7 +174,7 @@ void RemoteControlServerInfo::commandsCommand(RemoteControlClientSocket *socket,
     QTextStream stream(socket);
     for(CommandMap::Iterator it = commands.begin(); it != commands.end(); ++it)
 	stream << "commands : " << it.key() << endl;
-}	
+}
 
 void RemoteControlServerInfo::sendCommand(RemoteControlClientSocket *socket,const QString& txt) {
     QRegExp re("\\w+ +(\\w+) +([^ ].*)");
@@ -281,9 +281,9 @@ void RemoteControlServerInfo::disconnectCommand(RemoteControlClientSocket *socke
 	bool ok(false);
 	for(it = m_mtp->sessions.begin(); it != m_mtp->sessions.end(); ++it) {
 	    if((*it)->sessionName() == session) {
-		ok = true;
-		m_mtp->closeTab(*it);
-		break;
+            ok = true;
+            m_mtp->closeTab((*it)->chatpage());
+            break;
 	    }
 	}
 	if (!ok) stream << "Session \"" << session << "\" does not exist" << endl;

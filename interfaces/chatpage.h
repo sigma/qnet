@@ -15,6 +15,7 @@
 #include <qwidget.h>
 #include <qstringlist.h>
 #include <master.h>
+#include <page.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -26,12 +27,12 @@ class QTextEdit;
 class QAction;
 class QPopupMenu;
 
-class ChatPage : public Master
+class ChatPage : public Page
 {
     Q_OBJECT
 
 public:
-    ChatPage( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ChatPage( QWidget* parent = 0, const char* name = 0, Master *master = 0, WFlags fl = 0 );
     ~ChatPage();
 
     QTextEdit* chat_edit;
@@ -54,6 +55,7 @@ public slots:
     void slotContextMenu(QListBoxItem*,const QPoint&);
     void toggleUserMenu(bool);
     void toggleUserBox();
+    void append(const QString&);
 
 protected:
     QGridLayout* ChatPageLayout;
@@ -62,10 +64,6 @@ protected:
 
 protected slots:
     virtual void languageChange();
-
-signals:
-	void textDisplayed(QWidget *);
-	void outputMessage(const QString& );
 
 private:
     QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end, *box, *bookmark, *gotob;

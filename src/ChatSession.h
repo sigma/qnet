@@ -17,7 +17,7 @@
 #include <qdom.h>
 #include <vector>
 
-#include "chatpage.h"
+#include "MainChatPage.h"
 #include "version.h"
 #include "master.h"
 
@@ -32,7 +32,7 @@ class MtpFilter;
 class MtpContext;
 class Page;
 
-class ChatSession : public ChatPage {
+class ChatSession : public Master {
     Q_OBJECT
 
 public:
@@ -43,33 +43,35 @@ public:
     void displayStdout(const QString&);
     const QString & sessionName() const;
     QMtp* topLevel() const;
-    
+
     void updateFilters();
 
+    MainChatPage *chatpage();
+
+    bool isLogged() {return login_set;}
+
 public slots:
-    void returnPressed();
     void closeSession();
     void slotLinkClicked(const QString &);
-    void slotComplete();
     void slotReconnect();
-
-    void slotUserDoubleClicked(QListBoxItem*);
-        
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString &);
-    
+
+signals:
+	void outputMessage(const QString& );
+
 private:
     void escape(QString * msg);
     void unescape(QString * msg);
     bool filter(QString * msg);
     void getInfo();
 
-    QString caseUnsensitive(const QString& msg);    
+    QString caseUnsensitive(const QString& msg);
 
     void executeShellCommand(const QString&);
     void createTelnetManager();
-    
+
     QProcess * proc;
 
     QMtp * mtp;
@@ -83,13 +85,14 @@ private:
 
     QString host, port, session_name;
 
-    QAction *complete, *reconnect;
-    
+
     QDomDocument * m_dom;
     MtpFilter * m_filter;
 //    MtpContext * m_context;
     std::vector<Page *> brothers;
-    
+
+    MainChatPage *m_chatpage;
+
 private slots:
 	void deleteProcess();
 

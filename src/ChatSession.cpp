@@ -33,7 +33,7 @@
 #include "page.h"
 
 ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
-        : ChatPage(parent, name) {
+        : Master(parent, name) {
 
     host = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/host","");
     port = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/port","");
@@ -50,21 +50,14 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     receiving_who = false;
     position = 0;
 
-    complete = new QAction(chat_edit,"complete");
-    complete->setAccel(QKeySequence(Key_Tab));
-    reconnect = new QAction(this,"reconnect");
-    reconnect->setAccel(QKeySequence(CTRL + Key_R));
-    connect(complete, SIGNAL(activated()),
-            this, SLOT(slotComplete()));
-    connect(reconnect, SIGNAL(activated()),
-            this, SLOT(slotReconnect()));
-
     connect(mng, SIGNAL(processExited()),
             this, SLOT(closeSession()));
 
     m_filter = new MtpFilter(dom,context());
+    m_chatpage = new MainChatPage(parent,name,this);
 
-    chat_edit->setUndoRedoEnabled(false);
+    connect(m_chatpage, SIGNAL(destroyed()),
+            this, SLOT(deleteLater()));
 }
 
 
@@ -102,11 +95,11 @@ void ChatSession::displayStdout(const QString& msg) {
 
         output = Filter::expandVars(new_m,context());
         unescape(&output);
-        chat_view->append(output);
+        m_chatpage->append(output);
 
         position += new_m.length();
         login_set = true;
-        chat_edit->setUndoRedoEnabled(true);
+        m_chatpage->chat_edit->setUndoRedoEnabled(true);
         mng->writeStdin(QString("set client ") + CLIENT);
         getInfo();
     } else if(filter(&m)) {
@@ -154,8 +147,7 @@ void ChatSession::displayStdout(const QString& msg) {
             } else {
                 output = Filter::expandVars(mm,context());
                 unescape(&output);
-                chat_view->append(output);
-                emit textDisplayed(this);
+                m_chatpage->append(output);
             }
         }
     }
@@ -171,23 +163,6 @@ void ChatSession::kill(Page * ref) {
             brothers.erase(it);
             return;
         }
-}
-
-void ChatSession::returnPressed() {
-    // delete this $#!@? "\n" we've just inserted
-    chat_edit->doKeyboardAction(QTextEdit::ActionBackspace);
-
-    // put in history if and ONLY if password is already set...
-    if (login_set && (chat_edit->text() != history[0]))
-        history.push_front(chat_edit->text());
-
-    QString m(chat_edit->text());
-    send(m);
-    chat_edit->clear();
-
-    // history returns to start
-    history_iterator = 0;
-
 }
 
 void ChatSession::send(const QString & m) {
@@ -229,7 +204,7 @@ void ChatSession::send(const QString & m) {
 }
 
 void ChatSession::closeSession() {
-    QMessageBox::information(this,"Connection lost","Lost connection with host " + host);
+    QMessageBox::information(m_chatpage,"Connection lost","Lost connection with host " + host);
 }
 
 void ChatSession::slotLinkClicked(const QString & link) {
@@ -238,49 +213,6 @@ void ChatSession::slotLinkClicked(const QString & link) {
     for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
         if(link.startsWith(*it))
             executeShellCommand(DomUtil::readEntry(*m_dom,QString("/urls/" + *it + "/command")).replace(QRegExp("%l"),link));
-}
-
-void ChatSession::slotComplete() {
-    int para, index;
-    //    chat_edit->doKeyboardAction(QTextEdit::ActionBackspace);
-    chat_edit->getCursorPosition(&para,&index);
-    QString parag = chat_edit->text(para);
-    QString pref;
-
-    if (!parag.at(index-1).isLetterOrNumber())
-        return;
-
-    while (parag.at(--index).isLetterOrNumber()) {
-        pref = parag.at(index) + pref;
-        chat_edit->doKeyboardAction(QTextEdit::ActionBackspace);
-    }
-    for(uint i=0; i<users_box->count(); i++)
-        //if (users_box->text(i).startsWith(pref)) {
-        if (!(users_box->text(i).find(pref,0,false))) {
-            if (users_box->text(i) == pref) {
-                uint position = (i+1)%(users_box->count());
-                chat_edit->insertAt(users_box->text(position),para,++index);
-                chat_edit->setCursorPosition(para,index+users_box->text(position).length());
-            } else {
-                chat_edit->insertAt(users_box->text(i),para,++index);
-                chat_edit->setCursorPosition(para,index+users_box->text(i).length());
-            }
-            return;
-        }
-    chat_edit->insertAt(pref,para,++index);
-    chat_edit->setCursorPosition(para,index+pref.length());
-}
-
-void ChatSession::slotReconnect() {
-    delete mng;
-    emit inactive();
-    createTelnetManager();
-    emit active();
-}
-
-void ChatSession::slotUserDoubleClicked(QListBoxItem* item) {
-    if(!item) return;
-    displayStdout(":tell:" + item->text() +": ");
 }
 
 void ChatSession::escape(QString * msg) {
@@ -305,15 +237,15 @@ bool ChatSession::filter(QString * msg) {
 
     QRegExp user_out("^[0-9: ]*<Mtp> ([^ ]*) (leaves|disconnects|is kicked out).*");
     if (user_out.exactMatch(*msg))
-        removeUser(user_out.cap(1));
+        m_chatpage->removeUser(user_out.cap(1));
 
     QRegExp user_kick("^[0-9: ]*<Mtp> You kick ([^ ]*) out.*");
     if (user_kick.exactMatch(*msg))
-        removeUser(user_kick.cap(1));
+        m_chatpage->removeUser(user_kick.cap(1));
 
     QRegExp user_in("^[0-9: ]*<Mtp> ([^ ]*) (comes in ?!).*");
     if (user_in.exactMatch(*msg))
-        addUser(user_in.cap(1));
+        m_chatpage->addUser(user_in.cap(1));
 
 
 
@@ -330,7 +262,7 @@ bool ChatSession::filter(QString * msg) {
 
     if (msg->startsWith("-----")) {
         if(receiving_who)
-            users_box->clear();
+            m_chatpage->users_box->clear();
         return (enable_stdout);
     }
 
@@ -338,13 +270,13 @@ bool ChatSession::filter(QString * msg) {
         bool tmp = this->enable_stdout;
         this->enable_stdout = true;
         this->receiving_who = false;
-        users_box->sort();
+        m_chatpage->users_box->sort();
         return tmp;
     }
 
     if (receiving_who) {
         QString login(*msg);
-        this->users_box->insertItem(login.replace(QRegExp(" .*"),""));
+        m_chatpage->users_box->insertItem(login.replace(QRegExp(" .*"),""));
         return enable_stdout;
     }
 
@@ -406,4 +338,15 @@ void ChatSession::updateFilters() {
     m_filter = g;
     f->setObsolete();
     delete f;
+}
+
+void ChatSession::slotReconnect() {
+    delete mng;
+    emit inactive();
+    createTelnetManager();
+    emit active();
+}
+
+MainChatPage *ChatSession::chatpage() {
+    return m_chatpage;
 }

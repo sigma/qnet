@@ -21,7 +21,7 @@
 
 using namespace std;
 
-TelnetManager::TelnetManager(QWidget *parent, const char *name)
+TelnetManager::TelnetManager(QObject *parent, const char *name)
         : QObject(parent, name) {
     mtp = (ChatSession *)parent;
     socket = new QSocket(this);

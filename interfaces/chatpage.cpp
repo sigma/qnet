@@ -32,8 +32,8 @@
  *  Constructs a ChatPage as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
-    : Master( parent, name, fl )
+ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl )
+        : Page( parent, name, master, fl )
 {
     if ( !name )
 	setName( "ChatPage" );
@@ -103,7 +103,7 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
             this, SLOT(slotNewLine()));
 
     connect(chat_view,SIGNAL(linkClicked(const QString &)),
-            this, SLOT(slotLinkClicked(const QString &)));
+            master, SLOT(slotLinkClicked(const QString &)));
 
     connect(chat_edit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
@@ -243,4 +243,9 @@ void ChatPage::toggleUserBox() {
         users_box->hide();
     else
         users_box->show();
+}
+
+void ChatPage::append(const QString& msg) {
+    chat_view->append(msg);
+    emit textDisplayed(this);
 }

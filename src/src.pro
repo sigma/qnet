@@ -37,6 +37,7 @@ SOURCES += main.cpp \
            qnet.cpp \
            telnetmanager.cpp \
            ChatSession.cpp \
+           MainChatPage.cpp \
            SessionsSettings.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
@@ -47,6 +48,7 @@ SOURCES += main.cpp \
 HEADERS += qnet.h \
            telnetmanager.h \
            ChatSession.h \
+           MainChatPage.h \
            version.h \
            SessionsSettings.h \
            UrlSettings.h \
