@@ -1708,11 +1708,14 @@ _wrap_chatsession_outgoing (SCM s_0, SCM s_1)
 
 
 static SCM
-_wrap_new_face (SCM s_0, SCM s_1)
+_wrap_new_face (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
 {
 #define FUNC_NAME "new-face"
     QString *arg1 = 0 ;
     QString *arg2 = 0 ;
+    int arg3 ;
+    int arg4 ;
+    int arg5 ;
     Face *result;
     QString temp1 ;
     char *tempptr1 ;
@@ -1741,7 +1744,16 @@ _wrap_new_face (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    result = (Face *)new Face((QString const &)*arg1,(QString const &)*arg2);
+    {
+        arg3 = scm_num2int(s_2, SCM_ARG1, FUNC_NAME);
+    }
+    {
+        arg4 = scm_num2int(s_3, SCM_ARG1, FUNC_NAME);
+    }
+    {
+        arg5 = scm_num2int(s_4, SCM_ARG1, FUNC_NAME);
+    }
+    result = (Face *)new Face((QString const &)*arg1,(QString const &)*arg2,arg3,arg4,arg5);
     
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Face, 1);
@@ -2100,7 +2112,7 @@ SWIG_init (void)
     scm_c_define_gsubr("chatsession-incoming", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_incoming);
     scm_c_define_gsubr("chatsession-outgoing", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_outgoing);
     SWIG_TypeClientData(SWIGTYPE_p_Face, (void *) &_swig_guile_clientdataface);
-    scm_c_define_gsubr("new-face", 2, 0, 0, (swig_guile_proc) _wrap_new_face);
+    scm_c_define_gsubr("new-face", 5, 0, 0, (swig_guile_proc) _wrap_new_face);
     SWIG_TypeClientData(SWIGTYPE_p_Pattern, (void *) &_swig_guile_clientdatapattern);
     scm_c_define_gsubr("new-pattern", 1, 0, 0, (swig_guile_proc) _wrap_new_pattern);
     scm_c_define_gsubr("pattern-add", 3, 0, 0, (swig_guile_proc) _wrap_pattern_add);

@@ -1,7 +1,7 @@
 /*
  *  File: fontlock.h
  *  Created: Tuesday, August 24, 2004
- *  Time-stamp: <>
+ *  Time-stamp: <03/10/2004 21:15:36 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -29,7 +29,7 @@ public:
     Face(const QFont& font) : m_font(font) {}
     Face(const QColor& color) : m_color(color) {}
     Face(const QFont& font, const QColor& color) : m_font(font), m_color(color) {}
-    Face(const QString& font, const QString& color) : m_font(font), m_color(color) {}
+    Face(const QString& family, const QString& color, int size = 12, int weight = QFont::Normal, int italic = 0) : m_font(family,size,weight,italic), m_color(color) {}
 
     ~Face() {} //the destructor
 
@@ -105,11 +105,15 @@ public:
     bool matchEnd(const QString& text);
     bool matchMiddle(const QString& text);
 
-    ColorizerList getColors() const {return m_colors;}
+//    ColorizerList getColors() const {return m_colors;}
+    Pattern begin() {return m_begin;}
+    Pattern end() {return m_end;}
+    Pattern middle() {return m_middle;}
+
 
 private:
     Pattern m_begin, m_end, m_middle;
-    ColorizerList m_colors;
+//    ColorizerList m_colors;
 
     bool internalMatch(Pattern&, const QString&);
 };	// end of class BlockPattern

@@ -1,7 +1,7 @@
 /*
  *  File: fontlock.cpp
  *  Created: Tuesday, August 24, 2004
- *  Time-stamp: <>
+ *  Time-stamp: <03/10/2004 20:50:09 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -23,19 +23,36 @@ ColorizerList ColorizerList::simplify() const {
     return *this;
 }
 
+// bool Pattern::match(const QString & text) {
+//     m_colors.clear();
+//     if(! m_reg.exactMatch(text)) {
+//         return false;
+//     }
+
+//     for(QValueList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
+//         int num = (*it).first;
+//         int pos = m_reg.pos(num);
+//         if(pos != -1)
+//             m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
+//     }
+//     return true;
+// }
+
 bool Pattern::match(const QString & text) {
     m_colors.clear();
-    if(! m_reg.exactMatch(text)) {
-        return false;
-    }
+    bool match = false;
+    int offset = 0;
 
-    for(QValueList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
-        int num = (*it).first;
-        int pos = m_reg.pos(num);
-        if(pos != -1)
-            m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
+    while( (offset = m_reg.search(text,offset) + 1) ) {
+        match = true;
+        for(QValueList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
+            int num = (*it).first;
+            int pos = m_reg.pos(num);
+            if(pos != -1)
+                m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
+        }
     }
-    return true;
+    return match;
 }
 
 bool BlockPattern::matchBegin(const QString & text) {
@@ -54,41 +71,30 @@ bool BlockPattern::internalMatch(Pattern& reg, const QString & text) {
     return reg.match(text);
 }
 
-FontLock::FontLock(QTextEdit * edit) : QSyntaxHighlighter(edit) {
-//     Pattern pat("<(Mtp)> (.*)");
-//     Face f("","red");
-//     Face g("","yellow");
-//     Face h("","blue");
-
-//     pat << qMakePair(1,f) << qMakePair(2,g);
-
-//     addPattern(pat);
-
-//     Pattern p(".*(Sigma).*");
-//     p << qMakePair(1,h);
-
-//     addPattern(p);
-}
+FontLock::FontLock(QTextEdit * edit) : QSyntaxHighlighter(edit) {}
 
 FontLock::~FontLock() {}
 
 int FontLock::highlightParagraph(const QString & text, int block) {
     ColorizerList list;
     if(block>0) {
-        BlockPattern p = m_blocks[block];
-        if(p.matchEnd(text))
+        BlockPattern p = m_blocks[block-1];
+        if(p.matchEnd(text)) {
             m_nested.pop();
-        else if(! p.matchMiddle(text)) { //error, emergency exit
+            list = p.end().getColors();
+        } else if(! p.matchMiddle(text)) { //error, emergency exit
             m_nested.pop();
             return highlightParagraph(text, m_nested.isEmpty() ? 0 : m_nested.top());
+        } else {
+            list = p.middle().getColors();
         }
     }
 
     int index = 0;
     for(QValueList<BlockPattern>::Iterator it = m_blocks.begin(); it != m_blocks.end(); ++it, ++index)
         if((*it).matchBegin(text)) {
-            list = (*it).getColors();
-            m_nested.push(index);
+            list += (*it).begin().getColors();
+            m_nested.push(index+1);
         }
 
     for(QValueList<Pattern>::Iterator it = m_lines.begin(); it != m_lines.end(); ++it)

@@ -5,7 +5,7 @@
 %name(face)
 class Face {
 public:
-    Face(const QString& font, const QString& color);
+    Face(const QString& family, const QString& color, int size, int weight, int italic);
 };
 
 %name(pattern)

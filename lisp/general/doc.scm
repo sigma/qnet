@@ -25,9 +25,7 @@
      (primitive-eval
       (list 'begin
             (append (list 'define decl) b)
-;;            (list 'set-symbol-property! (quote ',name) (quote 'docstring) d)
-            (list 'set! (list 'documentation (quote ',name)) d))))
-)
+            (list 'set! (list 'documentation (quote ',name)) d)))))
 (set! (documentation 'defun) "define a function in emacs style")
 
 (defmacro* defvar (name #:optional init docstring)
