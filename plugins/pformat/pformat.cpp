@@ -15,7 +15,7 @@
 
 #include "pformat.h"
 
-PLUGIN_FACTORY(PFormat,"pformat");
+PLUGIN_FACTORY(PFormat,"pformat")
 
 PFormat::PFormat(QWidget */*parent*/, const char *name, Master * session) :
 Page(0, name, session) {}

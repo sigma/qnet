@@ -13,7 +13,7 @@
 
 #include <qlayout.h>
 
-PLUGIN_FACTORY(BrowserPage,"browser");
+PLUGIN_FACTORY(BrowserPage,"browser")
 
 BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
         : Page(parent,name,session) {

@@ -18,7 +18,7 @@
 
 #include "ptime.h"
 
-PLUGIN_FACTORY(PTime,"ptime");
+PLUGIN_FACTORY(PTime,"ptime")
 
 PTime::PTime(QWidget */*parent*/, const char *name, Master * session) :
 Page(0, name, session) {}

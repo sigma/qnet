@@ -17,3 +17,11 @@ SUBDIRS += tell \
            pformat \
            cron \
            osdsplash
+QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -Wall \
+                        -ansi \
+                        -pedantic \
+                        -g3
+QMAKE_CXXFLAGS_RELEASE += -Wall \
+                          -ansi \
+                          -pedantic

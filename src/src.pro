@@ -11,17 +11,6 @@ warn_on \
 qt \
 thread
 TARGET = ../bin/qnet
-QMAKE_CXXFLAGS_DEBUG += -g3 \
--pg \
--Werror \
--ansi \
--pedantic \
--Wno-long-long
-QMAKE_CXXFLAGS_RELEASE += -Os \
--Werror \
--ansi \
--pedantic \
--Wno-long-long
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 INCLUDEPATH = ../filters \
@@ -79,3 +68,13 @@ FORMS += qnet_base.ui \
          sessionssettingsbase.ui \
          tagssettings.ui \
          pluginssettings.ui
+QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -Wall \
+                        -ansi \
+                        -pedantic \
+                        -Wno-long-long \
+                        -g3
+QMAKE_CXXFLAGS_RELEASE += -Wall \
+                          -ansi \
+                          -pedantic \
+                          -Wno-long-long

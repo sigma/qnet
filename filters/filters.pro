@@ -25,8 +25,17 @@ CONFIG += release \
           qt \
           thread \
           staticlib
-QMAKE_CXXFLAGS_DEBUG += -g3
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 INCLUDEPATH = ../utils \
               ../interfaces
+QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -Wall \
+                        -ansi \
+                        -pedantic \
+                        -Wno-long-long \
+                        -g3
+QMAKE_CXXFLAGS_RELEASE += -Wall \
+                          -ansi \
+                          -pedantic \
+                          -Wno-long-long

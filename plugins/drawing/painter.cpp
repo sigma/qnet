@@ -24,7 +24,7 @@
 #include <qcolordialog.h>
 #include <qregexp.h>
 
-PLUGIN_FACTORY(Painter,"drawing");
+PLUGIN_FACTORY(Painter,"drawing")
 /*
  *  Constructs a Painter as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.

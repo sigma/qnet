@@ -14,7 +14,7 @@
 #include <qtextedit.h>
 #include <mtpbrowser.h>
 
-PLUGIN_FACTORY(TellPage,"tell");
+PLUGIN_FACTORY(TellPage,"tell")
 
 TellPage::TellPage(QWidget *parent, const char *name, Master * session)
         : ChatPage(parent,name,session) {

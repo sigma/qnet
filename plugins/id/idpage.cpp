@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'idpage.ui'
 **
 ** Created: Sat Feb 22 12:08:18 2003
-**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.3 2004/04/22 21:20:22 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.4 2004/04/25 16:24:22 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -19,7 +19,7 @@
 #include <qlabel.h>
 #include <qregexp.h>
 
-PLUGIN_FACTORY(IdPage,"id");
+PLUGIN_FACTORY(IdPage,"id")
 
 /*
  *  Constructs a IdPage as a child of 'parent', with the

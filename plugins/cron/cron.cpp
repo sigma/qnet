@@ -13,7 +13,7 @@
 
 #include "cron.h"
 
-PLUGIN_FACTORY(Cron,"cron");
+PLUGIN_FACTORY(Cron,"cron")
 
 Cron::Cron(QWidget * /*parent*/, const char *name, Master * session)
     : Page(0, name, session) {

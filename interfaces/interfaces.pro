@@ -19,3 +19,13 @@ CONFIG += release \
           staticlib
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
+QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -Wall \
+                        -ansi \
+                        -pedantic \
+                        -Wno-long-long \
+                        -g3
+QMAKE_CXXFLAGS_RELEASE += -Wall \
+                          -ansi \
+                          -pedantic \
+                          -Wno-long-long

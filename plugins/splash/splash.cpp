@@ -20,7 +20,7 @@
 
 #define Style_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
 
-PLUGIN_FACTORY(Splash,"splash");
+PLUGIN_FACTORY(Splash,"splash")
 
 Splash::Splash(QWidget * /*parent*/, const char *name, Master * session)
     : Page(0, name, session, WStyle_Customize | Style_Splash) {

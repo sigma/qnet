@@ -15,7 +15,7 @@
 
 #include "affect.h"
 
-PLUGIN_FACTORY(Affect,"affect");
+PLUGIN_FACTORY(Affect,"affect")
 
 Affect::Affect(QWidget */*parent*/, const char *name, Master * session) : Page(0, name, session) {}
 

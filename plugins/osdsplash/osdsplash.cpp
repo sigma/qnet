@@ -13,7 +13,7 @@
 
 #include "osdsplash.h"
 
-PLUGIN_FACTORY(OsdSplash,"splash");
+PLUGIN_FACTORY(OsdSplash,"splash")
 
 OsdSplash::OsdSplash(QWidget * /*parent*/, const char *name, Master * session)
     : Page(0, name, session) {

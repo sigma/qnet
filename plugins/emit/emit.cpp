@@ -12,7 +12,7 @@
 //
 #include "emit.h"
 
-PLUGIN_FACTORY(Emit,"emit");
+PLUGIN_FACTORY(Emit,"emit")
 
 Emit::Emit(QWidget */*parent*/, const char *name, Master * session) :
 Page(0, name, session) {}
