@@ -30,7 +30,7 @@ class BrowserPage : public Page {
 public:
     BrowserPage(QWidget *parent, const char *name, Master * session);
     ~BrowserPage();
-    virtual void append(QString & msg);
+    void append(const QString & msg);
     MtpBrowser* chat_view;
 
 protected:

@@ -46,7 +46,7 @@ public:
     }
 
     virtual bool isSlave() {return true;}
-    virtual void append(QString &) = 0;
+    virtual void append(const QString &) = 0;
 
 private:
     Master * m_master;

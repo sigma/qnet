@@ -32,7 +32,7 @@
 #include "page.h"
 #include <qglobal.h>
 
-ChatSession::ChatSession(QString session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
+ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
         : ChatPage(parent, name) {
 
     host = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/host","");
@@ -118,50 +118,51 @@ ChatSession::~ChatSession() {
         delete (*it);
 }
 
-void ChatSession::displayStderr(QString msg) {
+void ChatSession::displayStderr(const QString& msg) {
     mtp->system_view->append("["+ host + ":" + port + "]" + msg);
 }
 
-void ChatSession::displayStdout(QString msg) {
+void ChatSession::displayStdout(const QString& msg) {
 
     emit outputMessage(msg);
+    QString m(msg);
     
-    if (msg.startsWith("<Mtp> Welcome")) {
-        this->login = msg.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
+    if (m.startsWith("<Mtp> Welcome")) {
+        this->login = m.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
         displayStderr("Setting user name to " + this->login + ".");
 
         context()->setVar("login",caseUnsensitive(this->login));
         context()->setVar("Login",this->login);
 	context()->setVar("channel","Hall");
 
-        QString new_msg("<Mtp> Welcome, " + login + ".");
+        QString new_m("<Mtp> Welcome, " + login + ".");
 
-        escape(&new_msg);
-        new_msg = m_filter->filterOut(new_msg);
+        escape(&new_m);
+        new_m = m_filter->filterOut(new_m);
 #if (QT_VERSION < 305)
-        new_msg += "<br>";
+        new_m += "<br>";
 #endif
 
-        chat_view->append(new_msg);
+        chat_view->append(new_m);
 
-        position += new_msg.length();
+        position += new_m.length();
         login_set = true;
         mng->writeStdin(QString("set client ") + CLIENT);
         getInfo();
-    } else if(filter(&msg)) {
-        escape(&msg);
-        msg = m_filter->filterOut(msg);
+    } else if(filter(&m)) {
+        escape(&m);
+        m = m_filter->filterOut(m);
 
 
-        QStringList list = QStringList::split("\n",msg);
+        QStringList list = QStringList::split("\n",m);
         for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-            QString mmsg = *it;
+            QString mm = *it;
 #if (QT_VERSION < 305)
-            mmsg += "<br>";
+            mm += "<br>";
 #endif
 
             QRegExp rx("^:(\\w+\\?" "?):(\\w+):(.*)");
-            if (rx.exactMatch(mmsg)) {
+            if (rx.exactMatch(mm)) {
                 QString m(rx.cap(3));
 #if (QT_VERSION < 305)
                 m += "<br>";
@@ -185,10 +186,10 @@ void ChatSession::displayStdout(QString msg) {
 			edit->append(m);
 		    }
 		    else
-			displayStderr("Don't know what to do with : " + mmsg);
+			displayStderr("Don't know what to do with : " + mm);
                 }
             } else {
-                chat_view->append(mmsg);
+                chat_view->append(mm);
 
                 emit textDisplayed(this);
             }
@@ -196,7 +197,7 @@ void ChatSession::displayStdout(QString msg) {
     }
 }
 
-const QString & ChatSession::sessionName() {
+const QString & ChatSession::sessionName() const {
     return session_name;
 }
 
@@ -227,7 +228,7 @@ void ChatSession::returnPressed() {
 
 }
 
-void ChatSession::send(QString & m) {
+void ChatSession::send(const QString & m) {
     QString msg(m);
 
     QString prefix = "";
@@ -407,7 +408,7 @@ void ChatSession::getInfo() {
     mng->writeStdin("who all");
 }
 
-QString ChatSession::caseUnsensitive(QString msg) {
+QString ChatSession::caseUnsensitive(const QString& msg) {
     QString up = msg.upper();
     QString low = msg.lower();
     QString res("");
@@ -416,17 +417,17 @@ QString ChatSession::caseUnsensitive(QString msg) {
     return res;
 }
 
-void ChatSession::addUser(QString name) {
+void ChatSession::addUser(const QString& name) {
     users_box->insertItem(name);
     users_box->sort();
 }
 
-void ChatSession::removeUser(QString name) {
+void ChatSession::removeUser(const QString& name) {
     QListBoxItem * item = users_box->findItem(name,Qt::ExactMatch);
     delete item;
 }
 
-void ChatSession::executeShellCommand(QString com) {
+void ChatSession::executeShellCommand(const QString& com) {
     //    if (!proc->isRunning()) {
     proc = new QProcess(this);
     QStringList list = QStringList::split(" ",com);
@@ -581,7 +582,7 @@ void ChatSession::applyFilters() {
 
 }
 
-void ChatSession::applyLine(QString fname, QString reg, QString pat) {
+void ChatSession::applyLine(const QString& fname, const QString& reg, const QString& pat) {
     LineFilter * f1 = new LineFilter(fname,context());
     f1->setRegExp(reg);
     f1->setResultPattern(pat);
@@ -589,7 +590,7 @@ void ChatSession::applyLine(QString fname, QString reg, QString pat) {
     m_filter->addLineFilter(f1);
 }
 
-void ChatSession::applyItem(QString fname, QString reg, QString pat) {
+void ChatSession::applyItem(const QString& fname, const QString& reg, const QString& pat) {
     ItemFilter * f1 = new ItemFilter(fname,context());
     f1->setRegExp(reg);
     f1->setResultPattern(pat);
@@ -610,6 +611,6 @@ void ChatSession::createTelnetManager()
     mng->start();
 }
 
-QMtp* ChatSession::topLevel() {
+QMtp* ChatSession::topLevel() const {
     return mtp;
 }

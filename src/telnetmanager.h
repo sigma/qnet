@@ -29,14 +29,14 @@ public:
     TelnetManager(QWidget *parent=0, const char *name=0);
     ~TelnetManager();
 
-    void setArgs(QString, QString);
+    void setArgs(const QString&, const QString&);
     void start();
-    void setLogin(QString login);
-    void setPassword(QString password);
+    void setLogin(const QString& login);
+    void setPassword(const QString& password);
 
 public slots:
     void readStdout();
-    void writeStdin(QString);
+    void writeStdin(const QString&);
     void slotProcessExited();
     void slotError(int);
     

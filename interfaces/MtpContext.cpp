@@ -11,23 +11,23 @@
 #include "MtpContext.h"
 
 
-MtpContext::MtpContext()
-{}
+MtpContext::MtpContext() {}
 
 
 MtpContext::~MtpContext() {}
 
-void MtpContext::setVar(QString name, QString value) {
-var_map.insert(name,value);
+void MtpContext::setVar(const QString& name, const QString& value) {
+    var_map.insert(name,value);
 }
 
-void MtpContext::unsetVar(QString name) {
-var_map.remove(name);
+void MtpContext::unsetVar(const QString& name) {
+    var_map.remove(name);
 }
 
-QString MtpContext::getValue(QString name) {
-QMap<QString,QString>::Iterator it;
-if ((it = var_map.find(name)) != var_map.end())
+QString MtpContext::getValue(const QString& name) {
+    QMap<QString,QString>::Iterator it;
+    if ((it = var_map.find(name)) != var_map.end())
         return *it;
-        else return QString::null;
+    else
+        return QString::null;
 }

@@ -14,32 +14,28 @@
 #include <qlineedit.h>
 
 PrefixSettings::PrefixSettings(QWidget *parent, const char *name)
-  : PrefixSettingsBase(parent, name)
-{
-}
+        : PrefixSettingsBase(parent, name) {}
 
 
-PrefixSettings::~PrefixSettings()
-{
-}
+PrefixSettings::~PrefixSettings() {}
 
 void PrefixSettings::addPrefixItem(PrefixItem & it) {
-map.insert(it.name,it);
-prefix_box->insertItem(it.name);
+    map.insert(it.name,it);
+    prefix_box->insertItem(it.name);
 }
 
-void PrefixSettings::delPrefixItem(QString name) {
-map.remove(name);
+void PrefixSettings::delPrefixItem(const QString& name) {
+    map.remove(name);
 }
 
 void PrefixSettings::slotAdd() {
-if (name_edit->text().length()) {
-PrefixItem it(name_edit->text());
-	addPrefixItem(it);
-        }
+    if (name_edit->text().length()) {
+        PrefixItem it(name_edit->text());
+        addPrefixItem(it);
+    }
 }
 
 void PrefixSettings::slotDel() {
-delPrefixItem(QString(prefix_box->currentText()));
-prefix_box->removeItem(prefix_box->currentItem());
+    delPrefixItem(QString(prefix_box->currentText()));
+    prefix_box->removeItem(prefix_box->currentItem());
 }

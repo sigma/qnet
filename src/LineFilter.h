@@ -20,11 +20,11 @@
 class LineFilter : public Filter {
 
 public:
-    LineFilter(QString & name, MtpContext * ctxt);
+    LineFilter(const QString & name, MtpContext * ctxt);
     ~LineFilter();
 
-    void setRegExp(QString reg);
-    void setResultPattern(QString pat);
+    void setRegExp(const QString& reg);
+    void setResultPattern(const QString& pat);
     bool applyTo(QString &);
 
 private:

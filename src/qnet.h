@@ -47,7 +47,7 @@ public:
 
     bool loadConfigFile();
     bool saveConfigFile();
-    Page * getNewPage(QString, QString, ChatSession *);
+    Page * getNewPage(const QString&, const QString&, ChatSession *);
 
 public slots:
     void slotConfigure();
@@ -78,7 +78,7 @@ private:
     RemoteControlServerInfo *rctl;
     
 private:
-    void launchSession(QString name);
+    void launchSession(const QString& name);
 };
 
 #endif

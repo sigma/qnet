@@ -49,7 +49,7 @@ void Splash::timeout() {
     hide();
 }
 
-void Splash::append(QString & msg) {
+void Splash::append(const QString & msg) {
     
     m_timer->stop();
     label.setText(msg);

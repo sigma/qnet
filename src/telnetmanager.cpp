@@ -41,7 +41,7 @@ TelnetManager::~TelnetManager() {
     delete socket;
 }
 
-void TelnetManager::setArgs(QString host, QString port) {
+void TelnetManager::setArgs(const QString& host, const QString& port) {
     this->host = host;
     this->port = port.toInt();
 }
@@ -98,9 +98,10 @@ void TelnetManager::readStdout() {
     }
 }
 
-void TelnetManager::writeStdin(QString msg) {
-    QString to_write(msg.replace(QRegExp("\n"),"\r\n") + "\r\n");
-
+void TelnetManager::writeStdin(const QString& msg) {
+    QString to_write(msg);
+    to_write = to_write.replace(QRegExp("\n"),"\r\n") + "\r\n";
+    
     int index = 0;
     while ((index = to_write.find(IAC,index)) != -1) {
         to_write.insert(index,IAC);
@@ -114,11 +115,11 @@ void TelnetManager::slotProcessExited() {
     emit processExited();
 }
 
-void TelnetManager::setLogin(QString login) {
+void TelnetManager::setLogin(const QString& login) {
     this->login = login;
 }
 
-void TelnetManager::setPassword(QString password) {
+void TelnetManager::setPassword(const QString& password) {
     this->password = password;
 }
 

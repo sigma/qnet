@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'idpage.ui'
 **
 ** Created: Sat Feb 22 12:08:18 2003
-**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.1 2003/02/22 15:22:37 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.2 2003/05/06 17:58:13 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -28,7 +28,7 @@ IdPage::IdPage( QWidget* parent, const char* name, Master * session, WFlags fl )
         : Page( parent, name, session, fl ) {
     if ( !name )
         setName( "IdPage" );
-    IdPageLayout = new QGridLayout( this, 1, 1, 11, 6, "IdPageLayout");
+    IdPageLayout = new QGridLayout( this, 1, 1, 6, 6, "IdPageLayout");
 
     details_button = new QPushButton( this, "details_button" );
 
@@ -85,7 +85,7 @@ void IdPage::switchPage() {
     widgetStack->raiseWidget(id);
 }
 
-void IdPage::append(QString &msg) {
+void IdPage::append(const QString &msg) {
     browser->append("<font face=fixed>" + msg + "</font>");    
     idform->append(msg);
 }

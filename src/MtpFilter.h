@@ -37,15 +37,15 @@ public:
     MtpFilter();
     ~MtpFilter();
 
-    QString filterIn(QString &);
-    QString filterOut(QString &);
+    QString filterIn(const QString &);
+    QString filterOut(const QString &);
     void addGlobalFilter(GlobalFilter*);
     void addBlockFilter(BlockFilter*);
     void addLineFilter(LineFilter*);
     void addItemFilter(ItemFilter*);
     void addInputFilter(InputFilter*);
     
-    InputFilter * getInputFilter(QString name);
+    InputFilter * getInputFilter(const QString& name);
 
 private:
 std::vector<GlobalFilter*> global;

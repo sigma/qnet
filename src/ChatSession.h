@@ -38,13 +38,13 @@ class ChatSession : public ChatPage {
     Q_OBJECT
 
 public:
-    ChatSession(QString session_name, QMtp * mtp, QWidget *parent, const char *name,QDomDocument * dom);
+    ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name,QDomDocument * dom);
     ~ChatSession();
 
-    void displayStderr(QString);
-    void displayStdout(QString);
-    const QString & sessionName();
-    QMtp* topLevel();
+    void displayStderr(const QString&);
+    void displayStdout(const QString&);
+    const QString & sessionName() const;
+    QMtp* topLevel() const;
 
 public slots:
     void returnPressed();
@@ -58,23 +58,23 @@ public slots:
 
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
-    void send(QString &);
+    void send(const QString &);
 
 private:
 
     void applyFilters();
-    void applyLine(QString,QString,QString);
-    void applyItem(QString,QString,QString);
+    void applyLine(const QString&,const QString&,const QString&);
+    void applyItem(const QString&,const QString&, const QString&);
     void escape(QString * msg);
     bool filter(QString * msg);
     void getInfo();
 
-    QString caseUnsensitive(QString msg);
+    QString caseUnsensitive(const QString& msg);
     
-    void removeUser(QString);
-    void addUser(QString);
+    void removeUser(const QString&);
+    void addUser(const QString&);
 
-    void executeShellCommand(QString);
+    void executeShellCommand(const QString&);
     void createTelnetManager();
     
     QProcess * proc;

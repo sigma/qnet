@@ -11,26 +11,23 @@
 #include "GlobalFilter.h"
 
 
-GlobalFilter::GlobalFilter(QString & name) : Filter(name)
-
-{
-}
+GlobalFilter::GlobalFilter(const QString & name) : Filter(name)
+{}
 
 
-GlobalFilter::~GlobalFilter()
-{
-}
+GlobalFilter::~GlobalFilter() {}
 
 bool GlobalFilter::applyTo(QString & msg) {
-MtpRegExp re(".*");
+    MtpRegExp re(".*");
 
-bool match = re.exactMatch(msg);
+    bool match = re.exactMatch(msg);
 
-if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
+    if (match)
+        setResult(applyProcessedRegexpToPattern(re,pattern));
 
-return match;
+    return match;
 }
 
-void GlobalFilter::setResultPattern(QString & pat) {
-pattern = pat;
+void GlobalFilter::setResultPattern(const QString & pat) {
+    pattern = pat;
 }

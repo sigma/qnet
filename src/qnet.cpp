@@ -48,7 +48,7 @@ QMtp::QMtp(QWidget *parent, const char *name)
     delete statusBar();
 
     //system_view->setFamily("fixed");
-    system_view->setPointSize(10);
+    //system_view->setPointSize(10);
     //system_view->setWrapPolicy(QTextBrowser::Anywhere);
 
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
@@ -201,7 +201,7 @@ void QMtp::fileNew() {
     }
 }
 
-Page * QMtp::getNewPage(QString type,QString name,ChatSession * ref) {
+Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * ref) {
     QMap<QString,void*>::Iterator it;
     if((it = plugins_map.find(type)) != plugins_map.end()) {
 	create_t* create_plugin = (create_t*) dlsym(*it, "create");
@@ -404,7 +404,7 @@ void QMtp::loadPlugin(const QString& file_name) {
     plugins_map.insert(name_plugin(),plug);
 }
 
-void QMtp::launchSession(QString name) {
+void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
 
     sessions.push_back(session);

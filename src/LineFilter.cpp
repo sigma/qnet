@@ -11,7 +11,7 @@
 #include "LineFilter.h"
 
 
-LineFilter::LineFilter(QString & name, MtpContext * ctxt) : Filter(name,ctxt)
+LineFilter::LineFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt)
 {
 m_context = ctxt;
 }
@@ -30,10 +30,10 @@ if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
 return match;
 }
 
-void LineFilter::setRegExp(QString reg) {
+void LineFilter::setRegExp(const QString& reg) {
 	this->reg = MtpRegExp(reg,m_context);
 }
 
-void LineFilter::setResultPattern(QString pat) {
+void LineFilter::setResultPattern(const QString& pat) {
 	this->pattern = pat;
 }

@@ -22,9 +22,9 @@ class MtpContext {
 public:
     MtpContext();
     ~MtpContext();
-    void setVar(QString name, QString value);
-    void unsetVar(QString name);
-    QString getValue(QString name);
+    void setVar(const QString& name, const QString& value);
+    void unsetVar(const QString& name);
+    QString getValue(const QString& name);
 
 private:
     QMap<QString,QString> var_map;

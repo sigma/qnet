@@ -29,19 +29,18 @@ public:
         IN
     } Position;
 
-    BlockFilter(QString & name, MtpContext * ctxt);
+    BlockFilter(const QString & name, MtpContext * ctxt);
     ~BlockFilter();
 
     void setInputDependency(InputFilter *);
     InputFilter * getInputDependency();
 
-    void setBeginRegExp(QString reg);
-    void setEndRegExp(QString reg);
-    void setResultPattern(QString pat);
+    void setBeginRegExp(const QString& reg);
+    void setEndRegExp(const QString& reg);
+    void setResultPattern(const QString& pat);
     
     bool applyTo(QString &, Position pos = IN);
-    bool isFinished();
-
+    bool isFinished() const;
     
 private:
     InputFilter * dependency;

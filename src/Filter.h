@@ -28,21 +28,21 @@ public:
         Final
     } Policy;
 
-    Filter(QString & name, MtpContext * ctxt = 0);
+    Filter(const QString & name, MtpContext * ctxt = 0);
     virtual ~Filter();
 
     virtual bool applyTo(QString &) {return false;};
     
     void setPolicy(Policy p);
-    Policy policy();
+    Policy policy() const;
 
-    bool isEnabled();
+    bool isEnabled() const;
     void enable();
     void disable();
 
-    QString getName();
-    QString getResult();
-    void setResult(QString);
+    QString getName() const;
+    QString getResult() const;
+    void setResult(const QString&);
 
     QString applyProcessedRegexpToPattern(MtpRegExp &, const QString &);
     

@@ -18,24 +18,23 @@
  * 
  * Yann Hodique
  **/
-class InputFilter : public Filter
-{
+class InputFilter : public Filter {
 
 public:
-  InputFilter(QString & name, bool memory = false, MtpContext * ctxt = 0);
-  ~InputFilter();
-  
-  bool memorize();
-  bool applyTo(QString &);
-  
-  void setRegExp(QString &);
-  void setResultPattern(QString &);
-  
+    InputFilter(const QString & name, bool memory = false, MtpContext * ctxt = 0);
+    ~InputFilter();
+
+    bool memorize() const;
+    bool applyTo(QString &);
+
+    void setRegExp(const QString &);
+    void setResultPattern(const QString &);
+
 private:
-	bool memory;
-        MtpRegExp reg;
-        QString pattern;
-        MtpContext * m_context;
+    bool memory;
+    MtpRegExp reg;
+    QString pattern;
+    MtpContext * m_context;
 };
 
 #endif

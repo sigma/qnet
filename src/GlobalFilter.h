@@ -21,11 +21,11 @@ class GlobalFilter : public Filter
 {
 
 public:
-  GlobalFilter(QString & name);
+  GlobalFilter(const QString & name);
   ~GlobalFilter();  
   
   bool applyTo(QString &);
-  void setResultPattern(QString &);
+  void setResultPattern(const QString &);
   
   private:
   QString pattern;

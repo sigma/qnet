@@ -32,8 +32,8 @@ class TellPage : public Page {
 public:
     TellPage(QWidget *parent, const char *name, Master * session);
     ~TellPage();
-    virtual void append(QString & msg);
-    void setPrefix(QString);
+    virtual void append(const QString & msg);
+    void setPrefix(const QString&);
     QTextEdit* chat_edit;
     MtpBrowser* chat_view;
 

@@ -33,7 +33,7 @@ Painter::Painter( QWidget* parent, const char* name, Master * session )
         : Page( parent, name, session ) {
     if ( !name )
         setName( "Painter" );
-    PainterLayout = new QGridLayout( this, 1, 1, 11, 6, "PainterLayout");
+    PainterLayout = new QGridLayout( this, 1, 1, 6, 6, "PainterLayout");
 
     canvas = new Canvas( this, "myCustomWidget1" );
 
@@ -99,7 +99,7 @@ void Painter::slotShape(int s) {
     canvas->setDrawingShape((Canvas::Shape)s);
 }
 
-void Painter::append(QString & s) {
+void Painter::append(const QString & s) {
     //std::cerr << s << std::endl;
     if (s.startsWith("}L")) { // Line
 //	QRegExp re("\\}L *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
@@ -137,7 +137,7 @@ void Painter::append(QString & s) {
     }
 }
 
-void Painter::sendOutput(QString& msg) {
+void Painter::sendOutput(const QString& msg) {
   if(getMaster()->context()->getValue("channel") == "Dessin")
     getMaster()->send(msg);
 }

@@ -31,7 +31,7 @@ for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); 
         delete *it;
 }
 
-QString MtpFilter::filterIn(QString & arg) {
+QString MtpFilter::filterIn(const QString & arg) {
     QString res(arg);
 
     for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it) {
@@ -45,7 +45,7 @@ QString MtpFilter::filterIn(QString & arg) {
     return res;
 }
 
-QString MtpFilter::filterOut(QString & arg) {
+QString MtpFilter::filterOut(const QString & arg) {
 
     QString res(arg);
 
@@ -130,7 +130,7 @@ void MtpFilter::addInputFilter(InputFilter * f) {
     input.push_back(f);
 }
 
-InputFilter* MtpFilter::getInputFilter(QString name) {
+InputFilter* MtpFilter::getInputFilter(const QString& name) {
     for(std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it)
         if ((*it)->getName() == name)
             return (*it);

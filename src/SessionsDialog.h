@@ -21,43 +21,43 @@
  * 
  * Yann Hodique
  **/
-class SessionsDialog : public SessionsDialogBase
-{
-  Q_OBJECT
+class SessionsDialog : public SessionsDialogBase {
+    Q_OBJECT
 
 public:
 
-	class SessionItem {
-        public:
+    class SessionItem {
+    public:
         SessionItem(QString n="", QString h="", QString p="", QString l="", QString x="", bool b=false) {
-                name = n; 
-                host = h; 
-                port = p; 
-                login = l; 
-                password = x;
-                autoconnect = b;} 
+            name = n;
+            host = h;
+            port = p;
+            login = l;
+            password = x;
+            autoconnect = b;
+        }
         QString name;
         QString host;
         QString port;
         QString login;
         QString password;
         bool autoconnect;
-        };
+    };
 
-  SessionsDialog(QWidget *parent = 0, const char *name = 0);
-  ~SessionsDialog();
+    SessionsDialog(QWidget *parent = 0, const char *name = 0);
+    ~SessionsDialog();
 
-  	QMap<QString,SessionItem> map;
-    
+    QMap<QString,SessionItem> map;
+
 public slots:
-  void addSessionItem(SessionItem &, int index = -1);
-  void delSessionItem(QString);
-  void slotSubs();
-  void slotAdd();
-  void slotDel();
-  void slotDown();
-  void slotUp();
-  void slotUpdateInfo(const QString &);
+    void addSessionItem(SessionItem &, int index = -1);
+    void delSessionItem(const QString&);
+    void slotSubs();
+    void slotAdd();
+    void slotDel();
+    void slotDown();
+    void slotUp();
+    void slotUpdateInfo(const QString &);
 
 };
 

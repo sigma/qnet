@@ -150,7 +150,7 @@
     <variable access="private">int state;</variable>
 </variables>
 <slots>
-    <slot>append( QString &amp; msg )</slot>
+    <slot>append( const QString &amp; msg )</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>

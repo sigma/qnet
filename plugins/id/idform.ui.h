@@ -29,41 +29,42 @@ enum {
 	PLAN
     };
 
-void IdForm::append(QString& msg) {
+void IdForm::append(const QString& msg) {
+    QString m(msg);
     switch( state++ ) {
     case LOGIN:
-	login_label->setText("<h2>" + msg.replace(QRegExp("Login      : "),"") + "</h2>");
+	login_label->setText("<h2>" + m.replace(QRegExp("Login      : "),"") + "</h2>");
 	plan_edit->clear();
         break;
     case GROUP:
-	group_label->setText("<h2>" + msg.replace(QRegExp("Group      : "),"") + "</h2>");
+	group_label->setText("<h2>" + m.replace(QRegExp("Group      : "),"") + "</h2>");
 	break;
     case VAR:
-	if(msg.contains("Last on")) {
+	if(m.contains("Last on")) {
 	    state = LOGINNB;
 	}
 	break;
     case NAME:
-	name_edit->setText("<h3>" + msg.replace(QRegExp("Name       : "),"") + "</h3>");
+	name_edit->setText("<h3>" + m.replace(QRegExp("Name       : "),"") + "</h3>");
 	break;
     case EMAIL:
-	email_edit->setText("<h3>" + msg.replace(QRegExp("EMail      : "),"") + "</h3>");
+	email_edit->setText("<h3>" + m.replace(QRegExp("EMail      : "),"") + "</h3>");
 	break;
     case FORMATION:
-	formation_edit->setText("<h3>" + msg.replace(QRegExp("Formation  : "),"") + "</h3>");
+	formation_edit->setText("<h3>" + m.replace(QRegExp("Formation  : "),"") + "</h3>");
 	break;
     case BIRTHDAY:
-	birthday_edit->setText("<h3>" + msg.replace(QRegExp("Birthday   : "),"") + "</h3>");
+	birthday_edit->setText("<h3>" + m.replace(QRegExp("Birthday   : "),"") + "</h3>");
 	break;
     case PLAN:
-	if(msg.contains("End of finger")) {
+	if(m.contains("End of finger")) {
 	    state = LOGIN;
 	    repaint();
 	}
 	else {
-	    if(!msg.contains("Plan       :")) {
-//		plan_edit->append(msg.replace(QRegExp("^[^\\d]*"),""));
-		plan_edit->append(msg);		
+	    if(!m.contains("Plan       :")) {
+//		plan_edit->append(m.replace(QRegExp("^[^\\d]*"),""));
+		plan_edit->append(m);		
 	    }
 	    state = PLAN;
 	}

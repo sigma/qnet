@@ -21,7 +21,7 @@ Affect::Affect(QWidget */*parent*/, const char *name, Master * session) : Page(0
 
 Affect::~Affect() {}
 
-void Affect::append(QString& msg) {
+void Affect::append(const QString& msg) {
     QRegExp re("(\\w+)=(\\w+)");
     if(re.exactMatch(msg)) {
 	getMaster()->context()->setVar(re.cap(1),re.cap(2));

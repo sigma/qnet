@@ -26,7 +26,7 @@ BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
         : Page(parent,name,session) {
     if ( !name )
         setName( "BrowserPageBase" );
-    BrowserPageBaseLayout = new QGridLayout( this, 1, 1, 11, 6, "TellPageBaseLayout");
+    BrowserPageBaseLayout = new QGridLayout( this, 1, 1, 6, 6, "TellPageBaseLayout");
 
     chat_view = new MtpBrowser( this, "chat_view" );
 
@@ -49,7 +49,7 @@ BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
 
 BrowserPage::~BrowserPage() {}
 
-void BrowserPage::append(QString &msg) {
+void BrowserPage::append(const QString &msg) {
     //std::cerr << msg << std::endl;
     chat_view->append(msg);
     emit textDisplayed(this);

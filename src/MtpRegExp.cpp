@@ -19,7 +19,7 @@ MtpRegExp::MtpRegExp(const QString & pat, MtpContext * ctxt) {
 
 MtpRegExp::~MtpRegExp() {}
 
-bool MtpRegExp::exactMatch(QString & str) {
+bool MtpRegExp::exactMatch(const QString & str) {
 
     QString res(pattern);
     if (m_context) {
@@ -51,10 +51,10 @@ QString MtpRegExp::cap(int i) {
     return reg.cap(i);
 }
 
-int MtpRegExp::search(QString & msg, int & n) {
+int MtpRegExp::search(const QString & msg, int & n) const {
     return reg.search(msg,n);
 }
 
-int MtpRegExp::matchedLength() {
+int MtpRegExp::matchedLength() const {
     return reg.matchedLength();
 }

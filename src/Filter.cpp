@@ -11,7 +11,7 @@
 #include "Filter.h"
 
 
-Filter::Filter(QString & name, MtpContext * ctxt) {
+Filter::Filter(const QString & name, MtpContext * ctxt) {
     this->name = name;
     this->m_context = ctxt;
 }
@@ -23,11 +23,11 @@ void Filter::setPolicy(Policy p) {
     this->pol = p;
 }
 
-Filter::Policy Filter::policy() {
+Filter::Policy Filter::policy() const {
     return this->pol;
 }
 
-bool Filter::isEnabled() {
+bool Filter::isEnabled() const {
     return this->active;
 }
 
@@ -39,15 +39,15 @@ void Filter::disable() {
     this->active = false;
 }
 
-QString Filter::getName() {
+QString Filter::getName() const {
     return name;
 }
 
-QString Filter::getResult() {
+QString Filter::getResult() const {
     return result;
 }
 
-void Filter::setResult(QString r) {
+void Filter::setResult(const QString& r) {
     result = r;
 }
 
@@ -84,7 +84,9 @@ QString Filter::applyProcessedRegexpToPattern(MtpRegExp & re, const QString & pa
             pos  += rx.matchedLength();
         }
     }
-    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-        res = res.replace(QRegExp("\\\\" + *it + "\\\\"),re.cap((*it).toInt()));
+    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+	QString repl(re.cap((*it).toInt()));
+        res = res.replace(QRegExp("\\\\" + *it + "\\\\"),repl);
+    }
     return res;
 }

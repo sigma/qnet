@@ -29,9 +29,9 @@ public:
     
     MtpContext* context() { return m_context; }
     
-    virtual void displayStderr(QString) = 0;
-    virtual void displayStdout(QString) = 0;
-    virtual void send(QString &) = 0;
+    virtual void displayStderr(const QString&) = 0;
+    virtual void displayStdout(const QString&) = 0;
+    virtual void send(const QString &) = 0;
     
 public slots:
     virtual void slotLinkClicked(const QString &) {}

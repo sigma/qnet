@@ -11,35 +11,33 @@
 #include "InputFilter.h"
 
 
-InputFilter::InputFilter(QString & name, bool memory, MtpContext * ctxt)
-  : Filter(name)
-{
-this->memory = memory;
-m_context = ctxt;
+InputFilter::InputFilter(const QString & name, bool memory, MtpContext * ctxt)
+        : Filter(name) {
+    this->memory = memory;
+    m_context = ctxt;
 }
 
 
-InputFilter::~InputFilter()
-{
-}
+InputFilter::~InputFilter() {}
 
 bool InputFilter::applyTo(QString & msg) {
-MtpRegExp re(reg);
-bool match = re.exactMatch(msg);
+    MtpRegExp re(reg);
+    bool match = re.exactMatch(msg);
 
-if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
+    if (match)
+        setResult(applyProcessedRegexpToPattern(re,pattern));
 
-return match;
+    return match;
 }
 
-bool InputFilter::memorize() {
-return memory;
+bool InputFilter::memorize() const {
+    return memory;
 }
 
-void InputFilter::setRegExp(QString & exp) {
-reg = MtpRegExp(exp,m_context);
+void InputFilter::setRegExp(const QString & exp) {
+    reg = MtpRegExp(exp,m_context);
 }
 
-void InputFilter::setResultPattern(QString & pat) {
-pattern = pat;
+void InputFilter::setResultPattern(const QString & pat) {
+    pattern = pat;
 }

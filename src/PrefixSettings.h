@@ -21,28 +21,29 @@
  * 
  * Yann Hodique
  **/
-class PrefixSettings : public PrefixSettingsBase
-{
-  Q_OBJECT
+class PrefixSettings : public PrefixSettingsBase {
+    Q_OBJECT
 
 public:
 
-	class PrefixItem {
-        public:
-        PrefixItem(QString n="") {name = n;} 
+    class PrefixItem {
+    public:
+        PrefixItem(QString n="") {
+            name = n;
+        }
         QString name;
-        };
+    };
 
-  PrefixSettings(QWidget *parent = 0, const char *name = 0);
-  ~PrefixSettings();
+    PrefixSettings(QWidget *parent = 0, const char *name = 0);
+    ~PrefixSettings();
 
-  	QMap<QString,PrefixItem> map;
-    
+    QMap<QString,PrefixItem> map;
+
 public slots:
-  void addPrefixItem(PrefixItem &);
-  void delPrefixItem(QString);
-  void slotAdd();
-  void slotDel();
+    void addPrefixItem(PrefixItem &);
+    void delPrefixItem(const QString&);
+    void slotAdd();
+    void slotDel();
 
 };
 

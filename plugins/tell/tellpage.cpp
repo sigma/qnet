@@ -31,7 +31,7 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
         : Page(parent,name,session) {
     if ( !name )
         setName( "TellPageBase" );
-    TellPageBaseLayout = new QGridLayout( this, 1, 1, 11, 6, "TellPageBaseLayout");
+    TellPageBaseLayout = new QGridLayout( this, 1, 1, 6, 6, "TellPageBaseLayout");
 
     QSplitter *vsplit = new QSplitter(Qt::Vertical,this);
     chat_view = new MtpBrowser( vsplit, "chat_view" );
@@ -101,7 +101,7 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
 
 TellPage::~TellPage() {}
 
-void TellPage::append(QString &msg) {
+void TellPage::append(const QString &msg) {
     //std::cerr << msg << std::endl;
     chat_view->append(msg);
     emit textDisplayed(this);
@@ -120,7 +120,7 @@ void TellPage::returnPressed() {
     history_iterator = 0;
 }
 
-void TellPage::setPrefix(QString prefix) {
+void TellPage::setPrefix(const QString& prefix) {
     this->prefix = prefix;
 }
 

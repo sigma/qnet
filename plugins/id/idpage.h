@@ -2,7 +2,7 @@
 ** Form interface generated from reading ui file 'idpage.ui'
 **
 ** Created: Sat Feb 22 12:08:09 2003
-**      by: The User Interface Compiler ($Id: idpage.h,v 1.1 2003/02/22 15:22:37 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: idpage.h,v 1.2 2003/05/06 17:58:13 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -41,7 +41,7 @@ public:
 
 private slots:
     void switchPage();
-    void append(QString&);
+    void append(const QString&);
     void updatePage();
     
 protected:

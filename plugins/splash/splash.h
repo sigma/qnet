@@ -35,7 +35,7 @@ protected:
 
 public slots:
     void timeout();
-    void append(QString & msg);
+    void append(const QString & msg);
     
 private:
     QTimer *m_timer;

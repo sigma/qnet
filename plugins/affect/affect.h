@@ -28,7 +28,7 @@ public:
     bool isSlave() {
         return false;
     }
-    void append(QString& arg1);
+    void append(const QString& msg);
 
 };
 

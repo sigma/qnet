@@ -42,9 +42,9 @@ public slots:
     void slotColor();
     void slotWidth(int);
     void slotShape(int);
-    void append(QString &);
-  void sendOutput(QString&);
-    
+    void append(const QString &);
+    void sendOutput(const QString&);
+
 protected:
     QGridLayout* PainterLayout;
 

@@ -20,21 +20,20 @@
  * 
  * Yann Hodique
  **/
-class ItemFilter : public Filter
-{
+class ItemFilter : public Filter {
 
 public:
-  ItemFilter(QString & name, MtpContext * ctxt = 0);
-  ~ItemFilter();
+    ItemFilter(const QString & name, MtpContext * ctxt = 0);
+    ~ItemFilter();
 
-  void setRegExp(QString reg);
-  void setResultPattern(QString pat);
-  bool applyTo(QString &);
-    
+    void setRegExp(const QString& reg);
+    void setResultPattern(const QString& pat);
+    bool applyTo(QString &);
+
 private:
-        MtpRegExp reg;
-        QString pattern,reg_exp;
-        MtpContext * m_context;
+    MtpRegExp reg;
+    QString pattern,reg_exp;
+    MtpContext * m_context;
 };
 
 #endif

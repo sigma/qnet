@@ -7,61 +7,60 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
- 
+
 #include "ItemFilter.h"
 #include <iostream>
 #include <qregexp.h>
 
-ItemFilter::ItemFilter(QString & name, MtpContext * ctxt) : Filter(name,ctxt) {
-setPolicy(Filter::Final);
-m_context = ctxt;
+ItemFilter::ItemFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt) {
+    setPolicy(Filter::Final);
+    m_context = ctxt;
 }
 
 
-ItemFilter::~ItemFilter() {
-}
+ItemFilter::~ItemFilter() {}
 
 bool ItemFilter::applyTo(QString & msg) {
-/*MtpRegExp re(reg);
-bool match = re.exactMatch(msg);
+    /*MtpRegExp re(reg);
+    bool match = re.exactMatch(msg);
+     
+    if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
+     
+    return match;
+    */
 
-if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
+    QRegExp rx(reg_exp);
+    QString res("");
+    int pos = 0;
+    int tmp;
 
-return match;
-*/
 
-        QRegExp rx(reg_exp);
-        QString res("");
-        int pos = 0;
-        int tmp;
-        
-        
-        while ( ((tmp = rx.search(msg, pos)) != -1) && rx.matchedLength() ) {
-            //std::cout << "tmp = " << tmp << std::endl;
-            //std::cout << "length = " << rx.matchedLength() << std::endl;
-            res += msg.right(msg.length()-pos).left(tmp-pos);
-                        
-            QString ok(msg.right(msg.length()-tmp).left(rx.matchedLength()));
-            
-            MtpRegExp re(reg);
-            if (re.exactMatch(ok)) {
-                res += applyProcessedRegexpToPattern(re,pattern);
-                }
-            pos = tmp;
-            pos += rx.matchedLength();
+    while ( ((tmp = rx.search(msg, pos)) != -1) && rx.matchedLength() ) {
+        //std::cout << "tmp = " << tmp << std::endl;
+        //std::cout << "length = " << rx.matchedLength() << std::endl;
+        res += msg.right(msg.length()-pos).left(tmp-pos);
+
+        QString ok(msg.right(msg.length()-tmp).left(rx.matchedLength()));
+
+        MtpRegExp re(reg);
+        if (re.exactMatch(ok)) {
+            res += applyProcessedRegexpToPattern(re,pattern);
         }
-        res += msg.right(msg.length()-pos);
-        setResult(res);
-        
-return pos;
+        pos = tmp;
+        pos += rx.matchedLength();
+    }
+    res += msg.right(msg.length()-pos);
+    setResult(res);
+
+    return pos;
 
 }
 
-void ItemFilter::setRegExp(QString reg) {
-	this->reg = MtpRegExp(reg, m_context);
-        reg_exp = reg;
+void ItemFilter::setRegExp(const QString& reg) {
+    this->reg = MtpRegExp(reg, m_context);
+    reg_exp = reg;
 }
 
-void ItemFilter::setResultPattern(QString pat) {
-	this->pattern = pat;
+void ItemFilter::setResultPattern(const QString& pat) {
+    this->pattern = pat;
 }

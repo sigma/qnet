@@ -21,31 +21,34 @@
  * 
  * Yann Hodique
  **/
-class UrlSettings : public UrlSettingsBase
-{
-  Q_OBJECT
+class UrlSettings : public UrlSettingsBase {
+    Q_OBJECT
 
 public:
 
-	class UrlItem {
-        public:
-        UrlItem(QString n="", QString p="", QString c="") {name = n; prefix = p; command = c;} 
+    class UrlItem {
+    public:
+        UrlItem(QString n="", QString p="", QString c="") {
+            name = n;
+            prefix = p;
+            command = c;
+        }
         QString name;
         QString prefix;
         QString command;
-        };
+    };
 
-  UrlSettings(QWidget *parent = 0, const char *name = 0);
-  ~UrlSettings();
+    UrlSettings(QWidget *parent = 0, const char *name = 0);
+    ~UrlSettings();
 
-  	QMap<QString,UrlItem> map;
-    
+    QMap<QString,UrlItem> map;
+
 public slots:
-  void addUrlItem(UrlItem &);
-  void delUrlItem(QString);
-  void slotAdd();
-  void slotDel();
-  void slotUpdateInfo(const QString &);
+    void addUrlItem(UrlItem &);
+    void delUrlItem(const QString&);
+    void slotAdd();
+    void slotDel();
+    void slotUpdateInfo(const QString &);
 
 };
 

@@ -26,11 +26,10 @@ public:
     MtpRegExp(const QString & = "", MtpContext * ctxt = 0);
     ~MtpRegExp();
     
-    bool exactMatch(QString &);
+    bool exactMatch(const QString &);
     QString cap(int i);
-    int search(QString&,int&);
-    int matchedLength();
-
+    int search(const QString&,int&) const;
+    int matchedLength() const;
 
 private:
     QRegExp reg;

@@ -15,71 +15,68 @@
 #include <qcheckbox.h>
 
 SessionsDialog::SessionsDialog(QWidget *parent, const char *name)
-  : SessionsDialogBase(parent, name)
-{
-}
+        : SessionsDialogBase(parent, name) {}
 
 
-SessionsDialog::~SessionsDialog()
-{
-}
+SessionsDialog::~SessionsDialog() {}
 
 void SessionsDialog::addSessionItem(SessionItem & it, int index) {
-map.insert(it.name,it);
-sessions_box->insertItem(it.name, index);
+    map.insert(it.name,it);
+    sessions_box->insertItem(it.name, index);
 }
 
-void SessionsDialog::delSessionItem(QString name) {
-map.remove(name);
+void SessionsDialog::delSessionItem(const QString& name) {
+    map.remove(name);
 }
 
 void SessionsDialog::slotSubs() {
-SessionItem *it = &(*(map.find(sessions_box->currentText())));
-if (it->name != name_edit->text()) return;
-it->host = host_edit->text();
-it->port = port_edit->text();
-it->login = login_edit->text();
-it->password = pass_edit->text();
-it->autoconnect = auto_check->isChecked();
+    SessionItem *it = &(*(map.find(sessions_box->currentText())));
+    if (it->name != name_edit->text())
+        return;
+    it->host = host_edit->text();
+    it->port = port_edit->text();
+    it->login = login_edit->text();
+    it->password = pass_edit->text();
+    it->autoconnect = auto_check->isChecked();
 }
 
 void SessionsDialog::slotAdd() {
-if (name_edit->text().length() && host_edit->text().length() && port_edit->text().length()) {
-SessionItem it(name_edit->text(),host_edit->text(),port_edit->text(),login_edit->text(),pass_edit->text(),auto_check->isChecked());
-	addSessionItem(it);
-        }
+    if (name_edit->text().length() && host_edit->text().length() && port_edit->text().length()) {
+        SessionItem it(name_edit->text(),host_edit->text(),port_edit->text(),login_edit->text(),pass_edit->text(),auto_check->isChecked());
+        addSessionItem(it);
+    }
 }
 
 void SessionsDialog::slotDel() {
-delSessionItem(QString(sessions_box->currentText()));
-sessions_box->removeItem(sessions_box->currentItem());
+    delSessionItem(QString(sessions_box->currentText()));
+    sessions_box->removeItem(sessions_box->currentItem());
 }
 
 void SessionsDialog::slotDown() {
-unsigned int index = sessions_box->currentItem();
+    unsigned int index = sessions_box->currentItem();
 
-if (index < sessions_box->count()) {
+    if (index < sessions_box->count()) {
         QString text = sessions_box->currentText();
         sessions_box->removeItem(index);
         sessions_box->insertItem(text,index + 1);
-}
+    }
 }
 
 void SessionsDialog::slotUp() {
-int index = sessions_box->currentItem();
-if (index) {
+    int index = sessions_box->currentItem();
+    if (index) {
         QString text = sessions_box->currentText();
         sessions_box->removeItem(index);
         sessions_box->insertItem(text,index - 1);
-        }
+    }
 }
 
 void SessionsDialog::slotUpdateInfo(const QString & name) {
-SessionItem it = *(map.find(name));
-name_edit->setText(it.name);
-host_edit->setText(it.host);
-port_edit->setText(it.port);
-login_edit->setText(it.login);
-pass_edit->setText(it.password);
-auto_check->setChecked(it.autoconnect);
+    SessionItem it = *(map.find(name));
+    name_edit->setText(it.name);
+    host_edit->setText(it.host);
+    port_edit->setText(it.port);
+    login_edit->setText(it.login);
+    pass_edit->setText(it.password);
+    auto_check->setChecked(it.autoconnect);
 }
