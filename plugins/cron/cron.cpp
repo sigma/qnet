@@ -48,11 +48,11 @@ void Cron::append(const QString & msg) {
         return;
     }
     
-    QRegExp re("start +(\\d+) +([^ ].*)");
+    QRegExp re("(start|shot) +(\\d+) +([^ ].*)");
     if(re.exactMatch(msg)) {
-        time = re.cap(1).toInt();
-        m_action = re.cap(2);
+        time = re.cap(2).toInt();
+        m_action = re.cap(3);
         getMaster()->send(m_action);
-        m_timer->start(time);
+        m_timer->start(time,re.cap(1) == "shot");
     }
 }
