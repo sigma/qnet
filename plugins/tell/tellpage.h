@@ -44,7 +44,8 @@ public slots:
     void slotHistoryUp();
     void slotHistoryDown();
     void slotNewLine();
-
+    void slotPageUp();
+    void slotPageDown();
 
 protected:
     QGridLayout* TellPageBaseLayout;
@@ -54,7 +55,7 @@ protected slots:
 
 private:
     QString prefix;
-    QAction *history_up, *history_down, *new_line;
+    QAction *history_up, *history_down, *new_line, *pgup, *pgdown;
     QStringList history;
     QStringList::Iterator history_iterator;
 

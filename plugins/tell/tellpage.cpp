@@ -77,7 +77,11 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     history_down->setAccel(QKeySequence(SHIFT + Key_Down));
     new_line = new QAction(chat_edit,"new");
     new_line->setAccel(QKeySequence(CTRL + Key_Return));
-
+    pgup = new QAction(chat_edit,"pgup");
+    pgup->setAccel(QKeySequence(Key_PageUp));
+    pgdown = new QAction(chat_edit,"pgdown");
+    pgdown->setAccel(QKeySequence(Key_PageDown));
+    
     connect(history_up, SIGNAL(activated()),
             this, SLOT(slotHistoryUp()));
     connect(history_down, SIGNAL(activated()),
@@ -90,6 +94,11 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
             
     connect(chat_view,SIGNAL(linkClicked(const QString &)),
             session, SLOT(slotLinkClicked(const QString &)));
+
+    connect(pgup,SIGNAL(activated()),
+            this,SLOT(slotPageUp()));
+    connect(pgdown,SIGNAL(activated()),
+            this,SLOT(slotPageDown()));
 
     chat_edit->setFocus();
     chat_edit->setWordWrap(QTextEdit::NoWrap);
@@ -151,6 +160,14 @@ void TellPage::slotHistoryDown() {
 
 void TellPage::slotNewLine() {
     chat_edit->doKeyboardAction(QTextEdit::ActionReturn);
+}
+
+void TellPage::slotPageUp() {
+    chat_view->moveCursor(QTextEdit::MovePgUp,false);
+}
+
+void TellPage::slotPageDown() {
+    chat_view->moveCursor(QTextEdit::MovePgDown,false);
 }
 
 QString TellPage::getText() {
