@@ -46,6 +46,8 @@ public:
     void setResult(const QString&);
 
     QString applyProcessedRegexpToPattern(MtpRegExp &, const QString &);
+
+    static QString expandVars(const QString& msg, MtpContext * context = 0);
     
 private:
     QString name;

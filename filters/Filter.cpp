@@ -58,24 +58,24 @@ void Filter::setResult(const QString& r) {
 QString Filter::applyProcessedRegexpToPattern(MtpRegExp & re, const QString & pat) {
     QString res(pat);
 
-    if(m_context) {
-        QRegExp rx( "\\\\(\\w+)\\\\" );
-        QStringList list;
+//     if(m_context) {
+//         QRegExp rx( "\\\\(\\w+)\\\\" );
+//         QStringList list;
 
-        int pos = 0;
-        while ( pos >= 0 ) {
-            pos = rx.search( pat, pos );
-            if ( pos > -1 ) {
-                list += rx.cap( 1 );
-                pos  += rx.matchedLength();
-            }
-        }
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-            QString value;
-            if ((value = m_context->getValue(*it)) != QString::null)
-                res = res.replace(QRegExp("\\\\" + *it + "\\\\"),value);
-        }
-    }
+//         int pos = 0;
+//         while ( pos >= 0 ) {
+//             pos = rx.search( pat, pos );
+//             if ( pos > -1 ) {
+//                 list += rx.cap( 1 );
+//                 pos  += rx.matchedLength();
+//             }
+//         }
+//         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+//             QString value;
+//             if ((value = m_context->getValue(*it)) != QString::null)
+//                 res = res.replace(QRegExp("\\\\" + *it + "\\\\"),value);
+//         }
+//     }
 
     QRegExp rx( "\\\\(\\d+)\\\\" );
     QStringList list;
@@ -89,8 +89,32 @@ QString Filter::applyProcessedRegexpToPattern(MtpRegExp & re, const QString & pa
         }
     }
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-	QString repl(re.cap((*it).toInt()));
+        QString repl(re.cap((*it).toInt()));
         res = res.replace(QRegExp("\\\\" + *it + "\\\\"),repl);
+    }
+    return res;
+}
+
+QString Filter::expandVars(const QString& msg, MtpContext * context) {
+    QString res(msg);
+    
+    if(context) {
+        QRegExp rx( "\\\\(\\w+)\\\\" );
+        QStringList list;
+        
+        int pos = 0;
+        while ( pos >= 0 ) {
+            pos = rx.search( msg, pos );
+            if ( pos > -1 ) {
+                list += rx.cap( 1 );
+                pos  += rx.matchedLength();
+            }
+        }
+        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+            QString value;
+            if ((value = context->getValue(*it)) != QString::null)
+                res = res.replace(QRegExp("\\\\" + *it + "\\\\"),value);
+        }
     }
     return res;
 }
