@@ -62,6 +62,8 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
     chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
     chat_edit->setMinimumSize( QSize( 1, 1 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
+    chat_edit->setHScrollBarMode(QTextEdit::AlwaysOff);
+    chat_edit->setVScrollBarMode(QTextEdit::AlwaysOff);
 
     ChatPageLayout->addWidget(vsplit,0,0);
 
@@ -136,6 +138,7 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
 
     chat_view->setFocusProxy(chat_edit);
     users_box->setFocusProxy(chat_edit);
+    this->setFocusProxy(chat_edit);
 
     user_menu = new QPopupMenu(users_box);
     user_box_visible = true;
