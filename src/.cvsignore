@@ -23,3 +23,7 @@ urlsettingsbase.cpp
 urlsettingsbase.h
 tagssettings.cpp
 tagssettings.h
+pluginssettings.cpp
+pluginssettings.h
+sessionssettingsbase.cpp
+sessionssettingsbase.h
