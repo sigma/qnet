@@ -11,7 +11,7 @@
 #include "canvas.h"
 
 #include <math.h>
-
+#include <iostream>
 #include <qinputdialog.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -80,8 +80,7 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
     switch (shape) {
     case LINE:
         if(definitive)
-//            description = QString("}L 0x%1 %2 %3 %4 %5 %6").arg(penColor().rgb(),0,16)
-	    description = QString("}L %1 %2 %3 %4 %5 %6").arg(penColor().rgb())
+	    description = QString("}L 0x%1 %2 %3 %4 %5 %6").arg(penColor().rgb()-0xff000000,0,16)
                           .arg(q.x()).arg(q.y()).arg(p.x()).arg(p.y()).arg(penWidth());
         painter.drawLine(q,p);
         parray[1] = q;
@@ -96,8 +95,7 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
             parray[1] = tmp1;
             parray[0] = tmp2;
             if(definitive)
-//                description = QString("}C 0x%1 %2 %3 %4 %5").arg(penColor().rgb(),0,16)
-		description = QString("}C %1 %2 %3 %4 %5").arg(penColor().rgb())
+		description = QString("}C 0x%1 %2 %3 %4 %5").arg(penColor().rgb()-0xff000000,0,16)
                               .arg(q.x()).arg(q.y()).arg(dist).arg(penWidth());
 
         }
@@ -107,9 +105,8 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
 	    QString text = QInputDialog::getText("Text Input","Enter text");
 	    painter.drawText(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()),
 			     Qt::AlignAuto|Qt::AlignVCenter|Qt::BreakAnywhere,text);
-//	    description = QString("}T 0x%1 %2 %3 %4").arg(penColor().rgb(),0,16)
-	    description = QString("}T %1 %2 %3 %4").arg(penColor().rgb())
-			  .arg(min(q.x(),p.x())).arg(min(q.y(),p.y())).arg(abs(q.x()-p.x())).arg(abs(q.y()-p.y())).arg(text);
+	    description = QString("}T 0x%1 %2 %3 fixed %4").arg(penColor().rgb()-0xff000000,0,16)
+			  .arg(min(q.x(),p.x())).arg(min(q.y(),p.y())).arg(text);
 	}
 	else {
 	    painter.drawRect(min(q.x(),p.x()),min(q.y(),p.y()),abs(q.x()-p.x()),abs(q.y()-p.y()));
@@ -129,7 +126,9 @@ void Canvas::draw(const QPoint & q, const QPoint & p, bool definitive, bool eras
     r.setBottom( r.bottom() + penWidth() );
 
     bitBlt( this, r.x(), r.y(), definitive?(&buffer):(&over), r.x(), r.y(), r.width(), r.height() );
-    if(definitive) emit drawing(description);
+    if(definitive) {
+        emit drawing(description);
+    }
 }
 
 void Canvas::draw(Shape s, const QColor & col, const QPoint & q, const QPoint & p, int width, const QString & text) {

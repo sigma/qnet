@@ -87,7 +87,7 @@ private slots:
     void draw(const QPoint &, const QPoint &, bool definitive=true, bool erase=false);
 
 signals:
-    void drawing(QString & str);
+    void drawing(const QString & str);
 };
 
 #endif

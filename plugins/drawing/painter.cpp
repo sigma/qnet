@@ -62,7 +62,7 @@ Painter::Painter( QWidget* parent, const char* name, Master * session )
 
     connect( size_box, SIGNAL( valueChanged( int ) ), this, SLOT( slotWidth( int ) ) );
     
-    connect(canvas,SIGNAL(drawing(QString&)),SLOT(sendOutput(QString&)));
+    connect(canvas,SIGNAL(drawing(const QString&)),SLOT(sendOutput(const QString&)));
 }
 
 /*
@@ -102,42 +102,38 @@ void Painter::slotShape(int s) {
 void Painter::append(const QString & s) {
     //std::cerr << s << std::endl;
     if (s.startsWith("}L")) { // Line
-//	QRegExp re("\\}L *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
-	QRegExp re("\\}L *([0-9]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");	
-	if (re.exactMatch(s)) {
-	    QColor col(re.cap(1).toUInt());
-	    QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
-	    QPoint e(re.cap(4).toInt(),re.cap(5).toInt());
-	    int w = re.cap(6).toInt();
-	    canvas->draw(Canvas::LINE,col,s,e,w);
-	    // TODO : line width
-	}
+        QRegExp re("\\}L *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+        if (re.exactMatch(s)) {
+            QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
+            QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
+            QPoint e(re.cap(4).toInt(),re.cap(5).toInt());
+            int w = re.cap(6).toInt();
+            canvas->draw(Canvas::LINE,col,s,e,w);
+            // TODO : line width
+        }
     }
     else if (s.startsWith("}C")) { // Circle
-//	QRegExp re("\\}C *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
-	QRegExp re("\\}C *([0-9]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");	
-	if (re.exactMatch(s)) {
-	    QColor col(re.cap(1).toUInt());
-	    QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
-	    QPoint e(re.cap(2).toInt(),re.cap(3).toInt()+re.cap(4).toInt());
-	    int w = re.cap(5).toInt();
-	    canvas->draw(Canvas::CIRCLE,col,s,e,w);
-	}
+        QRegExp re("\\}C *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *");
+        if (re.exactMatch(s)) {
+            QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
+            QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
+            QPoint e(re.cap(2).toInt(),re.cap(3).toInt()+re.cap(4).toInt());
+            int w = re.cap(5).toInt();
+            canvas->draw(Canvas::CIRCLE,col,s,e,w);
+        }
     }
     else if (s.startsWith("}T")) { // Text
-//	QRegExp re("\\}T *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *([\\w ]+) *");
-	QRegExp re("\\}T *([0-9]*) *(\\d+) *(\\d+) *(\\d+) *(\\d+) *([\\w ]+) *");	
-	if (re.exactMatch(s)) {
-	    QColor col(re.cap(1).toUInt());
-	    QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
-	    QPoint e(re.cap(2).toInt()+re.cap(4).toInt(),re.cap(3).toInt()+re.cap(5).toInt());
-	    QString text = re.cap(6);
-	    canvas->draw(Canvas::TEXT,col,s,e,0,text);
-	}
+        QRegExp re("\\}T *0x([0-9A-Fa-f]*) *(\\d+) *(\\d+) *([\\w ]+) *([\\w ]+) *");
+        if (re.exactMatch(s)) {
+            QColor col(re.cap(1).toUInt(0,16) + 0xff000000);
+            QPoint s(re.cap(2).toInt(),re.cap(3).toInt());
+            QString text = re.cap(6);
+            canvas->draw(Canvas::TEXT,col,s,s,0,text);
+        }
     }
 }
 
 void Painter::sendOutput(const QString& msg) {
-  if(getMaster()->context()->getValue("channel") == "Dessin")
-    getMaster()->send(msg);
+    if(getMaster()->context()->getValue("channel") == "Dessin")
+        getMaster()->send(msg);
 }
