@@ -191,10 +191,14 @@ void ChatSession::displayStdout(QString msg) {
                         brothers.push_back(edit);
                         edit->append(m);
 
-		    } else { // "drawing"
+		    } else if(abbrev=="drawing") {
                         Page * edit = mtp->getNewPage(QMtp::DRAWING,rx.cap(2),this);
                         brothers.push_back(edit);
                         edit->append(m);			
+		    } else { //splash
+			Page * edit = mtp->getNewPage(QMtp::SPLASH,rx.cap(2),this);
+			brothers.push_back(edit);
+			edit->append(m);
 		    }
                 }
             } else {
@@ -460,8 +464,9 @@ void ChatSession::applyFilters() {
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt \\w+&gt  )(\\}[LCT][^<]*)(<.*>)?",
 	      ":drawing:Dessin:\\4\\");
     applyLine("tell_receive",
-              "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  )(\\w+) (tells you:|asks you:|replies:)(.*)(<.*>)?",
-              ":tell:\\4\\: \\1\\&lt \\4\\&gt \\6\\\\7\\");
+              "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  )(\\w+) (tells you:|asks you:|replies:)([^<]*)(<.*>)?",
+              ":tell:\\4\\: \\1\\&lt \\4\\&gt \\6\\\\7\\"
+	      "\n:splash:spl:<\\4\\> \\6\\");
     applyLine("tell_emit",
               "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You (tell|ask|reply to) (\\w+)(:)(.*)(<.*>)?",
               ":tell:\\4\\: \\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/mytalk","black") + ">&lt \\Login\\&gt \\6\\</font>\\7\\");
@@ -475,7 +480,11 @@ void ChatSession::applyFilters() {
     applyLine("me","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt .*you:.*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/me","black") + ">\\2\\\\3\\</font>\\4\\");
     applyLine("other","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt  You.*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/other","black") + ">\\2\\\\3\\</font>\\4\\");
     applyLine("server","^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt Mtp&gt .*)(<.*>)?","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/server","black") + ">\\2\\\\3\\</font>\\4\\");
-    applyLine("aboutme","(:\\w+:\\w+:)?(.*\\login\\.*)","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/aboutme","black") + ">\\2\\</font>");
+    applyLine("aboutme","(:\\w+:\\w+:)?(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt .*\\login\\[^<]*)(<.*>)?",
+	      "\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/aboutme","black") + ">\\2\\\\3\\\\4\\\\5\\</font>"
+	      "\n:splash:spl:\\2\\\\3\\\\4\\");
+    applyLine("aboutme2","(:\\w+:\\w+:)?(.*\\login\\.*)",
+	      "\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/aboutme","black") + ">\\2\\</font>");
     applyLine("default","(:\\w+:\\w+:)?(.*)","\\1\\<font color=" + DomUtil::readEntry(*m_dom,"/colors/default","black") + ">\\2\\</font>");
 
     QString fname("format");

@@ -41,6 +41,7 @@
 #include "browserpage.h"
 #include "remotecontrol.h"
 #include "painter.h"
+#include "splash.h"
 
 QMtp::QMtp(QWidget *parent, const char *name)
         : QMtp_base(parent, name), m_document() {
@@ -224,6 +225,12 @@ Page * QMtp::getNewPage(PageType type,QString name,ChatSession * ref) {
 
             return paint;
         }
+    case SPLASH: {
+            Splash * splash = new Splash(tabs,name,ref);
+            tab_map.insert(splash,ref);
+
+            return splash;
+        }
     }
     return 0;
 }
@@ -273,13 +280,12 @@ void QMtp::closeTab(QWidget *w) {
     if(w != tab) {
         tabs->removePage(w);
         QMap<QWidget*,ChatSession*>::Iterator it;
-	if ((it = tab_map.find(w)) != tab_map.end()) {
+        if ((it = tab_map.find(w)) != tab_map.end()) {
             (*it)->kill((Page*)w);
-	}
-	else // session tab
-	    sessions.remove((ChatSession*)w);
+        } else // session tab
+            sessions.remove((ChatSession*)w);
         delete w;
-    }    
+    }
 }
 
 void QMtp::fileExit() {
@@ -296,7 +302,7 @@ void QMtp::gotoPreviousTab() {
 }
 
 void QMtp::helpAbout() {
-    QMessageBox::about(this, "About QNet", CLIENT + QString("\n© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
+    QMessageBox::about(this, "About QNet", CLIENT + QString("\nÂ© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
 }
 
 bool QMtp::loadConfigFile() {
@@ -396,9 +402,9 @@ void QMtp::endFortune() {
 
 void QMtp::launchSession(QString name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
-    
+
     sessions.push_back(session);
-    
+
     tabs->addTab(session,name);
     tabs->showPage(session);
 

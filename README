@@ -15,7 +15,7 @@ prévenir, a priori ce n'est pas la peine d'essayer avec les 2.x)
 pour la compilation proprement dite, il faut positionner les variables
 d'environnements QTDIR et QMAKESPEC
 (ex : 
-    "export QTDIR=/usr/lib/qt3" (mandrake) ou "export QTDIR=/usr/share/qt" (debian)
+    "export QTDIR=/usr/lib/qt3" (mandrake) ou "export QTDIR=/usr/share/qt" voire "export QTDIR=/usr/share/qt3" (debian)
     "export QMAKESPEC=linux-g++"
 )
 
@@ -50,3 +50,5 @@ Exemples de fonctionnalités :
 - complétion des logins (Tab après au moins une lettre de login)
 - support dessin (expérimental -- norme à définir avec les autres implémenteurs)
 - contrôle distant (en cours, utilité indéniable ;-))
+- équivalent du kaware (apparition en bas de l'écran d'un message
+contenant le login, ou d'un message de tell)

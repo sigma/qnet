@@ -8,34 +8,36 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef _PAGE_H_
-#define _PAGE_H_
+#ifndef _SPLASH_H_
+#define _SPLASH_H_
 
+#include <qpixmap.h>
 #include <qwidget.h>
+#include <qtimer.h>
+#include <qlabel.h>
 
 #include "ChatSession.h"
+#include "page.h"
 
-/**
- * 
- * Yann Hodique
- **/
-class Page : public QWidget
-{
-  Q_OBJECT
-
+class Splash : public Page {
+    Q_OBJECT
+    
 public:
-  Page(QWidget *parent, const char *name, ChatSession *master, WFlags f = 0);
-  virtual ~Page();
-  
-  ChatSession * getMaster();
-  
-  virtual void append(QString &) = 0;
-  
+    Splash(QWidget *parent, const char *name, ChatSession * session);
+    ~Splash();
+    
+    void repaint();
+
+protected:
+    void mousePressEvent( QMouseEvent * );
+
+public slots:
+    void timeout();
+    void append(QString & msg);
+    
 private:
- ChatSession * m_master;
- 
- signals:
-	void textDisplayed(QWidget *);
+    QTimer *m_timer;
+    QLabel label;
 };
 
 #endif

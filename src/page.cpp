@@ -11,8 +11,8 @@
 #include "page.h"
 
 
-Page::Page(QWidget *parent, const char *name, ChatSession * master)
-  : QWidget(parent, name)
+Page::Page(QWidget *parent, const char *name, ChatSession * master, WFlags f)
+  : QWidget(parent, name, f)
 {
 m_master = master;
 }

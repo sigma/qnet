@@ -38,7 +38,8 @@ public:
     typedef enum {
         TELL,
         BROWSER,
-	DRAWING
+	DRAWING,
+	SPLASH
     } PageType;
 
     QMtp(QWidget *parent = 0, const char *name = 0);
