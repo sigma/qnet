@@ -49,6 +49,9 @@ public:
     virtual void append(const QString &) = 0;
     virtual QString getText() {return QString::null;}
     
+public slots:
+    virtual void ensureFocus() {}
+
 private:
     Master * m_master;
 
