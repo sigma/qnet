@@ -33,6 +33,8 @@ de *chaque* répertoire avant de recommencer (bien fait pour vous)
 Après ça, si tout s'est bien passé (mouahaha je n'y crois pas un instant) le joli exécutable se trouve dans bin/
 
 Reste à copier le qnetrc en ~/.qnetrc et à lancer le monstre.
+update: dans l'état actuel des choses, il vous faudra éditer le .qnetrc et remplacer les lignes /path/to/*.so par les chemins absolus menant à chacun des plugins.
+On essaiera de faire un peu mieux plus tard ;-)
 
 Sigma.
 
@@ -53,5 +55,4 @@ Exemples de fonctionnalités :
 - complétion des logins (Tab après au moins une lettre de login)
 - support dessin (expérimental -- norme à définir avec les autres implémenteurs)
 - contrôle distant (en cours, utilité indéniable ;-))
-- équivalent du kaware (apparition en bas de l'écran d'un message
-contenant le login, ou d'un message de tell)
+- équivalent du kaware (apparition en bas de l'écran d'un message contenant le login, ou d'un message de tell)

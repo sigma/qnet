@@ -4,7 +4,14 @@
 <sessions>
 <session>lof</session>
    <session>zen</session>
-</sessions> </general>
+</sessions> 
+  <plugins>
+   <file>/path/to/libtell.so</file>
+   <file>/path/to/libbrowser.so</file>
+   <file>/path/to/libdrawing.so</file>
+   <file>/path/libsplash.so</file>
+  </plugins>
+</general>
  <sessions>
 <lof>
 <host>lof.hn.org</host>
