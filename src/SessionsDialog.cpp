@@ -13,6 +13,7 @@
 #include <qlistbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
+#include <qinputdialog.h>
 
 SessionsDialog::SessionsDialog(QWidget *parent, const char *name)
         : SessionsDialogBase(parent, name) {}
@@ -41,10 +42,9 @@ void SessionsDialog::slotSubs() {
 }
 
 void SessionsDialog::slotAdd() {
-    if (name_edit->text().length() && host_edit->text().length() && port_edit->text().length()) {
-        SessionItem it(name_edit->text(),host_edit->text(),port_edit->text(),login_edit->text(),pass_edit->text(),auto_check->isChecked());
-        addSessionItem(it);
-    }
+    QString name = QInputDialog::getText("Session name","Enter a name",QLineEdit::Normal,("session"));
+    SessionItem it(name);
+    addSessionItem(it);
 }
 
 void SessionsDialog::slotDel() {
