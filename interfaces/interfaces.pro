@@ -5,12 +5,14 @@
 
 SOURCES += MtpContext.cpp \
            mtpbrowser.cpp \
-           chatpage.cpp
+           chatpage.cpp \
+           fontlock.cpp
 HEADERS += master.h \
            mtpbrowser.h \
            page.h \
            MtpContext.h \
-           chatpage.h
+           chatpage.h \
+           fontlock.h
 TEMPLATE = lib
 CONFIG += release \
           warn_on \

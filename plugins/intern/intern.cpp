@@ -23,7 +23,7 @@ Intern::Intern(QWidget */*parent*/, const char *name, Master * session) : Page(0
 Intern::~Intern() {}
 
 void Intern::append(const QString& msg) {
-    QRegExp re("(affect|emit|pformat|ptime|users):(.*)");
+    QRegExp re("(affect|emit|pformat|ptime|users|sort):(.*)");
     if(re.exactMatch(msg)) {
         if(re.cap(1) == "affect")
             affectAppend(re.cap(2));
@@ -35,6 +35,8 @@ void Intern::append(const QString& msg) {
             ptimeAppend(re.cap(2));
         else if(re.cap(1) == "users")
             usersAppend(re.cap(2));
+        else if(re.cap(1) == "sort")
+            sortAppend(re.cap(2));
     }
 }
 
@@ -94,3 +96,13 @@ void Intern::usersAppend(const QString& msg) {
             getMaster()->outgoing(re.cap(2));
     }
 }
+
+void Intern::sortAppend(const QString& msg) {
+    QRegExp re("(\\w+)<-(.*)");
+    if(re.exactMatch(msg)) {
+        QStringList tmp = QStringList::split(",",re.cap(2));
+        tmp.sort();
+        getMaster()->context()->setVar(re.cap(1),tmp.join(","));
+    }
+}
+

@@ -534,13 +534,18 @@ SWIG_Guile_GetArgs (SCM *dest, SCM rest,
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_QStringList swig_types[0] 
-#define  SWIGTYPE_p_MainChatPage swig_types[1] 
-#define  SWIGTYPE_p_Page swig_types[2] 
-#define  SWIGTYPE_p_MainWin swig_types[3] 
-#define  SWIGTYPE_p_QMtp swig_types[4] 
-#define  SWIGTYPE_p_ChatSession swig_types[5] 
-#define  SWIGTYPE_p_QWidget swig_types[6] 
-static swig_type_info *swig_types[8];
+#define  SWIGTYPE_p_Pattern swig_types[1] 
+#define  SWIGTYPE_p_BlockPattern swig_types[2] 
+#define  SWIGTYPE_p_ChatPage swig_types[3] 
+#define  SWIGTYPE_p_MainChatPage swig_types[4] 
+#define  SWIGTYPE_p_Page swig_types[5] 
+#define  SWIGTYPE_p_MainWin swig_types[6] 
+#define  SWIGTYPE_p_Face swig_types[7] 
+#define  SWIGTYPE_p_QMtp swig_types[8] 
+#define  SWIGTYPE_p_ChatSession swig_types[9] 
+#define  SWIGTYPE_p_QWidget swig_types[10] 
+#define  SWIGTYPE_p_FontLock swig_types[11] 
+static swig_type_info *swig_types[13];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -600,6 +605,15 @@ static swig_type_info *swig_types[8];
 extern MainWin *main_window;
 
 #include "ChatSession.h"
+
+
+#include "fontlock.h"
+
+
+#include "chatpage.h"
+
+
+#include "MainChatPage.h"
 
 static SCM
 _wrap_qnet_load_config_file (SCM s_0)
@@ -1349,7 +1363,6 @@ _wrap_chatsession_session_name (SCM s_0)
     
     gh_allow_ints();
     {
-        //    gswig_result = gh_str02scm(((std::string)(*result)).c_str());
         gswig_result = gh_str02scm((result)->ascii());
     }
     
@@ -1640,28 +1653,355 @@ _wrap_chatsession_outgoing (SCM s_0, SCM s_1)
 }
 
 
+static SCM
+_wrap_new_face (SCM s_0, SCM s_1)
+{
+#define FUNC_NAME "new-face"
+    QString *arg1 = 0 ;
+    QString *arg2 = 0 ;
+    Face *result;
+    QString temp1 ;
+    char *tempptr1 ;
+    QString temp2 ;
+    char *tempptr2 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        if (gh_string_p(s_0)) {
+            tempptr1 = SWIG_scm2str(s_0);
+            temp1 = QString(tempptr1);
+            if (tempptr1) SWIG_free(tempptr1);
+            arg1 = &temp1;
+        } else {
+            SWIG_exception(SWIG_TypeError, "string expected");
+        }
+    }
+    {
+        if (gh_string_p(s_1)) {
+            tempptr2 = SWIG_scm2str(s_1);
+            temp2 = QString(tempptr2);
+            if (tempptr2) SWIG_free(tempptr2);
+            arg2 = &temp2;
+        } else {
+            SWIG_exception(SWIG_TypeError, "string expected");
+        }
+    }
+    gh_defer_ints();
+    result = (Face *)new Face((QString const &)*arg1,(QString const &)*arg2);
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Face, 1);
+    }
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_new_pattern (SCM s_0)
+{
+#define FUNC_NAME "new-pattern"
+    QString *arg1 = 0 ;
+    Pattern *result;
+    QString temp1 ;
+    char *tempptr1 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        if (gh_string_p(s_0)) {
+            tempptr1 = SWIG_scm2str(s_0);
+            temp1 = QString(tempptr1);
+            if (tempptr1) SWIG_free(tempptr1);
+            arg1 = &temp1;
+        } else {
+            SWIG_exception(SWIG_TypeError, "string expected");
+        }
+    }
+    gh_defer_ints();
+    result = (Pattern *)new Pattern((QString const &)*arg1);
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Pattern, 1);
+    }
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_pattern_add (SCM s_0, SCM s_1, SCM s_2)
+{
+#define FUNC_NAME "pattern-add"
+    Pattern *arg1 = (Pattern *) 0 ;
+    int arg2 ;
+    SwigValueWrapper< Face > arg3 ;
+    Face *argp3 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (Pattern *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_Pattern, 1, 0);
+    }
+    {
+        arg2 = gh_scm2int(s_1);
+    }
+    {
+        argp3 = (Face *)SWIG_MustGetPtr(s_2, SWIGTYPE_p_Face, 3, 0);
+        arg3 = *argp3;
+    }
+    gh_defer_ints();
+    (arg1)->add(arg2,arg3);
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_new_block_pattern (SCM s_0, SCM s_1, SCM s_2)
+{
+#define FUNC_NAME "new-block-pattern"
+    Pattern *arg1 = 0 ;
+    Pattern *arg2 = 0 ;
+    Pattern *arg3 = 0 ;
+    BlockPattern *result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (Pattern *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_Pattern, 1, 0);
+    }
+    {
+        arg2 = (Pattern *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_Pattern, 2, 0);
+    }
+    {
+        arg3 = (Pattern *)SWIG_MustGetPtr(s_2, SWIGTYPE_p_Pattern, 3, 0);
+    }
+    gh_defer_ints();
+    result = (BlockPattern *)new BlockPattern((Pattern const &)*arg1,(Pattern const &)*arg2,(Pattern const &)*arg3);
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_BlockPattern, 1);
+    }
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_font_lock_add_pattern (SCM s_0, SCM s_1)
+{
+#define FUNC_NAME "font-lock-add-pattern"
+    FontLock *arg1 = (FontLock *) 0 ;
+    Pattern *arg2 = 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (FontLock *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_FontLock, 1, 0);
+    }
+    {
+        arg2 = (Pattern *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_Pattern, 2, 0);
+    }
+    gh_defer_ints();
+    (arg1)->addPattern((Pattern const &)*arg2);
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_font_lock_add_multi_pattern (SCM s_0, SCM s_1)
+{
+#define FUNC_NAME "font-lock-add-multi-pattern"
+    FontLock *arg1 = (FontLock *) 0 ;
+    BlockPattern *arg2 = 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (FontLock *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_FontLock, 1, 0);
+    }
+    {
+        arg2 = (BlockPattern *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_BlockPattern, 2, 0);
+    }
+    gh_defer_ints();
+    (arg1)->addMultiLinePattern((BlockPattern const &)*arg2);
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_font_lock_clear (SCM s_0)
+{
+#define FUNC_NAME "font-lock-clear"
+    FontLock *arg1 = (FontLock *) 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (FontLock *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_FontLock, 1, 0);
+    }
+    gh_defer_ints();
+    (arg1)->clear();
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_chat_page_toggle_user_box (SCM s_0)
+{
+#define FUNC_NAME "chat-page-toggle-user-box"
+    ChatPage *arg1 = (ChatPage *) 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (ChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatPage, 1, 0);
+    }
+    gh_defer_ints();
+    (arg1)->toggleUserBox();
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_chat_page_font_lock (SCM s_0)
+{
+#define FUNC_NAME "chat-page-font-lock"
+    ChatPage *arg1 = (ChatPage *) 0 ;
+    FontLock *result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (ChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatPage, 1, 0);
+    }
+    gh_defer_ints();
+    result = (FontLock *)(arg1)->fontLock();
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_FontLock, 0);
+    }
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_main_chat_page_toggle_user_box (SCM s_0)
+{
+#define FUNC_NAME "main-chat-page-toggle-user-box"
+    MainChatPage *arg1 = (MainChatPage *) 0 ;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (MainChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainChatPage, 1, 0);
+    }
+    gh_defer_ints();
+    (arg1)->toggleUserBox();
+    
+    gh_allow_ints();
+    gswig_result = SCM_UNSPECIFIED;
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
+static SCM
+_wrap_main_chat_page_font_lock (SCM s_0)
+{
+#define FUNC_NAME "main-chat-page-font-lock"
+    MainChatPage *arg1 = (MainChatPage *) 0 ;
+    FontLock *result;
+    SCM gswig_result;
+    int gswig_list_p = 0;
+    
+    {
+        arg1 = (MainChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainChatPage, 1, 0);
+    }
+    gh_defer_ints();
+    result = (FontLock *)(arg1)->fontLock();
+    
+    gh_allow_ints();
+    {
+        gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_FontLock, 0);
+    }
+    
+    return gswig_result;
+#undef FUNC_NAME
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_MainChatPageTo_p_ChatPage(void *x) {
+    return (void *)((ChatPage *)  ((MainChatPage *) x));
+}
 static swig_type_info _swigt__p_QStringList[] = {{"_p_QStringList", 0, "QStringList *", 0},{"_p_QStringList"},{0}};
+static swig_type_info _swigt__p_Pattern[] = {{"_p_Pattern", 0, "Pattern *", 0},{"_p_Pattern"},{0}};
+static swig_type_info _swigt__p_BlockPattern[] = {{"_p_BlockPattern", 0, "BlockPattern *", 0},{"_p_BlockPattern"},{0}};
+static swig_type_info _swigt__p_ChatPage[] = {{"_p_ChatPage", 0, "ChatPage *", 0},{"_p_ChatPage"},{"_p_MainChatPage", _p_MainChatPageTo_p_ChatPage},{0}};
 static swig_type_info _swigt__p_MainChatPage[] = {{"_p_MainChatPage", 0, "MainChatPage *", 0},{"_p_MainChatPage"},{0}};
 static swig_type_info _swigt__p_Page[] = {{"_p_Page", 0, "Page *", 0},{"_p_Page"},{0}};
 static swig_type_info _swigt__p_MainWin[] = {{"_p_MainWin", 0, "MainWin *", 0},{"_p_MainWin"},{0}};
+static swig_type_info _swigt__p_Face[] = {{"_p_Face", 0, "Face *", 0},{"_p_Face"},{0}};
 static swig_type_info _swigt__p_QMtp[] = {{"_p_QMtp", 0, "QMtp *", 0},{"_p_QMtp"},{0}};
 static swig_type_info _swigt__p_ChatSession[] = {{"_p_ChatSession", 0, "ChatSession *", 0},{"_p_ChatSession"},{0}};
 static swig_type_info _swigt__p_QWidget[] = {{"_p_QWidget", 0, "QWidget *", 0},{"_p_QWidget"},{0}};
+static swig_type_info _swigt__p_FontLock[] = {{"_p_FontLock", 0, "FontLock *", 0},{"_p_FontLock"},{0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_QStringList, 
+_swigt__p_Pattern, 
+_swigt__p_BlockPattern, 
+_swigt__p_ChatPage, 
 _swigt__p_MainChatPage, 
 _swigt__p_Page, 
 _swigt__p_MainWin, 
+_swigt__p_Face, 
 _swigt__p_QMtp, 
 _swigt__p_ChatSession, 
 _swigt__p_QWidget, 
+_swigt__p_FontLock, 
 0
 };
 
@@ -1718,6 +2058,17 @@ SWIG_init (void)
     gh_new_procedure("chatsession-send", (swig_guile_proc) _wrap_chatsession_send, 2, 0, 0);
     gh_new_procedure("chatsession-incoming", (swig_guile_proc) _wrap_chatsession_incoming, 2, 0, 0);
     gh_new_procedure("chatsession-outgoing", (swig_guile_proc) _wrap_chatsession_outgoing, 2, 0, 0);
+    gh_new_procedure("new-face", (swig_guile_proc) _wrap_new_face, 2, 0, 0);
+    gh_new_procedure("new-pattern", (swig_guile_proc) _wrap_new_pattern, 1, 0, 0);
+    gh_new_procedure("pattern-add", (swig_guile_proc) _wrap_pattern_add, 3, 0, 0);
+    gh_new_procedure("new-block-pattern", (swig_guile_proc) _wrap_new_block_pattern, 3, 0, 0);
+    gh_new_procedure("font-lock-add-pattern", (swig_guile_proc) _wrap_font_lock_add_pattern, 2, 0, 0);
+    gh_new_procedure("font-lock-add-multi-pattern", (swig_guile_proc) _wrap_font_lock_add_multi_pattern, 2, 0, 0);
+    gh_new_procedure("font-lock-clear", (swig_guile_proc) _wrap_font_lock_clear, 1, 0, 0);
+    gh_new_procedure("chat-page-toggle-user-box", (swig_guile_proc) _wrap_chat_page_toggle_user_box, 1, 0, 0);
+    gh_new_procedure("chat-page-font-lock", (swig_guile_proc) _wrap_chat_page_font_lock, 1, 0, 0);
+    gh_new_procedure("main-chat-page-toggle-user-box", (swig_guile_proc) _wrap_main_chat_page_toggle_user_box, 1, 0, 0);
+    gh_new_procedure("main-chat-page-font-lock", (swig_guile_proc) _wrap_main_chat_page_font_lock, 1, 0, 0);
 }
 
 #ifdef __cplusplus

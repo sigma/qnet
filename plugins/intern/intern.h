@@ -36,6 +36,7 @@ private:
     void pformatAppend(const QString&);
     void ptimeAppend(const QString&);
     void usersAppend(const QString&);
+    void sortAppend(const QString&);
 };
 
 #endif

@@ -16,11 +16,17 @@
 #include "qnet.h"
 
 #include "qnet_guile_wrap.cxx"
+#include "guile_global.h"
 
 MainWin * main_window;
 
 SCM init(void *) {
     return scm_primitive_load(scm_makfrom0str((QDir::homeDirPath() + "/.qnet.scm").ascii()));
+}
+
+void guile_global_init() {
+    guile_chatsession_created_hook=scm_make_hook(SCM_MAKINUM(0));
+    scm_c_define("chatsession-created-hook",guile_chatsession_created_hook);
 }
 
 int main( int argc, char ** argv ) {
@@ -29,6 +35,7 @@ int main( int argc, char ** argv ) {
 
     scm_init_guile();
     SWIG_init();
+    guile_global_init();
 
     while (1)
     {

@@ -72,6 +72,8 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
     system_edit->setFocus();
     system_view->setFocusProxy(system_edit);
 
+    highlighter = new ErrorHighlighter(system_view);
+
     // kick out this useless status bar
     delete statusBar();
 
@@ -607,6 +609,8 @@ void QMtp::loadStyleSheet() {
     QStyleSheet::setDefaultSheet(qnet_style);
 }
 
+extern SCM guile_chatsession_created_hook;
+
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
     session->chatpage()->toggleUserMenu(false);
@@ -617,6 +621,8 @@ void QMtp::launchSession(const QString& name) {
 
     connect(session->chatpage(), SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
+
+    scm_c_run_hook(guile_chatsession_created_hook, SCM_EOL);
 }
 
 void QMtp::launchSession(int index) {
@@ -702,11 +708,13 @@ void QMtp::returnPressed() {
 }
 
 void QMtp::displayOut() {
-    while(out->canReadLine())
-        system_view->append(out->readLine());
+    while(out->canReadLine()) {
+        QString output = out->readLine();
+        system_view->append(output);
+    }
 }
 
 void QMtp::displayErr() {
     while(err->canReadLine())
-        system_view->append(err->readLine());
+        system_view->append("### " + err->readLine());
 }

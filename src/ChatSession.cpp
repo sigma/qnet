@@ -19,7 +19,7 @@
 #include <qtextedit.h>
 #include <qapplication.h>
 
-#include <iostream>
+#include <libguile.h>
 
 #include "ChatSession.h"
 #include "telnetmanager.h"

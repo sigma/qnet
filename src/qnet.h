@@ -17,6 +17,20 @@
 #include <qmap.h>
 #include <qdir.h>
 
+#include <qsyntaxhighlighter.h>
+
+class ErrorHighlighter : public QSyntaxHighlighter {
+public:
+
+    ErrorHighlighter(QTextEdit *edit) : QSyntaxHighlighter(edit) {}
+
+    virtual int highlightParagraph(const QString &text, int) {
+        if (text.startsWith("###"))
+            setFormat(0,text.length(),QColor("red"));
+        return 0;
+    }
+};
+
 class QProcess;
 class ChatSession;
 class MtpSettings;
@@ -91,6 +105,7 @@ private:
     QString m_rcpath;
     MtpSettings *m_settings;
     QSocket *out, *err;
+    ErrorHighlighter *highlighter;
 
 public slots:
     void launchSession(const QString& name);

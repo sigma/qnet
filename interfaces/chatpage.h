@@ -24,6 +24,7 @@ class QListBoxItem;
 class QTextEdit;
 class QAction;
 class QPopupMenu;
+class FontLock;
 
 class ChatPage : public Page
 {
@@ -36,6 +37,8 @@ public:
     QTextEdit* chat_edit;
     QListBox* users_box;
     MtpBrowser* chat_view;
+
+    FontLock * fontLock() {return fontlock;}
 
 public slots:
     virtual void returnPressed();
@@ -66,6 +69,8 @@ protected slots:
 private:
     QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end, *box, *bookmark, *gotob;
     QPopupMenu *user_menu;
+    FontLock *fontlock;
+    bool user_box_visible;
 };
 
 #endif // CHATPAGE_H

@@ -25,6 +25,7 @@
 #include <qpoint.h>
 
 #include "mtpbrowser.h"
+#include "fontlock.h"
 
 #define DEFAULT_BOOKMARK "[Mark]"
 
@@ -51,20 +52,19 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
 
     hsplit->setResizeMode(users_box,QSplitter::KeepSize);
 
-    users_box->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::MinimumExpanding, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
+    users_box->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
     users_box->setMinimumSize( QSize( 75, 330 ) );
 
     chat_edit = new QTextEdit(vsplit,"chat_edit");
 
     vsplit->setResizeMode(chat_edit,QSplitter::KeepSize);
 
-    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
     chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
     ChatPageLayout->addWidget(vsplit,0,0);
 
-    resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
     repaint();
 
     chat_view->setTextFormat(Qt::RichText);
@@ -137,6 +137,8 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
     users_box->setFocusProxy(chat_edit);
 
     user_menu = new QPopupMenu(users_box);
+    user_box_visible = true;
+    fontlock = new FontLock(chat_view);
 }
 
 /*
@@ -241,10 +243,14 @@ void ChatPage::toggleUserMenu(bool on) {
 }
 
 void ChatPage::toggleUserBox() {
-    if(users_box->isVisible())
+    if(user_box_visible) {
+        user_box_visible = false;
         users_box->hide();
-    else
+    }
+    else {
         users_box->show();
+        user_box_visible = true;
+    }
 }
 
 void ChatPage::append(const QString& msg) {

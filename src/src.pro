@@ -46,7 +46,8 @@ HEADERS += qnet.h \
            appearancesettings.ui.h \
            mtpfilterssettings.ui.h \
            trayicon.h \
-           mainwin.h
+           mainwin.h \
+           guile_global.h
 IMAGES += images/filenew \
           images/fileopen \
           images/filesave \
@@ -68,8 +69,7 @@ FORMS += qnet_base.ui \
          sessionssettingsbase.ui \
          tagssettings.ui \
          pluginssettings.ui
-QMAKE_CXXFLAGS_DEBUG += -Werror \
-                        -Wall \
+QMAKE_CXXFLAGS_DEBUG += -Wall \
                         -ansi \
                         -pedantic \
                         -Wno-long-long \
