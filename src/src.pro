@@ -76,4 +76,6 @@ FORMS += qnet_base.ui \
          prefixsettingsbase.ui \
          fortunesettings.ui \
          appearancesettings.ui \
-         mtpfilterssettings.ui 
+         mtpfilterssettings.ui \
+         tagssettings.ui
+

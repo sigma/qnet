@@ -43,6 +43,7 @@
 #include "remotecontrol.h"
 #include "page.h"
 #include "mtpbrowser.h"
+#include "tagssettings.h"
 
 QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
         : QMtp_base(parent, name), m_document() {
@@ -164,6 +165,11 @@ void QMtp::slotConfigure() {
         appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
     }
 
+    // Stylesheet :
+    TagsSettings * tags_settings = new TagsSettings(m_settings->stack);
+    m_settings->stack->addWidget(tags_settings,5);
+    m_settings->prop_list->insertItem("StyleSheet",5);
+    
     connect(m_settings, SIGNAL(end()),
             SLOT(slotStoreConfig()));
 
