@@ -22,10 +22,20 @@ Affect::Affect(QWidget */*parent*/, const char *name, Master * session) : Page(0
 Affect::~Affect() {}
 
 void Affect::append(const QString& msg) {
-    QRegExp re("(\\w+)=(\\w+)");
+    QRegExp re("(\\w+)(=|\\|=)(\\w+)");
     if(re.exactMatch(msg)) {
-	getMaster()->context()->setVar(re.cap(1),re.cap(2));
-	getMaster()->displayStderr("Setting " + re.cap(1) + " to " + re.cap(2));
+        if(re.cap(2) == "=") {
+            getMaster()->displayStderr("Setting " + re.cap(1) + " to " + re.cap(3));
+            getMaster()->context()->setVar(re.cap(1),re.cap(3));
+        }
+        else { // shell command by |=
+            getMaster()->displayStderr("Calling shell command : " + re.cap(3));
+            getMaster()->context()->setVar(re.cap(1),shellOutput(re.cap(3)));
+        }
     }
 }
 
+QString Affect::shellOutput(const QString& // cmd
+                            ) {
+    return QString::null;
+}

@@ -30,6 +30,7 @@ public:
     }
     void append(const QString& msg);
 
+    QString shellOutput(const QString& cmd);
 };
 
 #endif
