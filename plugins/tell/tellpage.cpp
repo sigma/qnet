@@ -25,7 +25,9 @@
 
 #include "mtpbrowser.h"
 
-TellPage::TellPage(QWidget *parent, const char *name, ChatSession * session)
+PLUGIN_FACTORY(TellPage,"tell");
+
+TellPage::TellPage(QWidget *parent, const char *name, Master * session)
         : Page(parent,name,session) {
     if ( !name )
         setName( "TellPageBase" );
@@ -88,6 +90,8 @@ TellPage::TellPage(QWidget *parent, const char *name, ChatSession * session)
     chat_edit->setFocus();
     chat_edit->setWordWrap(QTextEdit::NoWrap);
     //chat_edit->setTextFormat(Qt::PlainText);
+    
+    setPrefix(QString("tell ") + name + " ");
 }
 
 

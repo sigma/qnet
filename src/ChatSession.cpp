@@ -181,7 +181,15 @@ void ChatSession::displayStdout(QString msg) {
                     }
                 if (ok) {
 
-                    if(abbrev=="tell") {
+		    Page * edit = mtp->getNewPage(abbrev,rx.cap(2),this);
+		    if(edit) {
+			brothers.push_back(edit);
+			edit->append(m);
+		    }
+		    else
+			displayStderr("Don't know what to do with : " + mmsg);
+		    
+/*                    if(abbrev=="tell") {
                         Page * edit = mtp->getNewPage(QMtp::TELL,rx.cap(2),this);
                         brothers.push_back(edit);
                         edit->append(m);
@@ -199,7 +207,7 @@ void ChatSession::displayStdout(QString msg) {
 			Page * edit = mtp->getNewPage(QMtp::SPLASH,rx.cap(2),this);
 			brothers.push_back(edit);
 			edit->append(m);
-		    }
+		    }*/
                 }
             } else {
                 chat_view->append(mmsg);
@@ -589,4 +597,8 @@ void ChatSession::createTelnetManager()
     mng->setLogin(DomUtil::readEntry(*m_dom,"/sessions/" + session_name + "/login",""));
     mng->setPassword(DomUtil::readEntry(*m_dom,"/sessions/" + session_name + "/password",""));
     mng->start();
+}
+
+QMtp* ChatSession::topLevel() {
+    return mtp;
 }

@@ -24,12 +24,12 @@
 #include <qcolordialog.h>
 #include <qregexp.h>
 
-
+PLUGIN_FACTORY(Painter,"drawing");
 /*
  *  Constructs a Painter as a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f'.
  */
-Painter::Painter( QWidget* parent, const char* name, ChatSession * session )
+Painter::Painter( QWidget* parent, const char* name, Master * session )
         : Page( parent, name, session ) {
     if ( !name )
         setName( "Painter" );

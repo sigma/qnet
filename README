@@ -7,10 +7,13 @@ Version actuelle : 0.42
 Compiler
 ~~~~~~~~
 pré-requis : 
-- libqt3 + headers (je fonctionne avec la 3.1, si
-il y a des problèmes avec les versions 3.0.x c'est gentil de me
-prévenir, a priori ce n'est pas la peine d'essayer avec les 2.x)
+- libqt3 + headers 
 - qmake
+
+Les versions de Qt testées sont les suivantes : Qt 3.0.5 (marche à peu près convenablement), Qt >= 3.1 (pas de problème particulier)
+Pour les autres versions : je n'ai pas la possibilité de tester dans ces conditions (non je n'ai pas 50 versions de Qt installées).
+Si le problème que vous constatez n'est pas reproductible sur l'une des plateformes précédemment citées, JE NE POURRAI RIEN FAIRE
+Si quelqu'un me propose un patch spécifique pour contourner ce genre de problème je l'accepterai avec joie. Sinon, tant pis.
 
 pour la compilation proprement dite, il faut positionner les variables
 d'environnements QTDIR et QMAKESPEC

@@ -24,10 +24,11 @@
 #include <qradiobutton.h>
 #include <qstatusbar.h>
 
+#include <dlfcn.h>
+
 #include "qnet.h"
 #include "connectionbox.h"
 #include "ChatSession.h"
-#include "chatpage.h"
 #include "version.h"
 #include "domutil.h"
 #include "SessionsDialog.h"
@@ -37,11 +38,8 @@
 #include "PrefixSettings.h"
 #include "fortunesettings.h"
 #include "appearancesettings.h"
-#include "tellpage.h"
-#include "browserpage.h"
 #include "remotecontrol.h"
-#include "painter.h"
-#include "splash.h"
+#include "page.h"
 
 QMtp::QMtp(QWidget *parent, const char *name)
         : QMtp_base(parent, name), m_document() {
@@ -63,6 +61,11 @@ QMtp::QMtp(QWidget *parent, const char *name)
     fproc = 0;
     rctl = new RemoteControlServerInfo(this,5000,system_view);
 
+    // plugins
+    QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
+    for(QStringList::Iterator it = plugs.begin(); it != plugs.end(); ++it)
+	loadPlugin(*it);
+    
     // autoconnect
     QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
@@ -191,9 +194,8 @@ void QMtp::fileNew() {
     }
 }
 
-Page * QMtp::getNewPage(PageType type,QString name,ChatSession * ref) {
-    switch(type) {
-    case TELL: {
+Page * QMtp::getNewPage(QString type,QString name,ChatSession * ref) {
+/*    if (type == "tell") {
             TellPage * edit = new TellPage(tabs,name,ref);
             edit->setPrefix("tell " + name + " ");
             tabs->addTab(edit,name);
@@ -206,7 +208,7 @@ Page * QMtp::getNewPage(PageType type,QString name,ChatSession * ref) {
 
             return edit;
         }
-    case BROWSER: {
+    else if (type == "browser") {
             BrowserPage * edit = new BrowserPage(tabs,name,ref);
             tabs->addTab(edit,name);
             tabs->showPage(edit);
@@ -217,7 +219,7 @@ Page * QMtp::getNewPage(PageType type,QString name,ChatSession * ref) {
 
             return edit;
         }
-    case DRAWING: {
+    else if (type == "drawing") {
             Painter * paint = new Painter(tabs,name,ref);
             tabs->addTab(paint,name);
             tabs->showPage(paint);
@@ -225,13 +227,26 @@ Page * QMtp::getNewPage(PageType type,QString name,ChatSession * ref) {
 
             return paint;
         }
-    case SPLASH: {
+    else if (type == "splash") {
             Splash * splash = new Splash(tabs,name,ref);
             tab_map.insert(splash,ref);
 
             return splash;
-        }
+        }*/
+    QMap<QString,void*>::Iterator it;
+    if((it = plugins_map.find(type)) != plugins_map.end()) {
+	create_t* create_plugin = (create_t*) dlsym(*it, "create");
+	Page* page = create_plugin(tabs,name,ref);
+	if (page->isSlave()) {
+	    tabs->addTab(page,name);
+            tabs->showPage(page);
+	}
+	tab_map.insert(page,ref);
+	connect(page, SIGNAL(textDisplayed(QWidget *)),
+		this, SLOT(slotTextDisplayed(QWidget *)));
+	return page;
     }
+    system_view->append("No type \"" + type + "\" available\n");
     return 0;
 }
 
@@ -398,6 +413,26 @@ void QMtp::endFortune() {
     fortune_page->append("<hr>");
     delete fproc;
     fproc = 0;
+}
+
+void QMtp::loadPlugin(const QString& file_name) {
+    system_view->append("Loading " + file_name);
+    
+    void* plug = dlopen(file_name, RTLD_LAZY);
+    if (!plug) {
+        system_view->append(QString("Cannot load library: ") + dlerror() + "\n");
+        return;
+    }
+
+    create_t* create_plugin = (create_t*) dlsym(plug, "create");
+    destroy_t* destroy_plugin = (destroy_t*) dlsym(plug, "destroy");
+    name_t* name_plugin = (name_t*) dlsym(plug, "name");
+    if (!create_plugin || !destroy_plugin || !name_plugin) {
+        system_view->append(QString("Cannot load symbols: ") + dlerror() + "\n");
+	return;
+    }
+    
+    plugins_map.insert(name_plugin(),plug);
 }
 
 void QMtp::launchSession(QString name) {

@@ -8,36 +8,54 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef _SPLASH_H_
-#define _SPLASH_H_
+#ifndef _TELLPAGE_H_
+#define _TELLPAGE_H_
 
-#include <qpixmap.h>
 #include <qwidget.h>
-#include <qtimer.h>
-#include <qlabel.h>
+#include <qaction.h>
+#include <qstringlist.h>
 
-#include "ChatSession.h"
 #include "page.h"
+#include "master.h"
 
-class Splash : public Page {
+class QTextEdit;
+class MtpBrowser;
+class QGridLayout;
+
+/**
+ * 
+ * Yann Hodique
+ **/
+class TellPage : public Page {
     Q_OBJECT
-    
-public:
-    Splash(QWidget *parent, const char *name, ChatSession * session);
-    ~Splash();
-    
-    void repaint();
 
-protected:
-    void mousePressEvent( QMouseEvent * );
+public:
+    TellPage(QWidget *parent, const char *name, Master * session);
+    ~TellPage();
+    virtual void append(QString & msg);
+    void setPrefix(QString);
+    QTextEdit* chat_edit;
+    MtpBrowser* chat_view;
 
 public slots:
-    void timeout();
-    void append(QString & msg);
-    
+    virtual void returnPressed();
+    void slotHistoryUp();
+    void slotHistoryDown();
+    void slotNewLine();
+
+
+protected:
+    QGridLayout* TellPageBaseLayout;
+
+protected slots:
+    virtual void languageChange();
+
 private:
-    QTimer *m_timer;
-    QLabel label;
+    QString prefix;
+    QAction *history_up, *history_down, *new_line;
+    QStringList history;
+    QStringList::Iterator history_iterator;
+
 };
 
 #endif

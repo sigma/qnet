@@ -20,9 +20,9 @@
 #include <qpixmap.h>
 #include <iostream>
 
-#include "mtpbrowser.h"
+PLUGIN_FACTORY(BrowserPage,"browser");
 
-BrowserPage::BrowserPage(QWidget *parent, const char *name, ChatSession * session)
+BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
         : Page(parent,name,session) {
     if ( !name )
         setName( "BrowserPageBase" );

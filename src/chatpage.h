@@ -2,7 +2,7 @@
 ** Form interface generated from reading ui file 'chatpage.ui'
 **
 ** Created: Mon Jan 6 19:25:19 2003
-**      by: The User Interface Compiler ($Id: chatpage.h,v 1.1 2003/01/28 19:15:31 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: chatpage.h,v 1.2 2003/02/15 20:53:06 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -14,6 +14,8 @@
 #include <qpixmap.h>
 #include <qwidget.h>
 
+#include "master.h"
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -22,7 +24,7 @@ class QListBox;
 class QListBoxItem;
 class QTextEdit;
 
-class ChatPage : public QWidget
+class ChatPage : public Master
 {
     Q_OBJECT
 

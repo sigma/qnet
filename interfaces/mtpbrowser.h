@@ -24,11 +24,11 @@ class MtpBrowser : public QTextBrowser
   Q_OBJECT
 
 public:
-  MtpBrowser(QWidget *parent, const char *name);
-  ~MtpBrowser();
+    MtpBrowser(QWidget *parent, const char *name) : QTextBrowser(parent,name) {}
+    ~MtpBrowser() {}
   
 public slots:
-void setSource(const QString &);
+    void setSource(const QString &) {}
 };
 
 #endif

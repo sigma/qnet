@@ -8,48 +8,36 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef _TELLPAGE_H_
-#define _TELLPAGE_H_
+#ifndef _BROWSERPAGE_H_
+#define _BROWSERPAGE_H_
 
 #include <qwidget.h>
-#include "page.h"
-#include "ChatSession.h"
 #include <qaction.h>
 
+#include "page.h"
+#include "master.h"
+#include "mtpbrowser.h"
+
+
+class QGridLayout;
 /**
  * 
  * Yann Hodique
  **/
-class TellPage : public Page {
+class BrowserPage : public Page {
     Q_OBJECT
 
 public:
-    TellPage(QWidget *parent, const char *name, ChatSession * session);
-    ~TellPage();
+    BrowserPage(QWidget *parent, const char *name, Master * session);
+    ~BrowserPage();
     virtual void append(QString & msg);
-    void setPrefix(QString);
-    QTextEdit* chat_edit;
     MtpBrowser* chat_view;
 
-public slots:
-    virtual void returnPressed();
-    void slotHistoryUp();
-    void slotHistoryDown();
-    void slotNewLine();
-
-
 protected:
-    QGridLayout* TellPageBaseLayout;
+    QGridLayout* BrowserPageBaseLayout;
 
 protected slots:
     virtual void languageChange();
-
-private:
-    QString prefix;
-    QAction *history_up, *history_down, *new_line;
-    QStringList history;
-    QStringList::Iterator history_iterator;
-
 };
 
 #endif

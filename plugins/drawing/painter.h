@@ -15,7 +15,7 @@
 #include <qvariant.h>
 #include <qpixmap.h>
 
-#include "ChatSession.h"
+#include "master.h"
 #include "page.h"
 
 class QVBoxLayout;
@@ -30,7 +30,7 @@ class Painter : public Page {
     Q_OBJECT
 
 public:
-    Painter( QWidget* parent = 0, const char* name = 0, ChatSession * session = 0 );
+    Painter( QWidget* parent = 0, const char* name = 0, Master * session = 0 );
     ~Painter();
 
     Canvas* canvas;

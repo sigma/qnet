@@ -8,32 +8,39 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef _BROWSERPAGE_H_
-#define _BROWSERPAGE_H_
+#ifndef _SPLASH_H_
+#define _SPLASH_H_
 
+#include <qpixmap.h>
 #include <qwidget.h>
+#include <qtimer.h>
+#include <qlabel.h>
+
+#include "master.h"
 #include "page.h"
-#include "ChatSession.h"
-#include <qaction.h>
 
-/**
- * 
- * Yann Hodique
- **/
-class BrowserPage : public Page {
+class Splash : public Page {
     Q_OBJECT
-
+    
 public:
-    BrowserPage(QWidget *parent, const char *name, ChatSession * session);
-    ~BrowserPage();
-    virtual void append(QString & msg);
-    MtpBrowser* chat_view;
-
+    Splash(QWidget *parent, const char *name, Master * session);
+    ~Splash();
+    
+    void repaint();
+    void setTime(int);
+    bool isSlave() {return false;}
+    
 protected:
-    QGridLayout* BrowserPageBaseLayout;
+    void mousePressEvent( QMouseEvent * );
 
-protected slots:
-    virtual void languageChange();
+public slots:
+    void timeout();
+    void append(QString & msg);
+    
+private:
+    QTimer *m_timer;
+    QLabel label;
+    int time;
 };
 
 #endif

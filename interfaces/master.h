@@ -8,34 +8,22 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef _PAGE_H_
-#define _PAGE_H_
+#ifndef _MASTER_H_
+#define _MASTER_H_
 
 #include <qwidget.h>
+#include <qstring.h>
 
-#include "ChatSession.h"
-
-/**
- * 
- * Yann Hodique
- **/
-class Page : public QWidget
-{
-  Q_OBJECT
-
-public:
-  Page(QWidget *parent, const char *name, ChatSession *master, WFlags f = 0);
-  virtual ~Page();
-  
-  ChatSession * getMaster();
-  
-  virtual void append(QString &) = 0;
-  
-private:
- ChatSession * m_master;
- 
- signals:
-	void textDisplayed(QWidget *);
+class Master : public QWidget {
+    Q_OBJECT
+public:  
+    Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {}
+    virtual ~Master() {}
+    
+    virtual void send(QString &) = 0;
+    
+public slots:
+    virtual void slotLinkClicked(const QString &) {}
 };
 
 #endif

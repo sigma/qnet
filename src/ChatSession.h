@@ -19,6 +19,7 @@
 
 #include "chatpage.h"
 #include "version.h"
+#include "master.h"
 
 class QProcess;
 class QAction;
@@ -43,6 +44,7 @@ public:
     void displayStderr(QString);
     void displayStdout(QString);
     const QString & sessionName();
+    QMtp* topLevel();
 
 public slots:
     void returnPressed();

@@ -34,20 +34,20 @@ class QMtp : public QMtp_base {
     friend class RemoteControlServerInfo;
     
 public:
-
+/*
     typedef enum {
         TELL,
         BROWSER,
 	DRAWING,
 	SPLASH
     } PageType;
-
+*/
     QMtp(QWidget *parent = 0, const char *name = 0);
     ~QMtp();
 
     bool loadConfigFile();
     bool saveConfigFile();
-    Page * getNewPage(PageType, QString, ChatSession *);
+    Page * getNewPage(QString, QString, ChatSession *);
 
 public slots:
     void slotConfigure();
@@ -64,10 +64,13 @@ public slots:
     void slotDisplayFortune();
     void readFortune();
     void endFortune();
+    
+    void loadPlugin(const QString&);
 
 private:
     QDomDocument m_document;
     QMap<QWidget*,ChatSession*> tab_map;
+    QMap<QString,void*> plugins_map;
     QValueList<ChatSession*> sessions;
     QTextBrowser *fortune_page;
     QProcess *fproc;
@@ -75,7 +78,7 @@ private:
     RemoteControlServerInfo *rctl;
     
 private:
-	void launchSession(QString name);
+    void launchSession(QString name);
 };
 
 #endif

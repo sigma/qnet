@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'chatpage.ui'
 **
 ** Created: Mon Jan 6 19:27:11 2003
-**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.1 2003/01/28 19:15:31 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.2 2003/02/15 20:53:06 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -311,7 +311,7 @@ static const char* const image0_data[] = {
  *  name 'name' and widget flags set to 'f'.
  */
 ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
-    : QWidget( parent, name, fl ),
+    : Master( parent, name, fl ),
       image0( (const char **) image0_data )
 {
     if ( !name )

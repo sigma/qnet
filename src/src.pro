@@ -12,12 +12,13 @@ warn_on \
 qt \
 thread
 TARGET = ../bin/qnet
-QMAKE_CXXFLAGS_DEBUG = -g3 \
+INCLUDEPATH = ../interfaces
+QMAKE_CXXFLAGS_DEBUG += -g3 \
 -pg \
 -Werror \
 -ansi \
 -pedantic
-QMAKE_CXXFLAGS_RELEASE = -Os \
+QMAKE_CXXFLAGS_RELEASE += -Os \
 -Werror \
 -ansi \
 -pedantic
@@ -31,7 +32,6 @@ SOURCES += main.cpp \
            ItemFilter.cpp \
            Filter.cpp \
            ChatSession.cpp \
-           mtpbrowser.cpp \
            InputFilter.cpp \
            domutil.cpp \
            SessionsDialog.cpp \
@@ -39,14 +39,8 @@ SOURCES += main.cpp \
            PrefixSettings.cpp \
            MtpRegExp.cpp \
            MtpContext.cpp \
-           page.cpp \
-           tellpage.cpp \
-           browserpage.cpp \
            remotecontrol.cpp \
-           canvas.cpp \
-           painter.cpp \
-           chatpage.cpp \
-           splash.cpp 
+           chatpage.cpp 
 HEADERS += qnet.h \
            telnetmanager.h \
            MtpFilter.h \
@@ -56,7 +50,6 @@ HEADERS += qnet.h \
            ItemFilter.h \
            Filter.h \
            ChatSession.h \
-           mtpbrowser.h \
            InputFilter.h \
            version.h \
            domutil.h \
@@ -64,14 +57,11 @@ HEADERS += qnet.h \
            UrlSettings.h \
            PrefixSettings.h \
            MtpRegExp.h \
-           page.h \
-           tellpage.h \
-           browserpage.h \
            remotecontrol.h \
-           canvas.h \
-           painter.h \
            chatpage.h \
-           splash.h 
+           ../interfaces/page.h \
+           ../interfaces/master.h \
+           ../interfaces/mtpbrowser.h 
 FORMS += qnet_base.ui \
          connectionbox.ui \
          sessionsdialogbase.ui \
