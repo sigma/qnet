@@ -457,3 +457,11 @@ void ChatSession::createTelnetManager()
 QMtp* ChatSession::topLevel() const {
     return mtp;
 }
+
+void ChatSession::updateFilters() {
+    MtpFilter* f = m_filter;
+    MtpFilter* g = new MtpFilter(m_dom,context());
+    m_filter = g;
+    f->setObsolete();
+    delete f;
+}

@@ -45,6 +45,8 @@ public:
     void displayStdout(const QString&);
     const QString & sessionName() const;
     QMtp* topLevel() const;
+    
+    void updateFilters();
 
 public slots:
     void returnPressed();
