@@ -3,14 +3,14 @@
 # Subdir relative project main directory: ./interfaces
 # Target is a library:  
 
-TEMPLATE = lib
-CONFIG += release \
-warn_on \
-qt \
-thread \
-staticlib
 SOURCES += MtpContext.cpp 
 HEADERS += master.h \
            mtpbrowser.h \
            page.h \
            MtpContext.h 
+TEMPLATE = lib 
+CONFIG += release \
+          warn_on \
+          qt \
+          thread \
+          staticlib 

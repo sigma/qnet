@@ -48,13 +48,13 @@ public:
     InputFilter * getInputFilter(const QString& name);
 
 private:
-std::vector<GlobalFilter*> global;
-std::vector<BlockFilter*> block;
-std::vector<LineFilter*> line;
-std::vector<ItemFilter*> item;
-std::vector<InputFilter*> input, queue;
+    std::vector<GlobalFilter*> global;
+    std::vector<BlockFilter*> block;
+    std::vector<LineFilter*> line;
+    std::vector<ItemFilter*> item;
+    std::vector<InputFilter*> input, queue;
 
-BlockFilter *current_block;
+    BlockFilter *current_block;
 };
 
 #endif

@@ -61,7 +61,7 @@ FORMS += qnet_base.ui \
          fortunesettings.ui \
          appearancesettings.ui 
 TEMPLATE = app 
-CONFIG += debug \
+CONFIG += release \
           warn_on \
           qt \
           thread 

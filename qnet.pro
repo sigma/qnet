@@ -7,12 +7,14 @@ SUBDIRS += interfaces \
            src \
            plugins 
 TEMPLATE = subdirs 
-CONFIG += debug \
+CONFIG += release \
           warn_on \
           qt 
 QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -Wall \
                         -ansi \
                         -pedantic 
 QMAKE_CXXFLAGS_RELEASE += -Werror \
+                          -Wall \
                           -ansi \
                           -pedantic 

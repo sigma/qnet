@@ -12,23 +12,23 @@
 #include <iostream>
 
 MtpFilter::MtpFilter() {
-current_block = 0;
+    current_block = 0;
 }
 
 
 MtpFilter::~MtpFilter() {
-for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it)
+    for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it)
+	delete *it;
+    for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it)
+	delete *it;
+    for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it)
+	delete *it;
+    for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it)
         delete *it;
-for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it)
+    for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it)
         delete *it;
-for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it)
-        delete *it;
-for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it)
-        delete *it;
-for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it)
-        delete *it;
-for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); ++it)
-        delete *it;
+    for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); ++it)
+	delete *it;
 }
 
 QString MtpFilter::filterIn(const QString & arg) {
