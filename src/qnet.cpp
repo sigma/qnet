@@ -59,7 +59,7 @@ QMtp::QMtp(QWidget *parent, const char *name)
     tabs->setTabPosition((QTabWidget::TabPosition)DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top));
     fortune_page = 0;
     fproc = 0;
-    rctl = new RemoteControlServerInfo(this,5000,system_view);
+    //rctl = new RemoteControlServerInfo(this,5000,system_view);
 
     // plugins
     QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
