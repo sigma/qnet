@@ -7,15 +7,15 @@
    <session>local</session>
   </sessions>
   <plugins>
-   <file>/home1/local/Projects/qnet/plugins/tell/libtell.so</file>
-   <file>/home1/local/Projects/qnet/plugins/browser/libbrowser.so</file>
-   <file>/home1/local/Projects/qnet/plugins/drawing/libdrawing.so</file>
-   <file>/home1/local/Projects/qnet/plugins/splash/libsplash.so</file>
-   <file>/home1/local/Projects/qnet/plugins/id/libid.so</file>
-   <file>/home1/local/Projects/qnet/plugins/emit/libemit.so</file>
-   <file>/home1/local/Projects/qnet/plugins/affect/libaffect.so</file>
-   <file>/home1/local/Projects/qnet/plugins/ptime/libptime.so</file>
-   <file>/home1/local/Projects/qnet/plugins/pformat/libpformat.so</file>
+   <file>/usr/lib/qnet/libtell.so</file>
+   <file>/usr/lib/qnet/libbrowser.so</file>
+   <file>/usr/lib/qnet/libdrawing.so</file>
+   <file>/usr/lib/qnet/libsplash.so</file>
+   <file>/usr/lib/qnet/libid.so</file>
+   <file>/usr/lib/qnet/libemit.so</file>
+   <file>/usr/lib/qnet/libaffect.so</file>
+   <file>/usr/lib/qnet/libptime.so</file>
+   <file>/usr/lib/qnet/libpformat.so</file>
   </plugins>
   <filters>
    <input>
