@@ -3,8 +3,8 @@
 # Subdir relative project main directory: .
 # Target is a subdirs project
 
-SUBDIRS += interfaces \
-           utils \
+SUBDIRS += utils \
+           interfaces \
            filters \
            src \
            plugins

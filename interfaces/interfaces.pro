@@ -9,19 +9,22 @@ SOURCES += MtpContext.cpp \
            mtpbrowser.cpp \
            chatpage.cpp \
            fontlock.cpp
-HEADERS += master.h \
+HEADERS += ../inc/all.h \
+           master.h \
            mtpbrowser.h \
            page.h \
            MtpContext.h \
            chatpage.h \
            fontlock.h
+PRECOMPILED_HEADER = ../inc/all.h
 FORMS += choicewidget.ui
 TEMPLATE = lib
 CONFIG += release \
           warn_on \
           qt \
           thread \
-          staticlib
+          staticlib \
+          precompile_header
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 QMAKE_CXXFLAGS_DEBUG += -Werror \

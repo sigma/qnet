@@ -9,7 +9,8 @@ TEMPLATE = app
 CONFIG += debug \
 warn_on \
 qt \
-thread
+thread \
+precompile_header
 TARGET = ../bin/qnet
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
@@ -34,7 +35,8 @@ SOURCES += main.cpp \
            trayicon.cpp \
            trayicon_x11.cpp \
            mainwin.cpp
-HEADERS += qnet.h \
+HEADERS += ../inc/all.h \
+           qnet.h \
            telnetmanager.h \
            ChatSession.h \
            MainChatPage.h \
@@ -48,6 +50,7 @@ HEADERS += qnet.h \
            trayicon.h \
            mainwin.h \
            guile_global.h
+PRECOMPILED_HEADER = ../inc/all.h
 IMAGES += images/filenew \
           images/fileopen \
           images/filesave \
