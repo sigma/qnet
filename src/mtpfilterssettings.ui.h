@@ -70,58 +70,56 @@ void MtpFiltersSettings::setDom( QDomDocument * dom)
     m_dom = dom;
 }
 
-
-
-
 void MtpFiltersSettings::changedBlock()
 {
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/result",block_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/beginresult",block_begin_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/endresult",block_end_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/begin",block_begin->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/end",block_end->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/depend",block_input->text());
-    DomUtil::writeBoolEntry(*m_dom,"/filters/" + block_rules->currentText() + "/active",block_active_check->isChecked());
-    DomUtil::writeIntEntry(*m_dom,"/filters/" + block_rules->currentText() + "/policy",(block_subrules_check->isChecked())?0:1);
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/result",block_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/beginresult",block_begin_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/endresult",block_end_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/begin",block_begin->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/end",block_end->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_name->text() + "/depend",block_input->text());
+    DomUtil::writeBoolEntry(*m_dom,"/filters/" + block_name->text() + "/active",block_active_check->isChecked());
+    DomUtil::writeIntEntry(*m_dom,"/filters/" + block_name->text() + "/policy",(block_subrules_check->isChecked())?0:1);
 }
 
 
 void MtpFiltersSettings::changedItem()
 {
-    DomUtil::writeEntry(*m_dom,"/filters/" + item_rules->currentText() + "/result",item_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + item_rules->currentText() + "/regexp",item_regexp->text());
-    DomUtil::writeBoolEntry(*m_dom,"/filters/" + item_rules->currentText() + "/active",item_active_check->isChecked());
+    DomUtil::writeEntry(*m_dom,"/filters/" + item_name->text() + "/result",item_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + item_name->text() + "/regexp",item_regexp->text());
+    DomUtil::writeBoolEntry(*m_dom,"/filters/" + item_name->text() + "/active",item_active_check->isChecked());
 }
 
 
 void MtpFiltersSettings::changedGlobal()
 {
-    DomUtil::writeEntry(*m_dom,"/filters/" + global_rules->currentText() + "/result",global_result->text());
-    DomUtil::writeBoolEntry(*m_dom,"/filters/" + global_rules->currentText() + "/active",global_active_check->isChecked());
-    DomUtil::writeIntEntry(*m_dom,"/filters/" + global_rules->currentText() + "/policy",(global_subrules_check->isChecked())?0:1);
+    DomUtil::writeEntry(*m_dom,"/filters/" + global_name->text() + "/result",global_result->text());
+    DomUtil::writeBoolEntry(*m_dom,"/filters/" + global_name->text() + "/active",global_active_check->isChecked());
+    DomUtil::writeIntEntry(*m_dom,"/filters/" + global_name->text() + "/policy",(global_subrules_check->isChecked())?0:1);
 }
 
 
 void MtpFiltersSettings::changedLine()
 {
-    DomUtil::writeEntry(*m_dom,"/filters/" + line_rules->currentText() + "/result",line_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + line_rules->currentText() + "/regexp",line_regexp->text());
-    DomUtil::writeBoolEntry(*m_dom,"/filters/" + line_rules->currentText() + "/active",line_active_check->isChecked());
-    DomUtil::writeIntEntry(*m_dom,"/filters/" + line_rules->currentText() + "/policy",(line_subrules_check->isChecked())?0:1);
+    DomUtil::writeEntry(*m_dom,"/filters/" + line_name->text() + "/result",line_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + line_name->text() + "/regexp",line_regexp->text());
+    DomUtil::writeBoolEntry(*m_dom,"/filters/" + line_name->text() + "/active",line_active_check->isChecked());
+    DomUtil::writeIntEntry(*m_dom,"/filters/" + line_name->text() + "/policy",(line_subrules_check->isChecked())?0:1);
 }
 
 
 void MtpFiltersSettings::changedInput()
 {
-    DomUtil::writeEntry(*m_dom,"/filters/" + input_rules->currentText() + "/result",input_result->text());
-    DomUtil::writeEntry(*m_dom,"/filters/" + input_rules->currentText() + "/regexp",input_regexp->text());
-    DomUtil::writeBoolEntry(*m_dom,"/filters/" + input_rules->currentText() + "/active",input_active_check->isChecked());
+    DomUtil::writeEntry(*m_dom,"/filters/" + input_name->text() + "/result",input_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + input_name->text() + "/regexp",input_regexp->text());
+    DomUtil::writeBoolEntry(*m_dom,"/filters/" + input_name->text() + "/active",input_active_check->isChecked());
 }
 
+#define RULENAME(txt) (QInputDialog::getText("Rule name","Enter a name",QLineEdit::Normal,(txt)))
 
 void MtpFiltersSettings::addGlobal()
 {
-    global_rules->insertItem(global_name->text());
+    global_rules->insertItem(RULENAME("globalRule"));
     global_rules->setSelected(global_rules->count()-1,true);
     changedGlobal();
     updateList(global_rules,"/general/filters/global"); 
@@ -130,7 +128,7 @@ void MtpFiltersSettings::addGlobal()
 
 void MtpFiltersSettings::addBlock()
 {
-    block_rules->insertItem(block_name->text());
+    block_rules->insertItem(RULENAME("blockRule"));
     block_rules->setSelected(block_rules->count()-1,true);
     changedBlock();
     updateList(block_rules,"/general/filters/block");
@@ -139,7 +137,7 @@ void MtpFiltersSettings::addBlock()
 
 void MtpFiltersSettings::addLine()
 {
-    line_rules->insertItem(line_name->text());
+    line_rules->insertItem(RULENAME("lineRule"));
     line_rules->setSelected(line_rules->count()-1,true);
     changedLine();
     updateList(line_rules,"/general/filters/line");
@@ -148,7 +146,7 @@ void MtpFiltersSettings::addLine()
 
 void MtpFiltersSettings::addItem()
 {
-    item_rules->insertItem(item_name->text());
+    item_rules->insertItem(RULENAME("itemRule"));
     item_rules->setSelected(item_rules->count()-1,true);
     changedItem();
     updateList(item_rules,"/general/filters/item");
@@ -157,7 +155,7 @@ void MtpFiltersSettings::addItem()
 
 void MtpFiltersSettings::addInput()
 {
-    input_rules->insertItem(input_name->text());
+    input_rules->insertItem(RULENAME("inputRule"));
     input_rules->setSelected(input_rules->count()-1,true);
     changedInput();
     updateList(input_rules,"/general/filters/input");
@@ -314,4 +312,160 @@ void MtpFiltersSettings::down( QListBox * box)
 	box->insertItem(text,index + 1);
 	box->setCurrentItem(index+1);
     }
+}
+
+
+void MtpFiltersSettings::activateGlobal(int index)
+{
+    if(modified_global) {
+        changedGlobal();
+        modified_global = false;
+    }
+    disconnect(global_result, SIGNAL(textChanged()), this, SLOT(slotGlobal()));
+    disconnect(global_active_check, SIGNAL(toggled(bool)), this, SLOT(slotGlobal()));
+    disconnect(global_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotGlobal()));
+    displayGlobal(global_rules->text(index));
+    connect(global_result, SIGNAL(textChanged()), SLOT(slotGlobal()));
+    connect(global_active_check, SIGNAL(toggled(bool)), SLOT(slotGlobal()));
+    connect(global_subrules_check, SIGNAL(toggled(bool)), SLOT(slotGlobal()));
+}
+
+
+void MtpFiltersSettings::activateBlock(int index )
+{
+    if(modified_block) {
+        changedBlock();
+        modified_block = false;
+    }
+    disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));    
+    disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+    disconnect(block_end_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+    disconnect(block_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+    disconnect(block_active_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
+    disconnect(block_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
+    displayBlock(block_rules->text(index));
+    connect(block_begin, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
+    connect(block_end, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));    
+    connect(block_input, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
+    connect(block_begin_result, SIGNAL(textChanged()), SLOT(slotBlock()));
+    connect(block_end_result, SIGNAL(textChanged()), SLOT(slotBlock()));
+    connect(block_result, SIGNAL(textChanged()), SLOT(slotBlock()));
+    connect(block_active_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
+    connect(block_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
+}
+
+
+void MtpFiltersSettings::activateLine(int  index )
+{
+    if(modified_line) {
+        changedLine();
+        modified_line = false;
+    }
+    disconnect(line_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotLine()));
+    disconnect(line_result, SIGNAL(textChanged()), this, SLOT(slotLine()));
+    disconnect(line_active_check, SIGNAL(toggled(bool)), this, SLOT(slotLine()));
+    disconnect(line_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotLine()));
+    displayLine(line_rules->text(index));
+    connect(line_regexp, SIGNAL(textChanged(const QString &)), SLOT(slotLine()));
+    connect(line_result, SIGNAL(textChanged()), SLOT(slotLine()));
+    connect(line_active_check, SIGNAL(toggled(bool)), this, SLOT(slotLine()));
+    connect(line_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotLine()));
+}
+
+
+void MtpFiltersSettings::activateItem(int index )
+{
+    if(modified_item) {
+        changedItem();
+        modified_item = false;
+    }
+    disconnect(item_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotItem()));
+    disconnect(item_result, SIGNAL(textChanged()), this, SLOT(slotItem()));
+    disconnect(item_active_check, SIGNAL(toggled(bool)), this, SLOT(slotItem()));
+    displayItem(item_rules->text(index));
+    connect(item_regexp, SIGNAL(textChanged(const QString &)), SLOT(slotItem()));
+    connect(item_result, SIGNAL(textChanged()), SLOT(slotItem()));
+    connect(item_active_check, SIGNAL(toggled(bool)), this, SLOT(slotItem()));
+}
+
+
+void MtpFiltersSettings::activateInput(int index)
+{
+    if(modified_input) {
+        changedInput();
+        modified_input = false;
+    }
+    disconnect(input_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotInput()));
+    disconnect(input_result, SIGNAL(textChanged()), this, SLOT(slotInput()));
+    disconnect(input_active_check, SIGNAL(toggled(bool)), this, SLOT(slotInput()));
+    displayInput(input_rules->text(index));
+    connect(input_regexp, SIGNAL(textChanged(const QString &)), SLOT(slotInput()));
+    connect(input_result, SIGNAL(textChanged()), SLOT(slotInput()));
+    connect(input_active_check, SIGNAL(toggled(bool)), this, SLOT(slotInput()));
+}
+
+
+void MtpFiltersSettings::init()
+{
+    modified_global = modified_block = modified_line = modified_item = modified_input = false;
+}
+
+
+void MtpFiltersSettings::destroy()
+{
+}
+
+
+void MtpFiltersSettings::slotGlobal()
+{
+    modified_global = true;
+    disconnect(global_result, SIGNAL(textChanged()), this, SLOT(slotGlobal()));
+}
+
+
+void MtpFiltersSettings::slotBlock()
+{
+    modified_block = true;
+    disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));    
+    disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
+    disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+    disconnect(block_end_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+    disconnect(block_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
+}
+
+
+void MtpFiltersSettings::slotLine()
+{
+    modified_line = true;
+    disconnect(line_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotLine()));
+    disconnect(line_result, SIGNAL(textChanged()), this, SLOT(slotLine()));
+}
+
+
+void MtpFiltersSettings::slotItem()
+{
+    modified_item = true;
+    disconnect(item_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotItem()));
+    disconnect(item_result, SIGNAL(textChanged()), this, SLOT(slotItem()));
+}
+
+
+void MtpFiltersSettings::slotInput()
+{
+    modified_input = true;
+    disconnect(input_regexp, SIGNAL(textChanged(const QString &)), this, SLOT(slotInput()));
+    disconnect(input_result, SIGNAL(textChanged()), this, SLOT(slotInput()));
+}
+
+
+void MtpFiltersSettings::apply()
+{
+    if(modified_global) changedGlobal();
+    if(modified_block) changedBlock();
+    if(modified_line) changedLine();
+    if(modified_item) changedItem();
+    if(modified_input) changedInput();
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>MtpFiltersSettings</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>619</width>
-            <height>411</height>
+            <height>417</height>
         </rect>
     </property>
     <property name="caption">
@@ -54,6 +54,9 @@
                             <widget class="QLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>global_name</cstring>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
@@ -114,14 +117,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QToolButton">
-                                        <property name="name">
-                                            <cstring>global_subs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Subs</string>
-                                        </property>
-                                    </widget>
                                     <widget class="QToolButton">
                                         <property name="name">
                                             <cstring>global_add</cstring>
@@ -217,6 +212,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>6</number>
+                    </property>
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
                             <cstring>layout27</cstring>
@@ -241,14 +239,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QToolButton">
-                                        <property name="name">
-                                            <cstring>block_subs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Subs</string>
-                                        </property>
-                                    </widget>
                                     <widget class="QToolButton">
                                         <property name="name">
                                             <cstring>block_add</cstring>
@@ -438,6 +428,9 @@
                                 <property name="name">
                                     <cstring>block_name</cstring>
                                 </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -473,6 +466,9 @@
                             <widget class="QLineEdit" row="0" column="1">
                                 <property name="name">
                                     <cstring>line_name</cstring>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QTextEdit" row="3" column="0" rowspan="1" colspan="2">
@@ -541,14 +537,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QToolButton">
-                                        <property name="name">
-                                            <cstring>line_subs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Subs</string>
-                                        </property>
-                                    </widget>
                                     <widget class="QToolButton">
                                         <property name="name">
                                             <cstring>line_add</cstring>
@@ -688,6 +676,9 @@
                                 <property name="name">
                                     <cstring>item_name</cstring>
                                 </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -728,14 +719,6 @@
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QToolButton">
-                                        <property name="name">
-                                            <cstring>item_subs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Subs</string>
-                                        </property>
-                                    </widget>
                                     <widget class="QToolButton">
                                         <property name="name">
                                             <cstring>item_add</cstring>
@@ -854,6 +837,12 @@
                                 <property name="name">
                                     <cstring>input_name</cstring>
                                 </property>
+                                <property name="dragEnabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -913,14 +902,6 @@
                                     </property>
                                     <widget class="QToolButton">
                                         <property name="name">
-                                            <cstring>input_subs</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Subs</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QToolButton">
-                                        <property name="name">
                                             <cstring>input_add</cstring>
                                         </property>
                                         <property name="text">
@@ -961,66 +942,6 @@
     </grid>
 </widget>
 <connections>
-    <connection>
-        <sender>global_rules</sender>
-        <signal>highlighted(const QString&amp;)</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>displayGlobal(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>block_rules</sender>
-        <signal>highlighted(const QString&amp;)</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>displayBlock(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>line_rules</sender>
-        <signal>highlighted(const QString&amp;)</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>displayLine(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>item_rules</sender>
-        <signal>highlighted(const QString&amp;)</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>displayItem(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>input_rules</sender>
-        <signal>highlighted(const QString&amp;)</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>displayInput(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>global_subs</sender>
-        <signal>clicked()</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>changedGlobal()</slot>
-    </connection>
-    <connection>
-        <sender>block_subs</sender>
-        <signal>clicked()</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>changedBlock()</slot>
-    </connection>
-    <connection>
-        <sender>item_subs</sender>
-        <signal>clicked()</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>changedItem()</slot>
-    </connection>
-    <connection>
-        <sender>input_subs</sender>
-        <signal>clicked()</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>changedInput()</slot>
-    </connection>
-    <connection>
-        <sender>line_subs</sender>
-        <signal>clicked()</signal>
-        <receiver>MtpFiltersSettings</receiver>
-        <slot>changedLine()</slot>
-    </connection>
     <connection>
         <sender>global_add</sender>
         <signal>clicked()</signal>
@@ -1141,15 +1062,56 @@
         <receiver>MtpFiltersSettings</receiver>
         <slot>downInput()</slot>
     </connection>
+    <connection>
+        <sender>input_rules</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>MtpFiltersSettings</receiver>
+        <slot>activateInput(int)</slot>
+    </connection>
+    <connection>
+        <sender>item_rules</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>MtpFiltersSettings</receiver>
+        <slot>activateItem(int)</slot>
+    </connection>
+    <connection>
+        <sender>line_rules</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>MtpFiltersSettings</receiver>
+        <slot>activateLine(int)</slot>
+    </connection>
+    <connection>
+        <sender>block_rules</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>MtpFiltersSettings</receiver>
+        <slot>activateBlock(int)</slot>
+    </connection>
+    <connection>
+        <sender>global_rules</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>MtpFiltersSettings</receiver>
+        <slot>activateGlobal(int)</slot>
+    </connection>
 </connections>
 <includes>
+    <include location="global" impldecl="in implementation">qinputdialog.h</include>
     <include location="local" impldecl="in implementation">mtpfilterssettings.ui.h</include>
 </includes>
 <forwards>
     <forward>class QDomDocument</forward>
 </forwards>
 <variables>
+    <variable access="private">bool modified_input;</variable>
+    <variable access="private">bool modified_item;</variable>
+    <variable access="private">bool modified_line;</variable>
+    <variable access="private">bool modified_block;</variable>
+    <variable access="private">bool modified_global;</variable>
+    <variable access="private">int active_global;</variable>
     <variable access="private">QDomDocument* m_dom;</variable>
+    <variable access="private">int active_block;</variable>
+    <variable access="private">int active_line;</variable>
+    <variable access="private">int active_item;</variable>
+    <variable access="private">int active_in;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">displayGlobal( const QString &amp; name )</slot>
@@ -1186,6 +1148,21 @@
     <slot>downInput()</slot>
     <slot>up( QListBox * box )</slot>
     <slot>down( QListBox * box )</slot>
+    <slot access="private">activateGlobal( int index )</slot>
+    <slot access="private">activateBlock( int index )</slot>
+    <slot access="private">activateLine( int index )</slot>
+    <slot access="private">activateItem( int index )</slot>
+    <slot access="private">activateInput( int index )</slot>
+    <slot access="private">slotGlobal()</slot>
+    <slot access="private">slotBlock()</slot>
+    <slot access="private">slotLine()</slot>
+    <slot access="private">slotItem()</slot>
+    <slot access="private">slotInput()</slot>
+    <slot>apply()</slot>
 </slots>
+<functions>
+    <function>init()</function>
+    <function>destroy()</function>
+</functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
