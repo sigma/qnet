@@ -20,11 +20,11 @@ class Master : public QWidget {
     Q_OBJECT
 public:  
     Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {
-	m_context = new MtpContext;
+        m_context = new MtpContext;
     }
     
     ~Master() {
-	delete m_context;
+        delete m_context;
     }
     
     MtpContext* context() { return m_context; }
@@ -35,9 +35,14 @@ public:
     
 public slots:
     virtual void slotLinkClicked(const QString &) {}
+    virtual void closeSession() {}
 
 private:
-MtpContext* m_context;
+    MtpContext* m_context;
+
+signals:
+    void active();
+    void inactive();
 };
 
 #endif
