@@ -44,7 +44,6 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     createTelnetManager();
 
     displayStderr("Connecting to " + host + ":" + port);
-
     login_set = false;
     enable_stdout = true;
     receiving_who = false;
@@ -60,7 +59,6 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     connect(m_chatpage, SIGNAL(destroyed()),
             this, SLOT(deleteLater()));
 }
-
 
 ChatSession::~ChatSession() {
     delete m_filter;
@@ -167,7 +165,8 @@ void ChatSession::send(const QString& m) {
         unsigned int limit = CHAT_BUFFER_LENGTH - prefix.length();
         while (m.length() > limit) {
             int last_space = m.findRev(' ',limit);
-            if(last_space == -1) last_space = limit;
+            if(last_space == -1) last_space = limit - 1;
+            last_space++;
 
             mng->writeStdin(prefix + m.left(last_space));
             m = msg.right(m.length() - last_space);
@@ -175,7 +174,6 @@ void ChatSession::send(const QString& m) {
         QString to_send(prefix + m);
         mng->writeStdin(Filter::expandVars(m_filter->filterIn(to_send),context()));
     }
-
 
 }
 
