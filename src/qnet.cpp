@@ -47,15 +47,18 @@ QMtp::QMtp(QWidget *parent, const char *name)
     // kick out this useless status bar
     delete statusBar();
 
-    system_view->setFamily("fixed");
+    //system_view->setFamily("fixed");
     system_view->setPointSize(10);
-    system_view->setWrapPolicy(QTextBrowser::Anywhere);
+    //system_view->setWrapPolicy(QTextBrowser::Anywhere);
 
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotCurrentPageChanged(QWidget*)));
 
     //    m_document = new QDomDocument();
-    loadConfigFile();
+    if (!loadConfigFile()) {
+	QString default_content("<qnet/>");
+	m_document.setContent(default_content);
+    }
     tabs->setTabPosition((QTabWidget::TabPosition)DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top));
     fortune_page = 0;
     fproc = 0;
@@ -283,7 +286,7 @@ void QMtp::gotoPreviousTab() {
 }
 
 void QMtp::helpAbout() {
-    QMessageBox::about(this, "About QNet", CLIENT + QString("\nÂ© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
+    QMessageBox::about(this, "About QNet", CLIENT + QString("\n© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
 }
 
 bool QMtp::loadConfigFile() {
