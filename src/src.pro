@@ -42,7 +42,6 @@ SOURCES += main.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
            remotecontrol.cpp \
-           chatpage.cpp \
            trayicon.cpp \
            trayicon_x11.cpp \
            mainwin.cpp
@@ -55,7 +54,6 @@ HEADERS += qnet.h \
            UrlSettings.h \
            PrefixSettings.h \
            remotecontrol.h \
-           chatpage.h \
            appearancesettings.ui.h \
            mtpfilterssettings.ui.h \
            trayicon.h \

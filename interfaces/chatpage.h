@@ -51,6 +51,7 @@ public slots:
     void addUser(const QString&);
     void slotContextMenu(QListBoxItem*,const QPoint&);
     void toggleUserMenu(bool);
+    void toggleUserBox();
 
 protected:
     QGridLayout* ChatPageLayout;
@@ -65,7 +66,7 @@ signals:
 	void outputMessage(const QString& );
 
 private:
-    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end;
+    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end, *box;
     QPopupMenu *user_menu;
 };
 

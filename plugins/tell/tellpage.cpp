@@ -65,13 +65,14 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     history_down->setAccel(QKeySequence(SHIFT + Key_Down));
     new_line = new QAction(chat_edit,"new");
     new_line->setAccel(QKeySequence(CTRL + Key_Return));
-    pgup = new QAction(chat_edit,"pgup");
+
+    pgup = new QAction(this,"pgup");
     pgup->setAccel(QKeySequence(ALT + Key_PageUp));
-    pgdown = new QAction(chat_edit,"pgdown");
+    pgdown = new QAction(this,"pgdown");
     pgdown->setAccel(QKeySequence(ALT + Key_PageDown));
-    home = new QAction(chat_edit,"home");
+    home = new QAction(this,"home");
     home->setAccel(QKeySequence(ALT + Key_Home));
-    end = new QAction(chat_edit,"end");
+    end = new QAction(this,"end");
     end->setAccel(QKeySequence(ALT + Key_End));
 
     connect(history_up, SIGNAL(activated()),

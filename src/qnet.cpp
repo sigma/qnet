@@ -114,64 +114,29 @@ void QMtp::slotConfigure() {
     connect(m_settings->prop_list, SIGNAL(highlighted(int)),
             m_settings->stack, SLOT(raiseWidget(int)));
 
-    // Filters :
-    {
-        MtpFiltersSettings * filters_settings = new MtpFiltersSettings(m_settings->stack);
-        m_settings->stack->addWidget(filters_settings,0);
-        m_settings->prop_list->insertItem("Filters",0);
-        filters_settings->setDom(&temporary_dom);
-    }
+    // Sessions :
 
-    // Urls :
-    UrlSettings * url_settings = new UrlSettings(m_settings->stack);
-    m_settings->stack->addWidget(url_settings,1);
-    m_settings->prop_list->insertItem("Url",1);
+    SessionsSettings * sessions_settings = new SessionsSettings(m_settings->stack);
+    m_settings->stack->addWidget(sessions_settings,0);
+    m_settings->prop_list->insertItem("Sessions",0);
     {
-        QStringList list = DomUtil::readListEntry(m_document,"/urls/available","type");
+        QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
             QString name = *it;
-            QString motif = DomUtil::readEntry(m_document,"/urls/" + name + "/motif","");
-            QString command = DomUtil::readEntry(m_document,"/urls/" + name + "/command","");
-            UrlSettings::UrlItem mng(name,motif,command);
-            url_settings->addUrlItem(mng);
+            QString host = DomUtil::readEntry(m_document,"/sessions/" + name + "/host","");
+            QString port = DomUtil::readEntry(m_document,"/sessions/" + name + "/port","");
+            QString login = DomUtil::readEntry(m_document,"/sessions/" + name + "/login","");
+            QString password = DomUtil::readEntry(m_document,"/sessions/" + name + "/password","");
+            bool autoconnect = DomUtil::readBoolEntry(m_document,"/sessions/" + name + "/autoconnect",false);
+            SessionsSettings::SessionItem session(name,host,port,login,password,autoconnect);
+            sessions_settings->addSessionItem(session);
         }
-    }
-
-    // Prefixes :
-    PrefixSettings * prefix_settings = new PrefixSettings(m_settings->stack);
-    m_settings->stack->addWidget(prefix_settings,2);
-    m_settings->prop_list->insertItem("Prefixes",2);
-    {
-        QStringList list = DomUtil::readListEntry(m_document,"/prefixes","item");
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-            PrefixSettings::PrefixItem mng(*it);
-            prefix_settings->addPrefixItem(mng);
-        }
-    }
-
-    // Fortune :
-    FortuneSettings * fortune_settings = new FortuneSettings(m_settings->stack);
-    m_settings->stack->addWidget(fortune_settings,3);
-    m_settings->prop_list->insertItem("Fortune",3);
-    {
-        QString args = DomUtil::readEntry(m_document,"/fortune");
-        fortune_settings->fortune_edit->setText(args);
-    }
-
-    // Appearance :
-    AppearanceSettings * appearance_settings = new AppearanceSettings(m_settings->stack);
-    m_settings->stack->addWidget(appearance_settings,4);
-    m_settings->prop_list->insertItem("Appearance",4);
-    {
-        int position = DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top);
-        appearance_settings->rbTop->setChecked(position==QTabWidget::Top);
-        appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
     }
 
     // Stylesheet :
     TagsSettings * tags_settings = new TagsSettings(m_settings->stack);
-    m_settings->stack->addWidget(tags_settings,5);
-    m_settings->prop_list->insertItem("StyleSheet",5);
+    m_settings->stack->addWidget(tags_settings,1);
+    m_settings->prop_list->insertItem("StyleSheet",1);
     {
         QStringList tags = DomUtil::readListEntry(m_document,"/general/tags","tag");
         for(QStringList::ConstIterator it = tags.begin(); it != tags.end(); ++it) {
@@ -188,23 +153,58 @@ void QMtp::slotConfigure() {
         }
     }
 
-    // Sessions :
-
-    SessionsSettings * sessions_settings = new SessionsSettings(m_settings->stack);
-    m_settings->stack->addWidget(sessions_settings,6);
-    m_settings->prop_list->insertItem("Sessions",6);
+    // Filters :
     {
-        QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
+        MtpFiltersSettings * filters_settings = new MtpFiltersSettings(m_settings->stack);
+        m_settings->stack->addWidget(filters_settings,2);
+        m_settings->prop_list->insertItem("Filters",2);
+        filters_settings->setDom(&temporary_dom);
+    }
+
+    // Urls :
+    UrlSettings * url_settings = new UrlSettings(m_settings->stack);
+    m_settings->stack->addWidget(url_settings,3);
+    m_settings->prop_list->insertItem("Url",3);
+    {
+        QStringList list = DomUtil::readListEntry(m_document,"/urls/available","type");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
             QString name = *it;
-            QString host = DomUtil::readEntry(m_document,"/sessions/" + name + "/host","");
-            QString port = DomUtil::readEntry(m_document,"/sessions/" + name + "/port","");
-            QString login = DomUtil::readEntry(m_document,"/sessions/" + name + "/login","");
-            QString password = DomUtil::readEntry(m_document,"/sessions/" + name + "/password","");
-            bool autoconnect = DomUtil::readBoolEntry(m_document,"/sessions/" + name + "/autoconnect",false);
-            SessionsSettings::SessionItem session(name,host,port,login,password,autoconnect);
-            sessions_settings->addSessionItem(session);
+            QString motif = DomUtil::readEntry(m_document,"/urls/" + name + "/motif","");
+            QString command = DomUtil::readEntry(m_document,"/urls/" + name + "/command","");
+            UrlSettings::UrlItem mng(name,motif,command);
+            url_settings->addUrlItem(mng);
         }
+    }
+
+    // Prefixes :
+    PrefixSettings * prefix_settings = new PrefixSettings(m_settings->stack);
+    m_settings->stack->addWidget(prefix_settings,4);
+    m_settings->prop_list->insertItem("Prefixes",4);
+    {
+        QStringList list = DomUtil::readListEntry(m_document,"/prefixes","item");
+        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+            PrefixSettings::PrefixItem mng(*it);
+            prefix_settings->addPrefixItem(mng);
+        }
+    }
+
+    // Fortune :
+    FortuneSettings * fortune_settings = new FortuneSettings(m_settings->stack);
+    m_settings->stack->addWidget(fortune_settings,5);
+    m_settings->prop_list->insertItem("Fortune",5);
+    {
+        QString args = DomUtil::readEntry(m_document,"/fortune");
+        fortune_settings->fortune_edit->setText(args);
+    }
+
+    // Appearance :
+    AppearanceSettings * appearance_settings = new AppearanceSettings(m_settings->stack);
+    m_settings->stack->addWidget(appearance_settings,6);
+    m_settings->prop_list->insertItem("Appearance",6);
+    {
+        int position = DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top);
+        appearance_settings->rbTop->setChecked(position==QTabWidget::Top);
+        appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
     }
 
     connect(m_settings, SIGNAL(end()),
@@ -216,13 +216,13 @@ void QMtp::slotConfigure() {
 void QMtp::slotStoreConfig() {
     if (m_settings->result() == QDialog::Accepted) {
 
-        MtpFiltersSettings * filters_settings = (MtpFiltersSettings *)m_settings->stack->widget(0);
-        UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(1);
-        PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(2);
-        FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
-        AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
-        TagsSettings * tags_settings = (TagsSettings *)m_settings->stack->widget(5);
-        SessionsSettings * sessions_settings = (SessionsSettings *)m_settings->stack->widget(6);
+        SessionsSettings * sessions_settings = (SessionsSettings *)m_settings->stack->widget(0);
+        TagsSettings * tags_settings = (TagsSettings *)m_settings->stack->widget(1);
+        MtpFiltersSettings * filters_settings = (MtpFiltersSettings *)m_settings->stack->widget(2);
+        UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(3);
+        PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(4);
+        FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(5);
+        AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(6);
 
         filters_settings->apply();
 

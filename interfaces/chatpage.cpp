@@ -77,14 +77,17 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
     new_line = new QAction(chat_edit,"new");
     new_line->setAccel(QKeySequence(CTRL + Key_Return));
 
-    pgup = new QAction(chat_edit,"pgup");
+    pgup = new QAction(this,"pgup");
     pgup->setAccel(QKeySequence(ALT + Key_PageUp));
-    pgdown = new QAction(chat_edit,"pgdown");
+    pgdown = new QAction(this,"pgdown");
     pgdown->setAccel(QKeySequence(ALT + Key_PageDown));
-    home = new QAction(chat_edit,"home");
+    home = new QAction(this,"home");
     home->setAccel(QKeySequence(ALT + Key_Home));
-    end = new QAction(chat_edit,"end");
+    end = new QAction(this,"end");
     end->setAccel(QKeySequence(ALT + Key_End));
+
+    box = new QAction(this,"box");
+    box->setAccel(QKeySequence(CTRL + Key_H));
 
     connect(history_up, SIGNAL(activated()),
             this, SLOT(slotHistoryUp()));
@@ -107,6 +110,9 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
             this,SLOT(slotHome()));
     connect(end,SIGNAL(activated()),
             this,SLOT(slotEnd()));
+
+    connect(box,SIGNAL(activated()),
+            this,SLOT(toggleUserBox()));
 
 //     connect(users_box, SIGNAL(doubleClicked(QListBoxItem*)),
 //             this,SLOT(slotUserDoubleClicked(QListBoxItem*)));
@@ -212,4 +218,11 @@ void ChatPage::toggleUserMenu(bool on) {
         disconnect(users_box, SIGNAL(contextMenuRequested(QListBoxItem*,const QPoint&)),
                 this,SLOT(slotContextMenu(QListBoxItem*,const QPoint&)));
     }
+}
+
+void ChatPage::toggleUserBox() {
+    if(users_box->isVisible())
+        users_box->hide();
+    else
+        users_box->show();
 }
