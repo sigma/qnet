@@ -105,7 +105,7 @@ ChatSession::ChatSession(QString session_name, QMtp * mtp, QWidget *parent, cons
 
     //proc = new QProcess(this);
     m_filter = new MtpFilter();
-    m_context = new MtpContext();
+//    context() = new MtpContext();
 
     applyFilters();
 
@@ -130,8 +130,8 @@ void ChatSession::displayStdout(QString msg) {
         this->login = msg.replace(QRegExp("<Mtp> Welcome, "),"").replace(QRegExp("\\..*"),"");
         displayStderr("Setting user name to " + this->login + ".");
 
-        m_context->setVar("login",caseUnsensitive(this->login));
-        m_context->setVar("Login",this->login);
+        context()->setVar("login",caseUnsensitive(this->login));
+        context()->setVar("Login",this->login);
 
         QString new_msg("<Mtp> Welcome, " + login + ".");
 
@@ -185,26 +185,6 @@ void ChatSession::displayStdout(QString msg) {
 		    }
 		    else
 			displayStderr("Don't know what to do with : " + mmsg);
-		    
-/*                    if(abbrev=="tell") {
-                        Page * edit = mtp->getNewPage(QMtp::TELL,rx.cap(2),this);
-                        brothers.push_back(edit);
-                        edit->append(m);
-
-                    } else if(abbrev=="browser") {
-                        Page * edit = mtp->getNewPage(QMtp::BROWSER,rx.cap(2),this);
-                        brothers.push_back(edit);
-                        edit->append(m);
-
-		    } else if(abbrev=="drawing") {
-                        Page * edit = mtp->getNewPage(QMtp::DRAWING,rx.cap(2),this);
-                        brothers.push_back(edit);
-                        edit->append(m);			
-		    } else { //splash
-			Page * edit = mtp->getNewPage(QMtp::SPLASH,rx.cap(2),this);
-			brothers.push_back(edit);
-			edit->append(m);
-		    }*/
                 }
             } else {
                 chat_view->append(mmsg);
@@ -461,10 +441,16 @@ void ChatSession::setDomDocument(QDomDocument * dom) {
 }
 
 void ChatSession::applyFilters() {
-
+    applyLine("test_file",
+	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(\\|\\w+\\| \\[Rainbow\\][^<]*)(<.*>)?",
+	      "\\0\\\n:file:File:\\3\\");
+    
+    applyLine("ignore_warning",
+	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  \\w+ is away and may not be hearing you(<.*>)?",
+	      "");
     applyLine("join_dessin",
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?&lt Mtp&gt  You join channel Dessin(<.*>)?",
-	      "\\0\\\n:drawing:Dessin:");
+	      "\\0\\\n:drawing:Dessin:\n:affect::channel=Dessin");
     applyLine("draw_other",
 	      "^(<.*>)?(\\d{2}:\\d{2}:\\d{2} )?(&lt \\w+&gt  )(\\}[LCT][^<]*)(<.*>)?",
 	      ":drawing:Dessin:\\4\\");
@@ -500,7 +486,7 @@ void ChatSession::applyFilters() {
     m_filter->addGlobalFilter(f1);
 
     /*    {QString iname("test");
-        InputFilter * f = new InputFilter(iname,false,m_context);
+        InputFilter * f = new InputFilter(iname,false,context());
         QString ipat("execute : \\1\\");
         f->setResultPattern(ipat);
         QString input("!(.*)");
@@ -511,7 +497,7 @@ void ChatSession::applyFilters() {
 
     {// Block filter try on "wall" command
         QString iname("wall_emit");
-        InputFilter * f = new InputFilter(iname,true,m_context);
+        InputFilter * f = new InputFilter(iname,true,context());
         QString ipat("\\0\\");
         f->setResultPattern(ipat);
         QString input("wall");
@@ -521,7 +507,7 @@ void ChatSession::applyFilters() {
 
 
         QString bname("wall");
-        BlockFilter * f2 = new BlockFilter(bname,m_context);
+        BlockFilter * f2 = new BlockFilter(bname,context());
         QString pat(":browser:Wall: \\1\\<font face=fixed size=3>\\2\\</font>\\3\\");
         f2->setResultPattern(pat);
         QString beg("^(<.*>)?(&lt Mtp&gt  Wall :)(<.*>)?");
@@ -539,7 +525,7 @@ void ChatSession::applyFilters() {
         QString iname("finger_emit");
 
         QString bname("finger");
-        BlockFilter * f2 = new BlockFilter(bname,m_context);
+        BlockFilter * f2 = new BlockFilter(bname,context());
         QString pat(":id:Finger: \\0\\");
         f2->setResultPattern(pat);
         QString beg("^(<.*>)?(Login *: \\w+)(<.*>)?");
@@ -555,7 +541,7 @@ void ChatSession::applyFilters() {
     
     {// Block filter try on info command
         QString bname("info");
-        BlockFilter * f2 = new BlockFilter(bname,m_context);
+        BlockFilter * f2 = new BlockFilter(bname,context());
         QString pat("\\1\\<font face=fixed size=2>\\2\\</font>\\3\\");
         f2->setResultPattern(pat);
         QString beg("^(<.*>)?([^&<][^<]*|&lt Mtp&gt  History[^<]*|&lt Mtp&gt  System[^<]*|&lt Mtp&gt  Help[^<]*)(<.*>)?");
@@ -586,7 +572,7 @@ void ChatSession::applyFilters() {
 }
 
 void ChatSession::applyLine(QString fname, QString reg, QString pat) {
-    LineFilter * f1 = new LineFilter(fname,m_context);
+    LineFilter * f1 = new LineFilter(fname,context());
     f1->setRegExp(reg);
     f1->setResultPattern(pat);
     f1->enable();
@@ -594,7 +580,7 @@ void ChatSession::applyLine(QString fname, QString reg, QString pat) {
 }
 
 void ChatSession::applyItem(QString fname, QString reg, QString pat) {
-    ItemFilter * f1 = new ItemFilter(fname,m_context);
+    ItemFilter * f1 = new ItemFilter(fname,context());
     f1->setRegExp(reg);
     f1->setResultPattern(pat);
     f1->enable();

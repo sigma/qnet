@@ -3,25 +3,8 @@
 # Subdir relative project main directory: ./src
 # Target is an application:  ../bin/qnet
 
-IMAGES = images/filenew images/fileopen images/filesave images/print images/undo images/redo images/editcut images/editcopy images/editpaste images/searchfind
 DBFILE = qnet.db
 LANGUAGE = C++
-TEMPLATE = app
-CONFIG += debug \
-warn_on \
-qt \
-thread
-TARGET = ../bin/qnet
-INCLUDEPATH = ../interfaces
-QMAKE_CXXFLAGS_DEBUG += -g3 \
--pg \
--Werror \
--ansi \
--pedantic
-QMAKE_CXXFLAGS_RELEASE += -Os \
--Werror \
--ansi \
--pedantic
 SOURCES += main.cpp \
            qnet.cpp \
            telnetmanager.cpp \
@@ -38,7 +21,6 @@ SOURCES += main.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
            MtpRegExp.cpp \
-           MtpContext.cpp \
            remotecontrol.cpp \
            chatpage.cpp 
 HEADERS += qnet.h \
@@ -58,11 +40,17 @@ HEADERS += qnet.h \
            PrefixSettings.h \
            MtpRegExp.h \
            remotecontrol.h \
-           chatpage.h \
-           ../interfaces/page.h \
-           ../interfaces/master.h \
-           ../interfaces/mtpbrowser.h \
-           MtpContext.h 
+           chatpage.h 
+IMAGES += images/filenew \
+          images/fileopen \
+          images/filesave \
+          images/print \
+          images/undo \
+          images/redo \
+          images/editcut \
+          images/editcopy \
+          images/editpaste \
+          images/searchfind 
 FORMS += qnet_base.ui \
          connectionbox.ui \
          sessionsdialogbase.ui \
@@ -72,3 +60,23 @@ FORMS += qnet_base.ui \
          prefixsettingsbase.ui \
          fortunesettings.ui \
          appearancesettings.ui 
+TEMPLATE = app 
+CONFIG += debug \
+          warn_on \
+          qt \
+          thread 
+TARGET = ../bin/qnet 
+QMAKE_CXXFLAGS_DEBUG += -g3 \
+                        -pg \
+                        -Werror \
+                        -ansi \
+                        -pedantic 
+QMAKE_CXXFLAGS_RELEASE += -Os \
+                          -Werror \
+                          -ansi \
+                          -pedantic 
+OBJECTS_DIR = .obj 
+MOC_DIR = .moc 
+INCLUDEPATH = ../interfaces 
+LIBS += ../interfaces/libinterfaces.a 
+TARGETDEPS += ../interfaces/libinterfaces.a 

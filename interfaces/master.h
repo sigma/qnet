@@ -14,11 +14,20 @@
 #include <qwidget.h>
 #include <qstring.h>
 
+#include "MtpContext.h"
+
 class Master : public QWidget {
     Q_OBJECT
 public:  
-    Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {}
-    virtual ~Master() {}
+    Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {
+	m_context = new MtpContext;
+    }
+    
+    ~Master() {
+	delete m_context;
+    }
+    
+    MtpContext* context() { return m_context; }
     
     virtual void displayStderr(QString) = 0;
     virtual void displayStdout(QString) = 0;
@@ -26,6 +35,9 @@ public:
     
 public slots:
     virtual void slotLinkClicked(const QString &) {}
+
+private:
+MtpContext* m_context;
 };
 
 #endif

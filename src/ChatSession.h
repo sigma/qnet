@@ -98,7 +98,7 @@ private:
 
     QDomDocument * m_dom;
     MtpFilter * m_filter;
-    MtpContext * m_context;
+//    MtpContext * m_context;
     std::vector<Page *> brothers;
 
 signals:

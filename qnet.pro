@@ -3,16 +3,16 @@
 # Subdir relative project main directory: .
 # Target is a subdirs project 
 
-TEMPLATE = subdirs
+SUBDIRS += interfaces \
+           src \
+           plugins 
+TEMPLATE = subdirs 
 CONFIG += debug \
-warn_on \
-qt
-QMAKE_CXXFLAGS_DEBUG = -Werror \
--ansi \
--pedantic
-QMAKE_CXXFLAGS_RELEASE = -Werror \
--ansi \
--pedantic
-SUBDIRS += src \
-           plugins \
-           interfaces 
+          warn_on \
+          qt 
+QMAKE_CXXFLAGS_DEBUG += -Werror \
+                        -ansi \
+                        -pedantic 
+QMAKE_CXXFLAGS_RELEASE += -Werror \
+                          -ansi \
+                          -pedantic 

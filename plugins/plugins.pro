@@ -10,4 +10,6 @@ SUBDIRS += tell \
            browser \
            drawing \
            splash \
-           id 
+           id \
+           file \
+           affect 
