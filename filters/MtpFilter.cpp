@@ -10,20 +10,22 @@
 
 #include "MtpFilter.h"
 #include "MtpContext.h"
+#include "GlobalFilter.h"
+#include "BlockFilter.h"
+#include "LineFilter.h"
+#include "ItemFilter.h"
 #include "domutil.h"
 
-#include <iostream>
-
-#include <qdom.h>
+//#include <iostream>
 
 MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
     current_block = 0;
     m_dom = dom;
     m_context = context;
     obsolete = false;
-    
+
     QStringList filters;
-    
+
     filters = DomUtil::readListEntry(*m_dom,"/general/filters/input","filter");
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	InputFilter* f = new InputFilter(*it,DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/memorize",false),m_context);
@@ -31,10 +33,10 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
-	
+
 	addInputFilter(f);
     }
-    
+
     filters = DomUtil::readListEntry(*m_dom,"/general/filters/item","filter");
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	ItemFilter* f = new ItemFilter(*it,m_context);
@@ -42,10 +44,10 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
-	
+
 	addItemFilter(f);
     }
-    
+
     filters = DomUtil::readListEntry(*m_dom,"/general/filters/line","filter");
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	LineFilter* f = new LineFilter(*it,m_context);
@@ -53,10 +55,10 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
-	
+
 	addLineFilter(f);
     }
-    
+
     filters = DomUtil::readListEntry(*m_dom,"/general/filters/block","filter");
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	BlockFilter* f = new BlockFilter(*it,m_context);
@@ -67,7 +69,7 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
     f->setEndPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/endresult"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
-	
+
 	QString dep = DomUtil::readEntry(*m_dom,"/filters/" + *it + "/depend",QString::null);
 	if(!dep.isNull()) {
 	    for(std::vector<InputFilter*>::iterator iter = input.begin(); iter != input.end(); ++iter)
@@ -114,7 +116,7 @@ MtpFilter::~MtpFilter() {
 	DomUtil::writeListEntry(*m_dom,"/general/filters/global","filter",filters);
 	filters.clear();
     }
-    
+
     for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it) {
 	if(!obsolete) {
 	    QString name((*it)->getName());
@@ -135,7 +137,7 @@ MtpFilter::~MtpFilter() {
 	DomUtil::writeListEntry(*m_dom,"/general/filters/block","filter",filters);
 	filters.clear();
     }
-    
+
     for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it) {
 	if(!obsolete) {
 	    QString name((*it)->getName());
@@ -151,9 +153,9 @@ MtpFilter::~MtpFilter() {
 	DomUtil::writeListEntry(*m_dom,"/general/filters/line","filter",filters);
 	filters.clear();
     }
-    
+
     for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it) {
-	if(!obsolete) {	
+	if(!obsolete) {
 	    QString name((*it)->getName());
 	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
 	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
@@ -167,9 +169,9 @@ MtpFilter::~MtpFilter() {
 	DomUtil::writeListEntry(*m_dom,"/general/filters/item","filter",filters);
 	filters.clear();
     }
-    
+
     for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it) {
-	if(!obsolete) {	
+	if(!obsolete) {
 	    QString name((*it)->getName());
 	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
 	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
@@ -204,7 +206,7 @@ QString MtpFilter::filterIn(const QString & arg) {
 QString MtpFilter::filterOut(const QString & arg) {
 
     QString res(arg);
-    
+
     // Global Filter
     for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it) {
         if ((*it)->isEnabled() && (*it)->applyTo(res)) {

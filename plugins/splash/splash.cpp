@@ -9,11 +9,11 @@
  ***************************************************************************/
 
 #include <qapplication.h>
-#include <qpainter.h>
-#include <qpixmap.h>
 #include <qcolor.h>
 #include <qregexp.h>
 #include <qpoint.h>
+#include <qtimer.h>
+#include <qlabel.h>
 #include <qcursor.h>
 
 #include "splash.h"
@@ -22,10 +22,10 @@
 
 PLUGIN_FACTORY(Splash,"splash");
 
-Splash::Splash(QWidget * /*parent*/, const char *name, Master * session) 
+Splash::Splash(QWidget * /*parent*/, const char *name, Master * session)
     : Page(0, name, session, WStyle_Customize | Style_Splash) {
     m_screen = QApplication::desktop()->primaryScreen();
-    
+
     m_label = new QLabel(this);
     m_label->setPaletteBackgroundColor(QColor("lightgrey"));
 
@@ -77,7 +77,7 @@ void Splash::append(const QString & msg) {
         } else {
             pt.setY(pt.y() - rect().height()/2);
         }
-        
+
         if(re.cap(2) == "E") {
             pt.setX(scr.width() - rect().width());
         } else if(re.cap(2) == "O") {
@@ -85,11 +85,11 @@ void Splash::append(const QString & msg) {
         } else {
             pt.setX(pt.x() - rect().width()/2);
         }
-        
+
         move(pt);
         show();
         repaint();
-    
+
         m_timer->start(time,true);
     }
 }

@@ -11,28 +11,24 @@
 #ifndef _CRON_H_
 #define _CRON_H_
 
-#include <qpixmap.h>
-#include <qwidget.h>
-#include <qtimer.h>
-#include <qlabel.h>
-
-#include "master.h"
 #include "page.h"
+
+class QTimer;
 
 class Cron : public Page {
     Q_OBJECT
-    
+
 public:
     Cron(QWidget *parent, const char *name, Master * session);
     ~Cron();
-    
+
     bool isSlave() {return false;}
 
 public slots:
     void timeout();
     void append(const QString & msg);
     void stop();
-    
+
 private:
     QTimer *m_timer;
     int time;

@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "Filter.h"
-
+#include "MtpContext.h"
 
 Filter::Filter(const QString & name, MtpContext * ctxt) {
     this->name = name;
@@ -97,11 +97,11 @@ QString Filter::applyProcessedRegexpToPattern(MtpRegExp & re, const QString & pa
 
 QString Filter::expandVars(const QString& msg, MtpContext * context) {
     QString res(msg);
-    
+
     if(context) {
         QRegExp rx( "\\\\(\\w+)\\\\" );
         QStringList list;
-        
+
         int pos = 0;
         while ( pos >= 0 ) {
             pos = rx.search( msg, pos );

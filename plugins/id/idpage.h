@@ -2,7 +2,7 @@
 ** Form interface generated from reading ui file 'idpage.ui'
 **
 ** Created: Sat Feb 22 12:08:09 2003
-**      by: The User Interface Compiler ($Id: idpage.h,v 1.2 2003/05/06 17:58:13 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: idpage.h,v 1.3 2004/04/22 21:20:22 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -10,19 +10,15 @@
 #ifndef IDPAGE_H
 #define IDPAGE_H
 
-#include <qvariant.h>
-#include <qwidget.h>
-
 #include "page.h"
-#include "master.h"
-#include "idform.h"
-#include "mtpbrowser.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QPushButton;
 class QWidgetStack;
+class IdForm;
+class MtpBrowser;
 
 class IdPage : public Page
 {
@@ -35,7 +31,7 @@ public:
     QPushButton* details_button;
     QPushButton* update_button;
     QWidgetStack* widgetStack;
-    
+
     IdForm* idform;
     MtpBrowser* browser;
 
@@ -43,7 +39,7 @@ private slots:
     void switchPage();
     void append(const QString&);
     void updatePage();
-    
+
 protected:
     QGridLayout* IdPageLayout;
 

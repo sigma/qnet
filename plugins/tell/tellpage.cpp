@@ -9,22 +9,10 @@
  ***************************************************************************/
 
 #include "tellpage.h"
-#include <qtextedit.h>
 
-#include <qvariant.h>
-#include <qtextedit.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <iostream>
-
-#include <qsplitter.h>
-#include <qvaluelist.h>
 #include <qlistbox.h>
-
-#include "mtpbrowser.h"
+#include <qtextedit.h>
+#include <mtpbrowser.h>
 
 PLUGIN_FACTORY(TellPage,"tell");
 

@@ -11,17 +11,13 @@
 #ifndef _BROWSERPAGE_H_
 #define _BROWSERPAGE_H_
 
-#include <qwidget.h>
-#include <qaction.h>
-
 #include "page.h"
-#include "master.h"
-#include "mtpbrowser.h"
 
-
+class MtpBrowser;
 class QGridLayout;
+
 /**
- * 
+ *
  * Yann Hodique
  **/
 class BrowserPage : public Page {
@@ -33,7 +29,7 @@ public:
     void append(const QString & msg);
     MtpBrowser* chat_view;
     QString getText();
-    
+
 protected:
     QGridLayout* BrowserPageBaseLayout;
 

@@ -12,11 +12,6 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
-#include <qvariant.h>
-#include <qpixmap.h>
-#include <qmap.h>
-
-#include "master.h"
 #include "page.h"
 
 class QVBoxLayout;

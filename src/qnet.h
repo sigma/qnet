@@ -11,14 +11,13 @@
 #ifndef _QMTP_H_
 #define _QMTP_H_
 
-#include <qwidget.h>
 #include "qnet_base.h"
+
 #include <qdom.h>
 #include <qmap.h>
-#include <qprocess.h>
 #include <qdir.h>
-#include <iostream>
 
+class QProcess;
 class ChatSession;
 class MtpSettings;
 class MtpFiltersSettings;

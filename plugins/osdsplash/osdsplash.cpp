@@ -8,12 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qcolor.h>
 #include <qregexp.h>
-#include <qpoint.h>
+#include <qapplication.h>
 
 #include "osdsplash.h"
 

@@ -12,8 +12,6 @@
  ***************************************************************************/
 
 #include "domutil.h"
-#include <qstringlist.h>
-
 
 void DomUtil::makeEmpty( QDomElement& e )
 {
@@ -80,7 +78,7 @@ bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path, bool d
 QStringList DomUtil::readListEntry(const QDomDocument &doc, const QString &path, const QString &tag)
 {
     QStringList list;
-    
+
     QDomElement el = elementByPath(doc, path);
     QDomElement subEl = el.firstChild().toElement();
     while (!subEl.isNull()) {
@@ -97,7 +95,7 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
                                              const QString &firstAttr, const QString &secondAttr)
 {
     PairList list;
-    
+
     QDomElement el = elementByPath(doc, path);
     QDomElement subEl = el.firstChild().toElement();
     while (!subEl.isNull()) {
@@ -108,10 +106,10 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
         }
         subEl = subEl.nextSibling().toElement();
     }
-    
+
     return list;
 }
- 
+
 DomUtil::TupleList DomUtil::readTupleListEntry(const QDomDocument &doc, const QString &path, const QString &tag,
                                         const QStringList &attrList)
 {
@@ -149,7 +147,7 @@ QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it)
         el = DomUtil::namedChildElement( el, *it );
-        
+
     while (!el.firstChild().isNull())
         el.removeChild(el.firstChild());
 
@@ -162,7 +160,7 @@ void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &
     QDomElement el = DomUtil::createElementByPath(doc, path);
     el.appendChild(doc.createTextNode(value));
 }
-    
+
 
 void DomUtil::writeIntEntry(QDomDocument &doc, const QString &path, int value)
 {

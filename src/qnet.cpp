@@ -8,14 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qtextbrowser.h>
 #include <qlineedit.h>
 #include <qtabwidget.h>
 #include <qcombobox.h>
 #include <qmessagebox.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qdom.h>
 #include <qlistbox.h>
 #include <qwidgetstack.h>
 #include <qregexp.h>
@@ -26,13 +24,13 @@
 #include <qpopupmenu.h>
 #include <qfiledialog.h>
 #include <qfontdatabase.h>
+#include <qprocess.h>
 
 #include <dlfcn.h>
 
 #include "qnet.h"
 #include "connectionbox.h"
 #include "ChatSession.h"
-#include "version.h"
 #include "domutil.h"
 #include "mtpsettings.h"
 #include "mtpfilterssettings.h"

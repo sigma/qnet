@@ -9,8 +9,9 @@
  ***************************************************************************/
 
 #include "MtpRegExp.h"
-#include <iostream>
+#include "MtpContext.h"
 
+//#include <iostream>
 
 MtpRegExp::MtpRegExp(const QString & pat, MtpContext * ctxt) {
     pattern = pat;

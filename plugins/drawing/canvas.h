@@ -16,7 +16,6 @@
 #include <qpixmap.h>
 #include <qwidget.h>
 #include <qstring.h>
-#include <qpointarray.h>
 
 class QMouseEvent;
 class QResizeEvent;

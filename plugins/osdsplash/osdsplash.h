@@ -11,23 +11,17 @@
 #ifndef _OSDSPLASH_H_
 #define _OSDSPLASH_H_
 
-#include <qpixmap.h>
-#include <qwidget.h>
-#include <qtimer.h>
-#include <qlabel.h>
-
-#include "master.h"
 #include "page.h"
 
 class OsdSplash : public Page {
     Q_OBJECT
-    
+
 public:
     OsdSplash(QWidget *parent, const char *name, Master * session);
     ~OsdSplash();
-    
+
     bool isSlave() {return false;}
-    
+
 public slots:
     void append(const QString & msg);
 };

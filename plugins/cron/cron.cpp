@@ -9,12 +9,13 @@
  ***************************************************************************/
 
 #include <qregexp.h>
+#include <qtimer.h>
 
 #include "cron.h"
 
 PLUGIN_FACTORY(Cron,"cron");
 
-Cron::Cron(QWidget * /*parent*/, const char *name, Master * session) 
+Cron::Cron(QWidget * /*parent*/, const char *name, Master * session)
     : Page(0, name, session) {
     m_timer = new QTimer(this);
 
@@ -47,7 +48,7 @@ void Cron::append(const QString & msg) {
         received = true;
         return;
     }
-    
+
     QRegExp re("(start|shot) +(\\d+) +([^ ].*)");
     if(re.exactMatch(msg)) {
         time = re.cap(2).toInt();

@@ -11,10 +11,8 @@
 #ifndef CHATPAGE_H
 #define CHATPAGE_H
 
-#include <qvariant.h>
-#include <qwidget.h>
 #include <qstringlist.h>
-#include <master.h>
+
 #include <page.h>
 
 class QVBoxLayout;

@@ -11,8 +11,6 @@
 #include <iostream>
 
 #include <qsocket.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <qregexp.h>
 #include <qinputdialog.h>
 
@@ -80,7 +78,7 @@ void TelnetManager::readStdout() {
         if (password != "")
             writeStdin(password);
         else
-            writeStdin(QInputDialog::getText("Password","Password: ",QLineEdit::Password));
+            writeStdin(QInputDialog::getText("Password@" + mtp->sessionName(),"[" + mtp->sessionName() + "]Password: ",QLineEdit::Password));
         password = "";
     }
 

@@ -1,5 +1,5 @@
 /****************************************************************************
-** 
+**
 ** Copyright (C) 2002 Yann Hodique <Yann.Hodique@lifl.fr>
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
@@ -13,12 +13,7 @@
 
 #include <qsocket.h>
 #include <qserversocket.h>
-#include <qapplication.h>
 #include <qtextbrowser.h>
-#include <qtextview.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qtextstream.h>
 #include <qmap.h>
 
 #include <stdlib.h>
@@ -79,7 +74,7 @@ class RemoteControlServerInfo : QObject {
 
     typedef QMap<QString, void(RemoteControlServerInfo::*)(RemoteControlClientSocket*,const QString&)> CommandMap;
     typedef QMap<ChatSession*,QValueList<RemoteControlClientSocket*> > SyncMap;
-    
+
 public:
     RemoteControlServerInfo(QMtp *, int port, QTextBrowser *log, const QString & pass = QString::null);
     ~RemoteControlServerInfo();

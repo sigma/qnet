@@ -11,15 +11,13 @@
 #ifndef _FILTER_H_
 #define _FILTER_H_
 
-#include <qstring.h>
 #include "MtpRegExp.h"
-#include "MtpContext.h"
 
 /**
- * 
+ *
  * Yann Hodique
  **/
- 
+
 class Filter {
 
 public:
@@ -32,7 +30,7 @@ public:
     virtual ~Filter();
 
     virtual bool applyTo(QString &) {return false;};
-    
+
     void setPolicy(Policy p);
     Policy policy() const;
 
@@ -48,14 +46,14 @@ public:
     QString applyProcessedRegexpToPattern(MtpRegExp &, const QString &);
 
     static QString expandVars(const QString& msg, MtpContext * context = 0);
-    
+
 private:
     QString name;
     QString result;
     Policy pol;
     bool active;
     MtpContext * m_context;
-    
+
 };
 
 #endif

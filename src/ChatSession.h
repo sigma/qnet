@@ -13,14 +13,12 @@
 
 #define CHAT_BUFFER_LENGTH 256
 
-#include <qwidget.h>
-#include <qdom.h>
 #include <vector>
 
 #include "MainChatPage.h"
 #include "version.h"
-#include "master.h"
 
+class QDomDocument;
 class QProcess;
 class QString;
 class QStringList;

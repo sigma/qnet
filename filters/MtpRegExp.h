@@ -14,18 +14,19 @@
 #include <qstring.h>
 #include <qregexp.h>
 
-#include "MtpContext.h"
-
 /**
- * 
+ *
  * Yann Hodique
  **/
+
+class MtpContext;
+
 class MtpRegExp {
 
 public:
     MtpRegExp(const QString & = "", MtpContext * ctxt = 0);
     ~MtpRegExp();
-    
+
     bool exactMatch(const QString &);
     QString cap(int i);
     int search(const QString&,int&) const;

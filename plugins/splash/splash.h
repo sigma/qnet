@@ -11,32 +11,29 @@
 #ifndef _SPLASH_H_
 #define _SPLASH_H_
 
-#include <qpixmap.h>
-#include <qwidget.h>
-#include <qtimer.h>
-#include <qlabel.h>
-
-#include "master.h"
 #include "page.h"
+
+class QTimer;
+class QLabel;
 
 class Splash : public Page {
     Q_OBJECT
-    
+
 public:
     Splash(QWidget *parent, const char *name, Master * session);
     ~Splash();
-    
+
     void repaint();
     void setTime(int);
     bool isSlave() {return false;}
-    
+
 protected:
     void mousePressEvent( QMouseEvent * );
 
 public slots:
     void timeout();
     void append(const QString & msg);
-    
+
 private:
     QTimer *m_timer;
     QLabel *m_label;

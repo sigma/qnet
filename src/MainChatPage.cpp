@@ -1,7 +1,7 @@
 /*
  *  File: MainChatPage.cpp
  *  Created: Wednesday, April 14, 2004
- *  Time-stamp: <14/04/2004 14:12:30 Yann Hodique>
+ *  Time-stamp: <22/04/2004 20:27:06 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -19,6 +19,7 @@
 
 #include <qtextedit.h>
 #include <qlistbox.h>
+#include <qaction.h>
 
 MainChatPage::MainChatPage(QWidget *parent, const char *name, Master *master) :
         ChatPage(parent,name,master) {

@@ -13,12 +13,11 @@
 
 #include "prefixsettingsbase.h"
 
-#include <qwidget.h>
 #include <qstring.h>
 #include <qmap.h>
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class PrefixSettings : public PrefixSettingsBase {

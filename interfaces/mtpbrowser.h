@@ -11,7 +11,6 @@
 #ifndef _MTPBROWSER_H_
 #define _MTPBROWSER_H_
 
-#include <qwidget.h>
 #include <qstring.h>
 #include <qtextbrowser.h>
 

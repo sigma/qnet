@@ -7,10 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #include <qglobal.h>
 #include <qaction.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <qregexp.h>
 #include <qkeysequence.h>
 #include <qprocess.h>
@@ -29,6 +28,7 @@
 #include "qnet.h"
 #include "domutil.h"
 #include "MtpFilter.h"
+#include "Filter.h"
 #include "MtpContext.h"
 #include "page.h"
 

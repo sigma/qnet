@@ -2,14 +2,15 @@
 ** Form implementation generated from reading ui file 'idpage.ui'
 **
 ** Created: Sat Feb 22 12:08:18 2003
-**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.2 2003/05/06 17:58:13 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: idpage.cpp,v 1.3 2004/04/22 21:20:22 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 
 #include "idpage.h"
+#include "idform.h"
+#include "mtpbrowser.h"
 
-#include <qvariant.h>
 #include <qpushbutton.h>
 #include <qwidgetstack.h>
 #include <qlayout.h>
@@ -21,7 +22,7 @@
 PLUGIN_FACTORY(IdPage,"id");
 
 /*
- *  Constructs a IdPage as a child of 'parent', with the 
+ *  Constructs a IdPage as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
 IdPage::IdPage( QWidget* parent, const char* name, Master * session, WFlags fl )
@@ -51,10 +52,10 @@ IdPage::IdPage( QWidget* parent, const char* name, Master * session, WFlags fl )
     IdPageLayout->addItem( spacer, 1, 1 );
     languageChange();
     resize( QSize(445, 308).expandedTo(minimumSizeHint()) );
-    
+
     id = 1;
     switchPage();
-    
+
     connect(details_button, SIGNAL(clicked()), SLOT(switchPage()));
     connect(update_button, SIGNAL(clicked()), SLOT(updatePage()));
     connect(browser,SIGNAL(linkClicked(const QString &)),
@@ -86,7 +87,7 @@ void IdPage::switchPage() {
 }
 
 void IdPage::append(const QString &msg) {
-    browser->append("<font face=fixed>" + msg + "</font>");    
+    browser->append("<font face=fixed>" + msg + "</font>");
     idform->append(msg);
 }
 

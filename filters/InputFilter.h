@@ -12,10 +12,9 @@
 #define _INPUTFILTER_H_
 
 #include "Filter.h"
-#include <qregexp.h>
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class InputFilter : public Filter {
@@ -32,7 +31,7 @@ public:
 
     QString getRegExp() const;
     QString getResultPattern() const;
-    
+
 private:
     bool memory;
     MtpRegExp reg;

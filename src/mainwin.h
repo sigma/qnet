@@ -21,17 +21,11 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include<qdialog.h>
 #include<qwidget.h>
-#include<qpushbutton.h>
-#include<qtoolbutton.h>
-#include<qpopupmenu.h>
-#include<qlayout.h>
-#include<qlabel.h>
-#include<qptrvector.h>
 #include<qtooltip.h>
 
-#include "trayicon.h"
+class QPopupMenu;
+class TrayIcon;
 
 class MTray : public QObject {
     Q_OBJECT
@@ -69,7 +63,7 @@ public:
     QMtp* qmtp() {
         return mw;
     }
-    
+
 signals:
     void closeProgram();
 

@@ -12,18 +12,19 @@
 #define _MTPFILTER_H_
 
 #include <vector>
+
 #include <qstring.h>
-#include "GlobalFilter.h"
-#include "BlockFilter.h"
-#include "LineFilter.h"
-#include "ItemFilter.h"
-#include "InputFilter.h"
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 
+class GlobalFilter;
+class BlockFilter;
+class LineFilter;
+class ItemFilter;
+class InputFilter;
 class QDomDocument;
 class MtpContext;
 
@@ -47,11 +48,11 @@ public:
     void addLineFilter(LineFilter*);
     void addItemFilter(ItemFilter*);
     void addInputFilter(InputFilter*);
-    
+
     InputFilter * getInputFilter(const QString& name);
 
     void setObsolete() {obsolete = true;}
-    
+
 private:
     std::vector<GlobalFilter*> global;
     std::vector<BlockFilter*> block;
@@ -60,7 +61,7 @@ private:
     std::vector<InputFilter*> input, queue;
 
     BlockFilter *current_block;
-    
+
     QDomDocument* m_dom;
     MtpContext* m_context;
     bool obsolete;

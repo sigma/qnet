@@ -1,7 +1,7 @@
 /*
  *  File: MainChatPage.h
  *  Created: Wednesday, April 14, 2004
- *  Time-stamp: <14/04/2004 14:09:12 Yann Hodique>
+ *  Time-stamp: <22/04/2004 20:27:01 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -19,7 +19,7 @@
 #define _MAINCHATPAGE_H_
 
 #include "chatpage.h"
-#include <qaction.h>
+class QAction;
 
 class MainChatPage : public ChatPage {
     Q_OBJECT

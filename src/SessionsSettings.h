@@ -13,7 +13,6 @@
 
 #include "sessionssettingsbase.h"
 
-#include <qwidget.h>
 #include <qstring.h>
 #include <qmap.h>
 

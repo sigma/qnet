@@ -11,13 +11,10 @@
 #ifndef _BLOCKFILTER_H_
 #define _BLOCKFILTER_H_
 
-#include <qregexp.h>
-
-#include "Filter.h"
 #include "InputFilter.h"
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class BlockFilter : public Filter {
@@ -40,16 +37,16 @@ public:
     void setResultPattern(const QString& pat);
     void setBeginPattern(const QString& pat);
     void setEndPattern(const QString& pat);
-    
+
     QString getBeginRegExp() const;
     QString getEndRegExp() const;
     QString getResultPattern() const;
     QString getBeginPattern() const;
     QString getEndPattern() const;
-    
+
     bool applyTo(QString &, Position pos = IN);
     bool isFinished() const;
-    
+
 private:
     InputFilter * dependency;
     bool finished;

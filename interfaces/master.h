@@ -11,7 +11,7 @@
 #ifndef _MASTER_H_
 #define _MASTER_H_
 
-#include <qwidget.h>
+#include <qobject.h>
 #include <qstring.h>
 
 #include "MtpContext.h"

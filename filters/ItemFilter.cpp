@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 #include "ItemFilter.h"
-#include <iostream>
-#include <qregexp.h>
+
+//#include <iostream>
 
 ItemFilter::ItemFilter(const QString & name, MtpContext * ctxt) : Filter(name,ctxt) {
     setPolicy(Filter::Final);
@@ -23,9 +23,9 @@ ItemFilter::~ItemFilter() {}
 bool ItemFilter::applyTo(QString & msg) {
     /*MtpRegExp re(reg);
     bool match = re.exactMatch(msg);
-     
+
     if (match) setResult(applyProcessedRegexpToPattern(re,pattern));
-     
+
     return match;
     */
 

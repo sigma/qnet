@@ -9,7 +9,6 @@
  ***************************************************************************/
 
 #include "remotecontrol.h"
-#include "version.h"
 #include "qnet.h"
 #include "ChatSession.h"
 #include "domutil.h"

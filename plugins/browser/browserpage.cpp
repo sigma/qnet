@@ -9,16 +9,9 @@
  ***************************************************************************/
 
 #include "browserpage.h"
-#include <qtextedit.h>
+#include "mtpbrowser.h"
 
-#include <qvariant.h>
-#include <qtextedit.h>
 #include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <iostream>
 
 PLUGIN_FACTORY(BrowserPage,"browser");
 

@@ -11,10 +11,6 @@
 #ifndef _TELLPAGE_H_
 #define _TELLPAGE_H_
 
-#include <qwidget.h>
-#include <qaction.h>
-#include <qstringlist.h>
-
 #include "chatpage.h"
 
 /**

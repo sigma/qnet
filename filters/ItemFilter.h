@@ -13,11 +13,8 @@
 
 #include "Filter.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-
 /**
- * 
+ *
  * Yann Hodique
  **/
 class ItemFilter : public Filter {
@@ -32,7 +29,7 @@ public:
 
     QString getRegExp() const;
     QString getResultPattern() const;
-    
+
 private:
     MtpRegExp reg;
     QString pattern,reg_exp;

@@ -22,13 +22,14 @@
 
 #include<qmessagebox.h>
 #include<qiconset.h>
-#include<qtooltip.h>
 #include<qstyle.h>
 #include<qapplication.h>
 #include<qptrlist.h>
 #include<qtimer.h>
 #include<qobjectlist.h>
+#include<qpopupmenu.h>
 
+#include "trayicon.h"
 #include "qnet.h"
 #include "version.h"
 
@@ -58,7 +59,7 @@ MainWin::MainWin(bool _onTop, bool _asTool, const char *name, const QString& rc)
 
     mw->show();
     connect(mw, SIGNAL(closeProgram()), SLOT(tryCloseProgram()));
-    
+
     icon_path = mw->iconPath();
 }
 
