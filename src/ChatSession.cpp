@@ -68,7 +68,7 @@ void ChatSession::displayStderr(const QString& msg) {
 }
 
 void ChatSession::displayStdout(const QString& msg) {
-    m_scm->runHook("chatsession-output-hook", SCM_EOL);
+    m_scm->runHook("chatsession-output-hook", scm_cons(scm_makfrom0str(msg.ascii()),SCM_EOL));
 
     emit outputMessage(msg);
     QString m(msg);

@@ -31,7 +31,7 @@
 (defface red-face #:family "verdana" #:color "red" #:weight 75)
 
 ; (add-hook! chatsession-output-hook output-filter)
-(add-hook! chatsession-created-hook font-lock)
+; (add-hook! chatsession-created-hook font-lock)
 
 (font-lock-add-keywords '(
                           ("^<Mtp>.*"
@@ -74,12 +74,14 @@
 (defvar osd-timeout 5)
 (defvar osd (make-xosd osd-size))
 (defvar osd-position '(80 . 0))
+(defvar osd-colour "red")
 
-(xosd-timeout! osd osd-timeout)
-(xosd-pos! osd 'bottom)
-(xosd-align! osd 'center)
-(xosd-horizontal-offset! osd (car osd-position))
-(xosd-vertical-offset! osd (cdr osd-position))
+(xosd-set-timeout! osd osd-timeout)
+(xosd-set-pos! osd 'bottom)
+(xosd-set-align! osd 'center)
+(xosd-set-horizontal-offset! osd (car osd-position))
+(xosd-set-vertical-offset! osd (cdr osd-position))
+(xosd-set-colour! osd osd-colour)
 
 (add-hook! chatsession-created-hook (lambda ()
                                       (xosd-hide osd)
