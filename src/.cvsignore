@@ -21,3 +21,5 @@ sessionsdialogbase.cpp
 sessionsdialogbase.h
 urlsettingsbase.cpp
 urlsettingsbase.h
+tagssettings.cpp
+tagssettings.h
