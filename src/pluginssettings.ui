@@ -1,0 +1,102 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>PluginsSettings</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PluginsSettings</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>482</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QListBox" row="0" column="0" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>plugins_box</cstring>
+            </property>
+        </widget>
+        <spacer row="0" column="1">
+            <property name="name">
+                <cstring>spacer6</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>402</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="1" column="1">
+            <property name="name">
+                <cstring>layout16</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>plugins_add</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton">
+                    <property name="name">
+                        <cstring>plugins_del</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Del</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>plugins_add</sender>
+        <signal>clicked()</signal>
+        <receiver>PluginsSettings</receiver>
+        <slot>slotAdd()</slot>
+    </connection>
+    <connection>
+        <sender>plugins_del</sender>
+        <signal>clicked()</signal>
+        <receiver>PluginsSettings</receiver>
+        <slot>slotDel()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">pluginssettings.ui.h</include>
+</includes>
+<slots>
+    <slot>slotAdd()</slot>
+    <slot>slotDel()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

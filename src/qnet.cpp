@@ -74,7 +74,9 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
     fortune_page = 0;
     fproc = 0;
     if (DomUtil::readBoolEntry(m_document,"/remote/enabled",false))
-        rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view);
+        rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view,DomUtil::readEntry(m_document,"/remote/password",QString::null));
+    else
+        rctl=0;
 
     // plugins
     loadPlugins();
