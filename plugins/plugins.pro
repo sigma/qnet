@@ -14,4 +14,5 @@ SUBDIRS += tell \
            affect \
            emit \
            ptime \
-           pformat
+           pformat \
+           cron
