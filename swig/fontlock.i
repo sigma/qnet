@@ -2,29 +2,31 @@
 #include "fontlock.h"
 %}
 
-%name(face)
+%rename(face) Face;
 class Face {
 public:
     Face(const QString& family, const QString& color, int size, int weight, int italic);
 };
 
-%name(pattern)
+%rename(pattern) Pattern;
 class Pattern {
 public:
     Pattern(const QString& str);
     void add(int i, Face f);
 };
 
-%name(block_pattern)
+%rename(block_pattern) BlockPattern;
 class BlockPattern {
 public:
     BlockPattern(const Pattern& b, const Pattern &e, const Pattern &m);
 };
 
-%name(font_lock)
+%rename(font_lock) FontLock;
 class FontLock {
+    %rename(add_pattern) addPattern(const Pattern&);
+    %rename(add_multi_pattern) addMultiLinePattern(const BlockPattern&);
 public:
-    %name(add_pattern) void addPattern(const Pattern&);
-    %name(add_multi_pattern) void addMultiLinePattern(const BlockPattern&);
-    %name(clear) void clear();
+    void addPattern(const Pattern&);
+    void addMultiLinePattern(const BlockPattern&);
+    void clear();
 };

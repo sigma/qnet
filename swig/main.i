@@ -2,4 +2,4 @@
 %include fontlock.i
 %include qstring.i
 
-extern MainWindow *main_window;
+extern MainWindow *mw;

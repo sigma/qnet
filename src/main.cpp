@@ -31,7 +31,7 @@
 #include "fontlock.h"
 #include "mode.h"
 
-MainWindow * main_window;
+MainWindow * mw;
 
 extern "C" {
     void scm_init_internal_module(void);
@@ -68,9 +68,9 @@ int main(int argc, char **argv)
     }
 
     Launcher app(argc, argv);
-    main_window = new MainWindow(0,0,false);
-    app.setMainWidget(main_window);
-    main_window->show();
+    mw = new MainWindow(0,0,false);
+    app.setMainWidget(mw);
+    mw->show();
 
     Face f("fixed","black");
     Face::setDefaultFace(f);

@@ -3,9 +3,11 @@
 %}
 
 %nodefault;
-%name(mainwindow)
+%rename(main_window) MainWindow;
 class MainWindow {
+    %rename(get_floating_tab) getFloatingTab();
+    %rename(get_tool_bar) getToolBar();
 public:
-    %name(get_floating_tab) FloatingTab* getFloatingTab() {return ft;}
-    %name(get_tool_bar) ToolBar* getToolBar() {return toolbar;}
+    FloatingTab* getFloatingTab();
+    ToolBar* getToolBar();
 };
