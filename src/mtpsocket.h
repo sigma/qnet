@@ -1,9 +1,9 @@
-/*
- *  File: mtpsocket.h
- *  Created: Thursday, January 20, 2005
- *  Time-stamp: <20/01/2005 22:06:39 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <09/02/2005 20:49:51 Yann Hodique>  */
+
+/**
+ *  @file mtpsocket.h
+ *  @date Thursday, January 20, 2005
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -20,7 +20,9 @@
 
 #include <QTcpSocket>
 
-class MtpSocket: public QTcpSocket {
+#include "interactiveiodevice.h"
+
+class MtpSocket: public QTcpSocket, public InteractiveIODevice {
 
     Q_OBJECT
 
@@ -33,8 +35,8 @@ public:
     void setLogin(const QString& l) {login = l;}
     void setPasswd(const QString& p) {passwd = p;}
 
-    QString getLogin() {return login;}
-    QString getPasswd() {return passwd;}
+    QString getLogin() const {return login;}
+    QString getPasswd() const {return passwd;}
 
 public slots:
     void connectToHost();

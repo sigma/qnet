@@ -1,9 +1,9 @@
-/*
- *  File: keymap.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <31/12/2004 18:13:36 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:22:18 Yann Hodique>  */
+
+/**
+ *  @file keymap.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -34,13 +34,26 @@ public:
     ~KeyMap();
 
     static const KeyMap& getGlobalKeyMap() {return global_keymap;}
+    static KeyMap* getCurrentKeyMap() {return current_keymap;}
 
     void setKey(const QKeySequence&, SCM);
+    void setKey(const QKeySequence&, KeyMap*);
+
     void unsetKey(const QKeySequence&);
+
+    typedef enum {
+        Accepted,
+        Keymap,
+        Rejected
+    } ExecutionStatus;
+
+    ExecutionStatus execute(const QKeySequence&) const;
 
 private:
     static KeyMap global_keymap;
+    static KeyMap * current_keymap;
     QMap<QKeySequence,SCM> keys;
+    QMap<QKeySequence,KeyMap*> maps;
 };	// end of class KeyMap
 
 

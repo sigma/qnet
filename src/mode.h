@@ -1,9 +1,9 @@
-/*
- *  File: mode.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <31/12/2004 11:30:53 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:18:01 Yann Hodique>  */
+
+/**
+ *  @file mode.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

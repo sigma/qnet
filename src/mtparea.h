@@ -1,9 +1,9 @@
-/*
- *  File: mtparea.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 19:06:18 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:21:28 Yann Hodique>  */
+
+/**
+ *  @file mtparea.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -39,8 +39,8 @@ public:
 
     ~MtpArea();
 
-    MtpOutput * getOutput();
-    MtpInput * getInput();
+    MtpOutput * getOutput() const;
+    MtpInput * getInput() const;
 
 public slots:
     virtual void returnPressed();

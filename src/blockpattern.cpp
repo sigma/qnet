@@ -1,8 +1,8 @@
-/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+/*  Time-stamp: <08/02/2005 09:14:05 Yann Hodique>  */
 
 /**
- *  @file mtpinfo.h
- *  @date Thursday, December 30, 2004
+ *  @file blockpattern.cpp
+ *  @date Monday, February 7, 2005
  *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
@@ -15,21 +15,20 @@
  *                                                                      *
  ************************************************************************/
 
-#ifndef _MTPINFO_H_
-#define _MTPINFO_H_
+#include "blockpattern.h"
 
-#include <QListWidget>
+bool BlockPattern::matchBegin(const QString & text) {
+    return internalMatch(m_begin,text);
+}
 
-class MtpInfo : public QListWidget {
+bool BlockPattern::matchEnd(const QString & text) {
+    return internalMatch(m_end,text);
+}
 
-    Q_OBJECT
+bool BlockPattern::matchMiddle(const QString & text) {
+    return internalMatch(m_middle,text);
+}
 
-public:
-    MtpInfo(QWidget *parent = 0);
-
-    ~MtpInfo();
-
-};	// end of class MtpInfo
-
-
-#endif /* _MTPINFO_H_ */
+bool BlockPattern::internalMatch(Pattern& reg, const QString & text) {
+    return reg.exactMatch(text);
+}

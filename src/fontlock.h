@@ -1,9 +1,9 @@
-/*
- *  File: fontlock.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <29/01/2005 17:49:44 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <13/02/2005 12:02:52 Yann Hodique>  */
+
+/**
+ *  @file fontlock.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -18,153 +18,71 @@
 #ifndef _FONTLOCK_H_
 #define _FONTLOCK_H_
 
-#include <QFont>
-#include <QColor>
-#include <QPair>
 #include <QStack>
-#include <QTextCharFormat>
 
-class Face {
-public:
-    Face() {} //the default constructor()
-    Face(const QFont& font) : m_font(font) {
-        tcf.setFont(font);
-    }
-    Face(const QColor& color) : m_color(color) {
-        tcf.setTextColor(color);
-    }
-    Face(const QFont& font, const QColor& color) : m_font(font), m_color(color) {
-        tcf.setFont(font);
-        tcf.setTextColor(color);
-    }
+#include "blockpattern.h"
 
-    typedef enum {
-        Light = QFont::Light,
-        Normal = QFont::Normal,
-        DemiBold = QFont::DemiBold,
-        Bold = QFont::Bold,
-        Black = QFont::Black
-    } Weight;
+/**
+ * \addtogroup fontification
+ * @{
+ */
 
-    Face(const QString& family, const QString& color, int size = 12, int weight = Normal, bool italic = false) : m_font(family,size,weight,italic), m_color(color) {
-        tcf.setFont(m_font);
-        tcf.setTextColor(color);
-    }
-
-    ~Face() {} //the destructor
-
-    const QFont font() const {return m_font;}
-    const QColor color() const {return m_color;}
-    const QTextCharFormat textCharFormat() const {return tcf;}
-
-    static const Face& defaultFace() {return default_face;}
-    static void setDefaultFace(const Face& f) {default_face = f;}
-
-private:
-    QFont m_font;
-    QColor m_color;
-    QTextCharFormat tcf;
-
-    static Face default_face;
-};	// end of class Face
-
-class Colorizer {
-public:
-    Colorizer() {} //the default constructor()
-    Colorizer(int start, int length, Face face) : m_start(start), m_length(length), m_face(face) {}
-
-    ~Colorizer() {} //the destructor
-
-    int start() const {return m_start;}
-    int length() const {return m_length;}
-    const Face face() const {return m_face;}
-
-private:
-    int m_start, m_length;
-    Face m_face;
-
-    bool operator< (const Colorizer& c) {
-        return m_start < c.m_start;
-    }
-
-    friend class ColorizerList;
-};	// end of class Colorizer
-
-class ColorizerList : public QList<Colorizer> {
-public:
-    ColorizerList() {} //the default constructor()
-
-    ~ColorizerList() {} //the destructor
-
-    ColorizerList simplify() const;
-};
-
-class Pattern {
-public:
-    Pattern() {} //the default constructor()
-    Pattern(const QRegExp& reg) : m_reg(reg) {}
-    Pattern(const QString& str) : m_reg(QRegExp(str)) {}
-
-    ~Pattern() {} //the destructor
-
-    typedef QPair< int,Face > MatchPair;
-    Pattern& operator<< (const MatchPair& p) {
-        m_matches << p; return *this;
-    }
-
-    void add(int i, Face f) {
-        *this << qMakePair(i,f);
-    }
-
-    bool match(const QString& text);
-
-    ColorizerList getColors() const {return m_colors;}
-
-private:
-    QRegExp m_reg;
-    QList<MatchPair> m_matches;
-    ColorizerList m_colors;
-};	// end of class Pattern
-
-class BlockPattern {
-public:
-    BlockPattern() {} //the default constructor()
-    BlockPattern(const Pattern& b, const Pattern &e, const Pattern &m)
-        : m_begin(b), m_end(e), m_middle(m) {}
-
-    ~BlockPattern() {} //the destructor
-
-    bool matchBegin(const QString& text);
-    bool matchEnd(const QString& text);
-    bool matchMiddle(const QString& text);
-
-//    ColorizerList getColors() const {return m_colors;}
-    Pattern begin() {return m_begin;}
-    Pattern end() {return m_end;}
-    Pattern middle() {return m_middle;}
-
-
-private:
-    Pattern m_begin, m_end, m_middle;
-//    ColorizerList m_colors;
-
-    bool internalMatch(Pattern&, const QString&);
-};	// end of class BlockPattern
-
+/**
+ * Class for colorizing a text. Inspired by the old QSyntaxHighlighter class
+ *
+ */
 class FontLock {
 public:
+
+/**
+ * Constructor
+ *
+ */
     FontLock();
 
+/**
+ * Destructor
+ *
+ */
     ~FontLock();
 
+/**
+ * Highlight a portion of text according to the current block. Blocks can be
+ * nested if needed. The result of the previous highlightParagraph() invocation
+ * (or 0) should be passed as \a block argument.
+ *
+ * @param text text to highlight
+ * @param block current block or 0 if none
+ * @param cursor cursor where to insert \a text
+ *
+ * @return new current block or 0 if none
+ */
     int highlightParagraph(const QString& text, int block, QTextCursor& cursor);
 
-    void addPattern(const Pattern&);
+/**
+ * Add a new Pattern to recognize. This Pattern is for single lines only.
+ *
+ * @param pat the pattern to add
+ */
+    void addPattern(const Pattern& pat);
 
-    void addMultiLinePattern(const BlockPattern&);
+/**
+ * Add a new BlockPattern to recognize. This BlockPattern is for multiple lines only.
+ *
+ * @param pat the pattern to add
+ */
+    void addMultiLinePattern(const BlockPattern& pat);
 
+/**
+ * Empty the list of patterns that are recognized by the current FontLock
+ *
+ */
     void clear();
 
+/**
+ * Redo the highlighting according to the new rules
+ *
+ */
     void rehighlight();
 
 private:
@@ -175,5 +93,8 @@ private:
 
 };	// end of class FontLock
 
+/**
+ * @}
+ */
 
 #endif /* _FONTLOCK_H_ */

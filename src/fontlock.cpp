@@ -1,9 +1,9 @@
-/*
- *  File: fontlock.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <31/12/2004 17:11:49 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:14:47 Yann Hodique>  */
+
+/**
+ *  @file fontlock.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -19,61 +19,6 @@
 
 #include <QTextCursor>
 #include <QTextBlock>
-
-Face Face::default_face;
-
-// @todo implement this method
-ColorizerList ColorizerList::simplify() const {
-    return *this;
-}
-
-// bool Pattern::match(const QString & text) {
-//     m_colors.clear();
-//     if(! m_reg.exactMatch(text)) {
-//         return false;
-//     }
-
-//     for(QValueList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
-//         int num = (*it).first;
-//         int pos = m_reg.pos(num);
-//         if(pos != -1)
-//             m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
-//     }
-//     return true;
-// }
-
-bool Pattern::match(const QString & text) {
-    m_colors.clear();
-    bool match = false;
-    int offset = 0;
-
-    while( (offset = m_reg.indexIn(text,offset) + 1) ) {
-        match = true;
-        for(QList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
-            int num = (*it).first;
-            int pos = m_reg.pos(num);
-            if(pos != -1)
-                m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
-        }
-    }
-    return match;
-}
-
-bool BlockPattern::matchBegin(const QString & text) {
-    return internalMatch(m_begin,text);
-}
-
-bool BlockPattern::matchEnd(const QString & text) {
-    return internalMatch(m_end,text);
-}
-
-bool BlockPattern::matchMiddle(const QString & text) {
-    return internalMatch(m_middle,text);
-}
-
-bool BlockPattern::internalMatch(Pattern& reg, const QString & text) {
-    return reg.match(text);
-}
 
 FontLock::FontLock() {}
 
@@ -103,7 +48,7 @@ int FontLock::highlightParagraph(const QString & text, int block, QTextCursor& c
         }
 
     for(QList<Pattern>::Iterator it = m_lines.begin(); it != m_lines.end(); ++it)
-        if((*it).match(text))
+        if((*it).exactMatch(text))
             list += (*it).getColors();
 
     list = list.simplify();
@@ -111,7 +56,6 @@ int FontLock::highlightParagraph(const QString & text, int block, QTextCursor& c
     cursor.insertBlock();
     cursor.insertText(text, Face::defaultFace().textCharFormat());
     for(ColorizerList::const_iterator it = list.begin(); it != list.end(); ++it) {
-        // setFormat((*it).start(), (*it).length(), (*it).face().font(), (*it).face().color());
         QString txt = text.right(text.length()-(*it).start()).left((*it).length());
         QTextCursor c(cursor.block());
         c.movePosition(QTextCursor::NextCharacter,QTextCursor::MoveAnchor,(*it).start());

@@ -1,9 +1,9 @@
-/*
- *  File: mtpinput.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <21/01/2005 17:04:32 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:18:03 Yann Hodique>  */
+
+/**
+ *  @file mtpinput.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

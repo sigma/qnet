@@ -1,9 +1,9 @@
-/*
- *  File: floatingtabbar.h
- *  Created: Monday, December 27, 2004
- *  Time-stamp: <21/01/2005 16:33:34 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:17:38 Yann Hodique>  */
+
+/**
+ *  @file floatingtabbar.h
+ *  @date Monday, December 27, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

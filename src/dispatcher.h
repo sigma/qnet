@@ -1,9 +1,9 @@
-/*
- *  File: dispatcher.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <21/01/2005 16:16:25 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <13/02/2005 11:46:31 Yann Hodique>  */
+
+/**
+ *  @file dispatcher.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -52,6 +52,15 @@ public:
      */
     ~Dispatcher();
 
+    /**
+     * Accessor to the hook used for giving feedback when a new line of text is
+     * dispatched to the outputs.
+     *
+     *
+     * @return the hook
+     */
+    SCM getAppendHook() {return append_hook;}
+
 public slots:
     /**
      * add a new InteractionArea to this Dispatcher. This provides multiple
@@ -78,6 +87,10 @@ private:
     QTextDocument content;
     QTextCursor cursor;
     AreaList areas;
+
+    SCM append_hook;
+    int hook_count;
+    static int hook_counter;
 
 private slots:
     void read();

@@ -6,13 +6,13 @@
 class Face {
     %rename(default_face) defaultFace;
     %rename(set_default_face) setDefaultFace;
-public:
-
     %rename(light) Light;
     %rename(normal) Normal;
     %rename(demi_bold) DemiBold;
     %rename(bold) Bold;
     %rename(black) Black;
+
+public:
     typedef enum {
         Light,
         Normal,
@@ -23,8 +23,8 @@ public:
 
     Face(const QString& family, const QString& color, int size, int weight, bool italic);
 
-    static const Face& defaultFace() {return default_face;}
-    static void setDefaultFace(const Face& f) {default_face = f;}
+    static const Face& defaultFace();
+    static void setDefaultFace(const Face& f);
 
 };
 

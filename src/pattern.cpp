@@ -1,8 +1,8 @@
-/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+/*  Time-stamp: <08/02/2005 09:13:47 Yann Hodique>  */
 
 /**
- *  @file mtpinfo.h
- *  @date Thursday, December 30, 2004
+ *  @file pattern.cpp
+ *  @date Monday, February 7, 2005
  *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
@@ -15,21 +15,21 @@
  *                                                                      *
  ************************************************************************/
 
-#ifndef _MTPINFO_H_
-#define _MTPINFO_H_
+#include "pattern.h"
 
-#include <QListWidget>
+bool Pattern::exactMatch(const QString & text) {
+    m_colors.clear();
+    bool match = false;
+    int offset = 0;
 
-class MtpInfo : public QListWidget {
-
-    Q_OBJECT
-
-public:
-    MtpInfo(QWidget *parent = 0);
-
-    ~MtpInfo();
-
-};	// end of class MtpInfo
-
-
-#endif /* _MTPINFO_H_ */
+    while( (offset = m_reg.indexIn(text,offset) + 1) ) {
+        match = true;
+        for(QList<MatchPair>::const_iterator it = m_matches.begin(); it != m_matches.end(); ++it) {
+            int num = (*it).first;
+            int pos = m_reg.pos(num);
+            if(pos != -1)
+                m_colors << Colorizer(pos, m_reg.cap(num).length(), (*it).second);
+        }
+    }
+    return match;
+}

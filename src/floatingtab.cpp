@@ -1,9 +1,9 @@
-/*
- *  File: floatingtab.cpp
- *  Created: Monday, December 27, 2004
- *  Time-stamp: <30/12/2004 18:20:37 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 21:21:57 Yann Hodique>  */
+
+/**
+ *  @file floatingtab.cpp
+ *  @date Monday, December 27, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -27,6 +27,7 @@ FloatingTab::~FloatingTab() {}
 void FloatingTab::tabInserted(int index) {
     if(count() == 1)
         setTabEnabled(index,true);
+    widget(index)->setFocus();
     emit tabInsertedSignal(index);
 }
 

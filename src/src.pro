@@ -11,12 +11,15 @@ QMAKE_CXXFLAGS_RELEASE += -ansi -Wall -O0 -g3 -Wno-long-long -Werror
 HEADERS += dispatcher.h mtpprotocol.h floatingtab.h floatingtabbar.h		\
 	   mainwindow.h interactionarea.h mtpinput.h mtpoutput.h mtparea.h	\
 	   mtpbrowser.h mtpedit.h mtpinfo.h mode.h fontlock.h keymap.h scm.h	\
-	   mtpsocket.h
+	   mtpsocket.h face.h colorizer.h colorizerlist.h pattern.h		\
+	   blockpattern.h interactiveiodevice.h
 
 SOURCES += dispatcher.cpp mtpprotocol.cpp floatingtab.cpp floatingtabbar.cpp	\
 	   mainwindow.cpp main.cpp interactionarea.cpp mtparea.cpp		\
 	   mtpbrowser.cpp mtpedit.cpp mtpinfo.cpp mode.cpp fontlock.cpp		\
-	   keymap.cpp scm.cpp mtpsocket.cpp
+	   keymap.cpp scm.cpp mtpsocket.cpp face.cpp colorizer.cpp		\
+	   colorizerlist.cpp pattern.cpp blockpattern.cpp			\
+	   interactiveiodevice.cpp
 
 PRECOMPILED_HEADER = all.h
 

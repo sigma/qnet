@@ -1,9 +1,9 @@
-/*
- *  File: mode.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <02/01/2005 11:59:10 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 21:22:35 Yann Hodique>  */
+
+/**
+ *  @file mode.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

@@ -1,9 +1,9 @@
-/*
- *  File: mtpprotocol.h
- *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <21/01/2005 17:17:29 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:18:03 Yann Hodique>  */
+
+/**
+ *  @file mtpprotocol.h
+ *  @date Tuesday, December 28, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

@@ -1,9 +1,9 @@
-/*
- *  File: mtpbrowser.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <21/01/2005 16:59:57 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+
+/**
+ *  @file mtpbrowser.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

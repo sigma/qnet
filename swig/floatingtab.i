@@ -3,7 +3,7 @@
 %}
 
 %rename(floating_tab) FloatingTab;
-class FloatingTab {
+class FloatingTab : public QWidget {
 
     %rename(add_tab) addTab;
     %rename(current_widget) currentWidget;

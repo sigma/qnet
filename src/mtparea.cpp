@@ -1,9 +1,9 @@
-/*
- *  File: mtparea.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 19:06:13 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:41:56 Yann Hodique>  */
+
+/**
+ *  @file mtparea.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -16,14 +16,14 @@
  ************************************************************************/
 
 #include "mtparea.h"
-#include "mtpoutput.h"
 #include "mtpedit.h"
 #include "mtpinfo.h"
 
 #include <QBoxLayout>
 #include <QSplitter>
 #include <QAction>
-#include <QResizeEvent>
+
+#include <iostream>
 
 MtpArea::MtpArea(QWidget *parent) : InteractionArea(parent), QWidget(parent) {
     chatpage_layout = new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -33,7 +33,6 @@ MtpArea::MtpArea(QWidget *parent) : InteractionArea(parent), QWidget(parent) {
     hsplit = new QSplitter(Qt::Horizontal,vsplit);
 
     chat_view = new MtpBrowser(hsplit);
-
     users_box = new MtpInfo(hsplit);
 
     chat_edit = new MtpEdit(vsplit);
@@ -51,20 +50,23 @@ MtpArea::MtpArea(QWidget *parent) : InteractionArea(parent), QWidget(parent) {
     chat_view->setFocusProxy(chat_edit);
     users_box->setFocusProxy(chat_edit);
     this->setFocusProxy(chat_edit);
+
+    users_box->resize(50,users_box->size().height());
 }
 
-MtpArea::~MtpArea() {}
+MtpArea::~MtpArea() {
+}
 
-MtpOutput * MtpArea::getOutput() {
+MtpOutput * MtpArea::getOutput() const {
     return chat_view;
 }
 
-MtpInput * MtpArea::getInput() {
+MtpInput * MtpArea::getInput()  const {
     return chat_edit;
 }
 
 void MtpArea::returnPressed() {
-    emit send(chat_edit->toPlainText());
+    slotSend(chat_edit->toPlainText());
     chat_edit->clear();
 }
 

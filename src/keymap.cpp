@@ -1,9 +1,9 @@
-/*
- *  File: keymap.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <31/12/2004 18:11:47 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:22:43 Yann Hodique>  */
+
+/**
+ *  @file keymap.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -16,17 +16,42 @@
  ************************************************************************/
 
 #include "keymap.h"
+#include "scm.h"
 
 KeyMap KeyMap::global_keymap;
+KeyMap* KeyMap::current_keymap = &global_keymap;
 
 KeyMap::KeyMap(QObject *parent) : QObject(parent) {}
 
 KeyMap::~KeyMap() {}
 
 void KeyMap::setKey(const QKeySequence& key, SCM scm) {
+    maps.remove(key);
     keys.insert(key,scm);
+}
+
+void KeyMap::setKey(const QKeySequence& key, KeyMap* map) {
+    keys.remove(key);
+    maps.insert(key,map);
 }
 
 void KeyMap::unsetKey(const QKeySequence& key) {
     keys.remove(key);
+}
+
+KeyMap::ExecutionStatus KeyMap::execute(const QKeySequence& key) const {
+    QMap<QKeySequence,KeyMap*>::ConstIterator it1;
+    QMap<QKeySequence,SCM>::ConstIterator it2;
+    if((it1 = maps.find(key)) != maps.end()) {
+        current_keymap = *it1;
+        return Keymap;
+    }
+    else if((it2 = keys.find(key)) != keys.end()) {
+        Scm::getInstance()->eval(*it2);
+        return Accepted;
+    }
+    else {
+        current_keymap = &global_keymap;
+        return Rejected;
+    }
 }

@@ -1,9 +1,9 @@
-/*
- *  File: mtpsocket.cpp
- *  Created: Thursday, January 20, 2005
- *  Time-stamp: <20/01/2005 20:42:03 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <09/02/2005 20:49:34 Yann Hodique>  */
+
+/**
+ *  @file mtpsocket.cpp
+ *  @date Thursday, January 20, 2005
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -17,7 +17,7 @@
 
 #include "mtpsocket.h"
 
-MtpSocket::MtpSocket(QObject *parent) : QTcpSocket(parent) {
+MtpSocket::MtpSocket(QObject *parent) : QTcpSocket(parent), InteractiveIODevice(parent) {
     host = QString::null;
     port = 0;
     login = QString::null;

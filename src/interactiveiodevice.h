@@ -1,8 +1,8 @@
-/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+/*  Time-stamp: <09/02/2005 20:48:05 Yann Hodique>  */
 
 /**
- *  @file mtpinfo.h
- *  @date Thursday, December 30, 2004
+ *  @file interactiveiodevice.h
+ *  @date Wednesday, February 9, 2005
  *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
@@ -15,21 +15,25 @@
  *                                                                      *
  ************************************************************************/
 
-#ifndef _MTPINFO_H_
-#define _MTPINFO_H_
+#ifndef _INTERACTIVEIODEVICE_H_
+#define _INTERACTIVEIODEVICE_H_
 
-#include <QListWidget>
+#include <QObject>
 
-class MtpInfo : public QListWidget {
+class InteractiveIODevice : public QObject {
 
     Q_OBJECT
 
 public:
-    MtpInfo(QWidget *parent = 0);
+    InteractiveIODevice(QObject * parent = 0);
 
-    ~MtpInfo();
+    virtual ~InteractiveIODevice();
 
-};	// end of class MtpInfo
+public slots:
+    virtual void sendLogin() = 0;
+    virtual void sendPasswd() = 0;
+
+};	// end of class InteractiveIODevice
 
 
-#endif /* _MTPINFO_H_ */
+#endif /* _INTERACTIVEIODEVICE_H_ */

@@ -1,33 +1,23 @@
-/****************************************************************************
-**
-** Copyright (C) 1992-2004 Trolltech AS. All rights reserved.
-**
-** This file is part of the demonstration applications of the Qt Toolkit.
-**
-** This file may be distributed under the terms of the Q Public License
-** as defined by Trolltech AS of Norway and appearing in the file
-** LICENSE.QPL included in the packaging of this file.
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
-**   information about Qt Commercial License Agreements.
-** See http://www.trolltech.com/qpl/ for QPL licensing information.
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-****************************************************************************/
+/*  Time-stamp: <07/02/2005 21:22:30 Yann Hodique>  */
+
+/**
+ *  @file mainwindow.cpp
+ *  @date Monday, February 7, 2005
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
+ */
+
+/************************************************************************
+ *                                                                      *
+ * This program is free software; you can redistribute it and/or modify *
+ * it under the terms of the GNU General Public License as published by *
+ * the Free Software Foundation; either version 2 of the License, or    *
+ * (at your option) any later version.                                  *
+ *                                                                      *
+ ************************************************************************/
 
 #include "mainwindow.h"
 #include "floatingtab.h"
+#include "keymap.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -39,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags, bool transient)
     : QMainWindow(parent, flags) {
     setObjectName("MainWindow");
     setWindowTitle("QNet 2");
-    resize(QSize(600,400));
+    resize(QSize(640,480));
 
     this->transient = transient;
     if(!transient) {
@@ -66,4 +56,21 @@ void MainWindow::setupDockWindows() {
 void MainWindow::checkTabs() {
     if(!ft->count())
         deleteLater();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent * e) {
+    int key = e->key();
+    QKeySequence seq(key + e->modifiers());
+    KeyMap::ExecutionStatus status = KeyMap::getCurrentKeyMap()->execute(seq);
+    switch(status) {
+        case KeyMap::Keymap:
+            statusBar()->message(seq);
+            break;
+        case KeyMap::Rejected:
+            statusBar()->message("Undefined");
+            break;
+        case KeyMap::Accepted:
+            statusBar()->clear();
+            break;
+    }
 }

@@ -1,9 +1,9 @@
-/*
- *  File: mtpprotocol.cpp
- *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <29/01/2005 15:27:02 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <09/02/2005 20:53:40 Yann Hodique>  */
+
+/**
+ *  @file mtpprotocol.cpp
+ *  @date Tuesday, December 28, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -16,6 +16,7 @@
  ************************************************************************/
 
 #include "mtpprotocol.h"
+#include "interactiveiodevice.h"
 
 #include <QIODevice>
 #include <QStringList>
@@ -51,15 +52,21 @@ void MtpProtocol::installIO(QIODevice *s) {
     if(io) uninstallIO();
     io = s;
     connect(s, SIGNAL(readyRead()), this, SLOT(readIO()));
-    connect(this, SIGNAL(loginQuery()), s, SLOT(sendLogin()));
-    connect(this, SIGNAL(passwdQuery()), s, SLOT(sendPasswd()));
+
+    if(dynamic_cast<InteractiveIODevice*>(s)) {
+        connect(this, SIGNAL(loginQuery()), s, SLOT(sendLogin()));
+        connect(this, SIGNAL(passwdQuery()), s, SLOT(sendPasswd()));
+    }
 }
 
 void MtpProtocol::uninstallIO() {
     if(io) {
         disconnect(io, SIGNAL(readyRead()), this, SLOT(readIO()));
-        disconnect(this, SIGNAL(loginQuery()), io, SLOT(sendLogin()));
-        disconnect(this, SIGNAL(passwdQuery()), io, SLOT(sendPasswd()));
+
+        if(dynamic_cast<InteractiveIODevice*>(io)) {
+            disconnect(this, SIGNAL(loginQuery()), io, SLOT(sendLogin()));
+            disconnect(this, SIGNAL(passwdQuery()), io, SLOT(sendPasswd()));
+        }
         io->deleteLater();
         io = 0;
     }

@@ -1,9 +1,9 @@
-/*
- *  File: mtpbrowser.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <02/01/2005 11:58:19 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 21:22:36 Yann Hodique>  */
+
+/**
+ *  @file mtpbrowser.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -21,11 +21,6 @@
 
 MtpBrowser::MtpBrowser(QWidget * parent): QTextBrowser(parent), cursor(document()) {
     block = 0;
-    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    sp.setHorizontalStretch(100);
-    sp.setVerticalStretch(100);
-    setSizePolicy(sp);
-    setMinimumSize( QSize( 1, 1 ) );
 }
 
 MtpBrowser::~MtpBrowser() {}

@@ -1,9 +1,9 @@
-/*
- *  File: dispatcher.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <21/01/2005 17:43:52 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <10/02/2005 11:38:34 Yann Hodique>  */
+
+/**
+ *  @file dispatcher.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -19,18 +19,25 @@
 #include "mtpprotocol.h"
 #include "interactionarea.h"
 #include "mtpoutput.h"
+#include "scm.h"
 
 #include <QStringList>
 
+int Dispatcher::hook_counter = 0;
+
 Dispatcher::Dispatcher(MtpProtocol *p, QObject *parent) : QObject(parent), proto(p), content(this), cursor(&content) {
     connect(p, SIGNAL(readyRead()), this, SLOT(read()));
+
+    append_hook = Scm::getInstance()->createHook(QString("append-hook-%1").arg(hook_counter),1);
+    hook_count = hook_counter;
+    hook_counter++;
 }
 
 Dispatcher::~Dispatcher() {}
 
 void Dispatcher::addInteractionArea(InteractionArea* a) {
     areas.append(a);
-    connect(a, SIGNAL(send(const QString&)), proto, SLOT(writeLine(const QString&)));
+    connect(a, SIGNAL(send(const QString&)), this, SLOT(write(const QString&)));
 }
 
 void Dispatcher::appendText(const QString& str) {
@@ -41,8 +48,11 @@ void Dispatcher::appendText(const QString& str) {
 }
 
 void Dispatcher::appendLine(const QString& l) {
+    ScmList args;
+    args << l;
+    Scm::getInstance()->runHook(QString("append-hook-%1").arg(hook_count),args);
     for(AreaList::Iterator it = areas.begin(); it != areas.end(); ++it) {
-        (*it)->display(l);
+        (*it)->slotDisplay(l);
     }
     cursor.insertBlock();
     cursor.insertText(l);
@@ -54,6 +64,6 @@ void Dispatcher::read() {
     }
 }
 
-void Dispatcher::write(const QString&) {
-
+void Dispatcher::write(const QString& txt) {
+    proto->writeLine(txt);
 }

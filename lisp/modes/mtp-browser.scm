@@ -17,10 +17,10 @@
 (defface block-face #:family "monospace" #:color "black")
 (defface server-face #:family "verdana" #:color "blue" #:italic #t)
 (defface me-face #:family "verdana" #:color "darkblue" #:weight bold)
-(defface other-face #:family "verdana" #:color "pink")
+(defface other-face #:family "verdana" #:color "orange" #:weight bold)
 (defface emote-face #:family "verdana" #:color "green")
 (defface tome-face #:family "verdana" #:color "red")
-(defface url-face #:family "verdana" #:color "orange")
+(defface url-face #:family "verdana" #:color "lightblue")
 
 (defvar mtp-browser-font-lock (mode-get-font-lock (mode-get-mode "MtpBrowser")))
 

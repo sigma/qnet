@@ -1,9 +1,9 @@
-/*
- *  File: mtpedit.h
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <21/01/2005 17:02:26 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <08/02/2005 09:24:20 Yann Hodique>  */
+
+/**
+ *  @file mtpedit.h
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -22,8 +22,6 @@
 #include <QResizeEvent>
 
 #include "mtpinput.h"
-
-class QShortcut;
 
 /**
  * A graphical MtpInput based on a standard QTextEdit

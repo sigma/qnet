@@ -1,8 +1,8 @@
-/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+/*  Time-stamp: <07/02/2005 21:21:57 Yann Hodique>  */
 
 /**
- *  @file mtpinfo.h
- *  @date Thursday, December 30, 2004
+ *  @file face.cpp
+ *  @date Monday, February 7, 2005
  *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
@@ -15,21 +15,6 @@
  *                                                                      *
  ************************************************************************/
 
-#ifndef _MTPINFO_H_
-#define _MTPINFO_H_
+#include "face.h"
 
-#include <QListWidget>
-
-class MtpInfo : public QListWidget {
-
-    Q_OBJECT
-
-public:
-    MtpInfo(QWidget *parent = 0);
-
-    ~MtpInfo();
-
-};	// end of class MtpInfo
-
-
-#endif /* _MTPINFO_H_ */
+Face Face::default_face;

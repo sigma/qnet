@@ -1,9 +1,9 @@
-/*
- *  File: mtpedit.cpp
- *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 17:36:41 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 21:22:37 Yann Hodique>  */
+
+/**
+ *  @file mtpedit.cpp
+ *  @date Thursday, December 30, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************
@@ -30,11 +30,7 @@ MtpEdit::MtpEdit(QWidget *parent) : QTextEdit(parent) {
     connect(return_pressed, SIGNAL(activated()),
             this, SLOT(returnPressedSlot()));
 
-    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    sp.setHorizontalStretch(1);
-    sp.setVerticalStretch(0);
-    setSizePolicy(sp);
-    setMinimumSize( QSize( 1, 1 ) );
+    setFixedHeight(30);
 }
 
 MtpEdit::~MtpEdit() {}

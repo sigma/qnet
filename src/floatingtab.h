@@ -1,9 +1,9 @@
-/*
- *  File: floatingtab.h
- *  Created: Monday, December 27, 2004
- *  Time-stamp: <21/01/2005 16:30:53 Yann Hodique>
- *  Copyright: Yann Hodique
- *  Email: Yann.Hodique@lifl.fr
+/*  Time-stamp: <07/02/2005 20:19:27 Yann Hodique>  */
+
+/**
+ *  @file floatingtab.h
+ *  @date Monday, December 27, 2004
+ *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
 /************************************************************************

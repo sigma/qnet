@@ -3,7 +3,7 @@ TEMPLATE = lib
 CONFIG += release warn_off precompile_header staticlib
 
 SWIG = swig
-SWIG_FLAGS = -guile -c++ -module internal -scm -Linkage module
+SWIG_FLAGS = -guile -c++ -module internal -scm -Linkage module -Dslots=""
 
 QMAKE_LFLAGS_DEBUG += -lguile
 QMAKE_LFLAGS_RELEASE += -lguile

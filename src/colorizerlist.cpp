@@ -1,8 +1,8 @@
-/*  Time-stamp: <07/02/2005 20:18:02 Yann Hodique>  */
+/*  Time-stamp: <13/02/2005 11:42:02 Yann Hodique>  */
 
 /**
- *  @file mtpinfo.h
- *  @date Thursday, December 30, 2004
+ *  @file colorizerlist.cpp
+ *  @date Monday, February 7, 2005
  *  @author Yann Hodique <Yann.Hodique@lifl.fr>
  */
 
@@ -15,21 +15,8 @@
  *                                                                      *
  ************************************************************************/
 
-#ifndef _MTPINFO_H_
-#define _MTPINFO_H_
+#include "colorizerlist.h"
 
-#include <QListWidget>
-
-class MtpInfo : public QListWidget {
-
-    Q_OBJECT
-
-public:
-    MtpInfo(QWidget *parent = 0);
-
-    ~MtpInfo();
-
-};	// end of class MtpInfo
-
-
-#endif /* _MTPINFO_H_ */
+ColorizerList& ColorizerList::simplify() {
+    return *this;
+}
