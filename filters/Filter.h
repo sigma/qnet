@@ -24,8 +24,8 @@ class Filter {
 
 public:
     typedef enum {
-        Transient,
-        Final
+        Transient = 0,
+        Final = 1
     } Policy;
 
     Filter(const QString & name, MtpContext * ctxt = 0);

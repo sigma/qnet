@@ -20,6 +20,7 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
     current_block = 0;
     m_dom = dom;
     m_context = context;
+    obsolete = false;
     
     QStringList filters;
     
@@ -90,73 +91,95 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 
 MtpFilter::~MtpFilter() {
 
-    QDomElement child = DomUtil::elementByPath(*m_dom,"/filters");
-    if(!child.isNull()) child.parentNode().removeChild(child);
+    if(!obsolete) {
+	QDomElement child = DomUtil::elementByPath(*m_dom,"/filters");
+	if(!child.isNull()) child.parentNode().removeChild(child);
+    }
 
     QStringList filters;
 
     for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it) {
-	QString name((*it)->getName());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
-	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
-	filters << name;
+	if(!obsolete) {
+	    QString name((*it)->getName());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	    filters << name;
+	}
         delete *it;
     }
-    DomUtil::writeListEntry(*m_dom,"/general/filters/global","filter",filters);
-    filters.clear();
+    if(!obsolete) {
+	DomUtil::writeListEntry(*m_dom,"/general/filters/global","filter",filters);
+	filters.clear();
+    }
     
     for (std::vector<BlockFilter*>::iterator it = block.begin(); it != block.end(); ++it) {
-	QString name((*it)->getName());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
-	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/begin",(*it)->getBeginRegExp());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/end",(*it)->getEndRegExp());
-	if((*it)->getInputDependency())
-	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/depend",(*it)->getInputDependency()->getName());
-	filters << name;
+	if(!obsolete) {
+	    QString name((*it)->getName());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/begin",(*it)->getBeginRegExp());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/end",(*it)->getEndRegExp());
+	    if((*it)->getInputDependency())
+		DomUtil::writeEntry(*m_dom,"/filters/" + name + "/depend",(*it)->getInputDependency()->getName());
+	    filters << name;
+	}
         delete *it;
     }
-    DomUtil::writeListEntry(*m_dom,"/general/filters/block","filter",filters);
-    filters.clear();
+    if(!obsolete) {
+	DomUtil::writeListEntry(*m_dom,"/general/filters/block","filter",filters);
+	filters.clear();
+    }
     
     for (std::vector<LineFilter*>::iterator it = line.begin(); it != line.end(); ++it) {
-	QString name((*it)->getName());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
-	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
-	filters << name;
+	if(!obsolete) {
+	    QString name((*it)->getName());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	    filters << name;
+	}
         delete *it;
     }
-    DomUtil::writeListEntry(*m_dom,"/general/filters/line","filter",filters);
-    filters.clear();
+    if(!obsolete) {
+	DomUtil::writeListEntry(*m_dom,"/general/filters/line","filter",filters);
+	filters.clear();
+    }
     
     for (std::vector<ItemFilter*>::iterator it = item.begin(); it != item.end(); ++it) {
-	QString name((*it)->getName());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
-	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
-	filters << name;
+	if(!obsolete) {	
+	    QString name((*it)->getName());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	    filters << name;
+	}
         delete *it;
     }
-    DomUtil::writeListEntry(*m_dom,"/general/filters/item","filter",filters);
-    filters.clear();
+    if(!obsolete) {
+	DomUtil::writeListEntry(*m_dom,"/general/filters/item","filter",filters);
+	filters.clear();
+    }
     
     for (std::vector<InputFilter*>::iterator it = input.begin(); it != input.end(); ++it) {
-	QString name((*it)->getName());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
-	DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
-	DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
-	DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/memorize",(*it)->memorize());
-	filters << name;
+	if(!obsolete) {	
+	    QString name((*it)->getName());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
+	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/regexp",(*it)->getRegExp());
+	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/memorize",(*it)->memorize());
+	    filters << name;
+	}
         delete *it;
     }
-    DomUtil::writeListEntry(*m_dom,"/general/filters/input","filter",filters);
-    filters.clear();
+    if(!obsolete) {
+	DomUtil::writeListEntry(*m_dom,"/general/filters/input","filter",filters);
+	filters.clear();
+    }
     
     for (std::vector<InputFilter*>::iterator it = queue.begin(); it != queue.end(); ++it)
         delete *it;

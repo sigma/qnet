@@ -50,6 +50,8 @@ public:
     
     InputFilter * getInputFilter(const QString& name);
 
+    void setObsolete() {obsolete = true;}
+    
 private:
     std::vector<GlobalFilter*> global;
     std::vector<BlockFilter*> block;
@@ -61,6 +63,7 @@ private:
     
     QDomDocument* m_dom;
     MtpContext* m_context;
+    bool obsolete;
 };
 
 #endif
