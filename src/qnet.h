@@ -64,6 +64,8 @@ public slots:
     
     void loadPlugin(const QString&);
 
+    void refreshMenu();
+    
 private:
     QDomDocument m_document;
     QMap<QWidget*,ChatSession*> tab_map;
@@ -71,11 +73,12 @@ private:
     QValueList<ChatSession*> sessions;
     QTextBrowser *fortune_page;
     QProcess *fproc;
-    
+    QPopupMenu *new_menu;
     RemoteControlServerInfo *rctl;
     
-private:
+private slots:
     void launchSession(const QString& name);
+    void launchSession(int index); 
 };
 
 #endif

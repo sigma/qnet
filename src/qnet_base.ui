@@ -77,8 +77,6 @@
         <cstring>menubar</cstring>
     </property>
     <item text="&amp;File" name="fileMenu">
-        <action name="fileNewAction"/>
-        <action name="fileOpenAction"/>
         <action name="fileSaveAsAction"/>
         <separator/>
         <action name="fileSessionsAction"/>
@@ -88,7 +86,6 @@
         <action name="fileExitAction"/>
     </item>
     <item text="&amp;Edit" name="editMenu">
-        <action name="editCutAction"/>
         <action name="editCopyAction"/>
         <action name="editPasteAction"/>
         <separator/>
@@ -428,6 +425,9 @@
         <slot>fileSessions()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in implementation">qnet_base.ui.h</include>
+</includes>
 <slots>
     <slot>fileNew()</slot>
     <slot>fileOpen()</slot>

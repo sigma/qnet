@@ -23,6 +23,8 @@
 #include <qprocess.h>
 #include <qradiobutton.h>
 #include <qstatusbar.h>
+#include <qaction.h>
+#include <qpopupmenu.h>
 
 #include <dlfcn.h>
 
@@ -47,6 +49,10 @@ QMtp::QMtp(QWidget *parent, const char *name)
     // kick out this useless status bar
     delete statusBar();
 
+    QAction *fileNewAction = new QAction( this, "fileNewAction" );
+    connect( fileNewAction, SIGNAL( activated() ), this, SLOT( fileNew() ) );
+    fileNewAction->setAccel( tr( "Ctrl+N" ) );
+    
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotCurrentPageChanged(QWidget*)));
 
@@ -70,6 +76,11 @@ QMtp::QMtp(QWidget *parent, const char *name)
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
         if(DomUtil::readBoolEntry(m_document,"/sessions/" + *it + "/autoconnect",false))
             launchSession(*it);
+
+    new_menu = new QPopupMenu(this);
+    refreshMenu();
+    fileMenu->insertItem(tr("New..."),new_menu,-1,0);
+    connect(new_menu,SIGNAL(activated(int)),this,SLOT(launchSession(int)));
 }
 
 
@@ -258,6 +269,7 @@ void QMtp::fileSessions() {
             DomUtil::writeBoolEntry(m_document,"/sessions/" + it.name + "/autoconnect",it.autoconnect);
         }
     }
+    refreshMenu();
 }
 
 void QMtp::closeCurrentTab() {
@@ -414,6 +426,15 @@ void QMtp::loadPlugin(const QString& file_name) {
     plugins_map.insert(name_plugin(),plug);
 }
 
+void QMtp::refreshMenu() {
+    new_menu->clear();
+    QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
+    int i = 0;
+    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it,++i)
+        new_menu->insertItem(*it,i);
+
+}
+
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
 
@@ -424,4 +445,9 @@ void QMtp::launchSession(const QString& name) {
 
     connect(session, SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
+}
+
+void QMtp::launchSession(int index) {
+    QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
+    this->launchSession(list[index]);
 }
