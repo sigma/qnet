@@ -1,7 +1,7 @@
 /*
  *  File: mtpprotocol.cpp
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <20/01/2005 20:42:24 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:14:18 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -48,17 +48,22 @@ void MtpProtocol::writeLine(const QString& s) {
 }
 
 void MtpProtocol::installIO(QIODevice *s) {
+    if(io) uninstallIO();
     io = s;
     connect(s, SIGNAL(readyRead()), this, SLOT(readIO()));
 }
 
 void MtpProtocol::uninstallIO() {
-    disconnect(io, SIGNAL(readyRead()), this, SLOT(readIO()));
-    io->deleteLater();
-    io = 0;
+    if(io) {
+        disconnect(io, SIGNAL(readyRead()), this, SLOT(readIO()));
+        io->deleteLater();
+        io = 0;
+    }
 }
 
 void MtpProtocol::readIO() {
+    if(!io) return;
+
     Q_LONGLONG available = io->bytesAvailable();
 
     char * buffer = new char[available+1];
@@ -115,5 +120,6 @@ void MtpProtocol::readIO() {
 }
 
 void MtpProtocol::writeIO(const QString& s) {
-    io->write(s.toAscii());
+    if(io)
+        io->write(s.toAscii());
 }
