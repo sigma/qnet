@@ -3,10 +3,11 @@
 # Subdir relative project main directory: ./plugins
 # Target is a subdirs project 
 
-TEMPLATE = subdirs 
+TEMPLATE = subdirs
 CONFIG += release \
-          warn_on 
+warn_on
 SUBDIRS += tell \
            browser \
            drawing \
-           splash 
+           splash \
+           id 
