@@ -31,6 +31,8 @@
     <filter>info</filter>
    </block>
    <line>
+    <filter>incoming</filter>
+    <filter>pong</filter>
     <filter>ignore_warning</filter>
     <filter>join_dessin</filter>
     <filter>join_others</filter>
@@ -63,22 +65,22 @@
   </available>
   <http>
    <motif>http://</motif>
-   <command>mozilla -remote openurl(%l,new-tab)</command>
+   <command>konqueror %l</command>
   </http>
+  <https>
+   <motif>https://</motif>
+   <command>konqueror %l</command>
+  </https>
   <ftp>
    <motif>ftp://</motif>
-   <command>galeon -n %l</command>
+   <command>konqueror %l</command>
   </ftp>
   <mailto>
    <motif>mailto:</motif>
-   <command>sylpheed --compose %l</command>
+   <command>kmail --composer %l</command>
   </mailto>
   <motif/>
   <command/>
-  <https>
-   <motif>https://</motif>
-   <command>mozilla -remote openurl(%l,new-tab)</command>
-  </https>
  </urls>
  <prefixes>
   <item>reply</item>
@@ -150,6 +152,20 @@
    <begin>^(&lt;.*>)?([^&amp;&lt;][^&lt;]*|&amp;lt Mtp&amp;gt  History[^&lt;]*|&amp;lt Mtp&amp;gt  System[^&lt;]*|&amp;lt Mtp&amp;gt  Help[^&lt;]*)(&lt;.*>)?</begin>
    <end>^(&lt;.*>)?(&amp;lt [^&lt;]*)(&lt;.*>)?</end>
   </info>
+  <incoming>
+   <active>false</active>
+   <policy>0</policy>
+   <result>\0\
+:cron:Cron:start 300000 sendmsg \Login\ ping
+</result>
+   <regexp>(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  (Your client is now |You set client to ).*(&lt;.*>)?</regexp>
+  </incoming>
+  <pong>
+   <active>false</active>
+   <policy>1</policy>
+   <result>:cron:Cron:restart</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|\w+\| ping(&lt;.*>)?</regexp>
+  </pong>
   <ignore_warning>
    <active>true</active>
    <policy>0</policy>
