@@ -14,7 +14,7 @@ void MtpFiltersSettings::displayGlobal( const QString & name)
     global_name->setText(name);
     global_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/result"));
     global_active_check->setChecked(DomUtil::readBoolEntry(*m_dom,"/filters/" + name + "/active"));
-    global_subrules_check->setChecked(!DomUtil::readIntEntry(*m_dom,"/filters/" + name + "/policy"));    
+    global_subrules_check->setChecked(!DomUtil::readIntEntry(*m_dom,"/filters/" + name + "/policy"));
 }
 
 
@@ -115,50 +115,70 @@ void MtpFiltersSettings::changedInput()
     DomUtil::writeBoolEntry(*m_dom,"/filters/" + input_name->text() + "/active",input_active_check->isChecked());
 }
 
-#define RULENAME(txt) (QInputDialog::getText("Rule name","Enter a name",QLineEdit::Normal,(txt)))
+#define RULENAME(txt) (QInputDialog::getText("Rule name","Enter a name",QLineEdit::Normal,(txt),&ok,this))
 
 void MtpFiltersSettings::addGlobal()
 {
-    global_rules->insertItem(RULENAME("globalRule"));
-    global_rules->setSelected(global_rules->count()-1,true);
-    changedGlobal();
-    updateList(global_rules,"/general/filters/global"); 
+    bool ok;
+    QString name = RULENAME("globalRule");
+    if(ok) {
+        global_rules->insertItem(name);
+        global_rules->setSelected(global_rules->count()-1,true);
+        changedGlobal();
+        updateList(global_rules,"/general/filters/global");
+    }
 }
 
 
 void MtpFiltersSettings::addBlock()
 {
-    block_rules->insertItem(RULENAME("blockRule"));
-    block_rules->setSelected(block_rules->count()-1,true);
-    changedBlock();
-    updateList(block_rules,"/general/filters/block");
+    bool ok;
+    QString name = RULENAME("blockRule");
+    if(ok) {
+        block_rules->insertItem(name);
+        block_rules->setSelected(block_rules->count()-1,true);
+        changedBlock();
+        updateList(block_rules,"/general/filters/block");
+    }
 }
 
 
 void MtpFiltersSettings::addLine()
 {
-    line_rules->insertItem(RULENAME("lineRule"));
-    line_rules->setSelected(line_rules->count()-1,true);
-    changedLine();
-    updateList(line_rules,"/general/filters/line");
+    bool ok;
+    QString name = RULENAME("lineRule");
+    if(ok) {
+        line_rules->insertItem(name);
+        line_rules->setSelected(line_rules->count()-1,true);
+        changedLine();
+        updateList(line_rules,"/general/filters/line");
+    }
 }
 
 
 void MtpFiltersSettings::addItem()
 {
-    item_rules->insertItem(RULENAME("itemRule"));
-    item_rules->setSelected(item_rules->count()-1,true);
-    changedItem();
-    updateList(item_rules,"/general/filters/item");
+    bool ok;
+    QString name = RULENAME("itemRule");
+    if(ok) {
+        item_rules->insertItem(name);
+        item_rules->setSelected(item_rules->count()-1,true);
+        changedItem();
+        updateList(item_rules,"/general/filters/item");
+    }
 }
 
 
 void MtpFiltersSettings::addInput()
 {
-    input_rules->insertItem(RULENAME("inputRule"));
-    input_rules->setSelected(input_rules->count()-1,true);
-    changedInput();
-    updateList(input_rules,"/general/filters/input");
+    bool ok;
+    QString name = RULENAME("inputRule");
+    if(ok) {
+        input_rules->insertItem(name);
+        input_rules->setSelected(input_rules->count()-1,true);
+        changedInput();
+        updateList(input_rules,"/general/filters/input");
+    }
 }
 
 
@@ -338,7 +358,7 @@ void MtpFiltersSettings::activateBlock(int index )
         modified_block = false;
     }
     disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
-    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));    
+    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
     disconnect(block_end_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
@@ -347,7 +367,7 @@ void MtpFiltersSettings::activateBlock(int index )
     disconnect(block_subrules_check, SIGNAL(toggled(bool)), this, SLOT(slotBlock()));
     displayBlock(block_rules->text(index));
     connect(block_begin, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
-    connect(block_end, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));    
+    connect(block_end, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
     connect(block_input, SIGNAL(textChanged(const QString &)), SLOT(slotBlock()));
     connect(block_begin_result, SIGNAL(textChanged()), SLOT(slotBlock()));
     connect(block_end_result, SIGNAL(textChanged()), SLOT(slotBlock()));
@@ -429,7 +449,7 @@ void MtpFiltersSettings::slotBlock()
 {
     modified_block = true;
     disconnect(block_begin, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
-    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));    
+    disconnect(block_end, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_input, SIGNAL(textChanged(const QString &)), this, SLOT(slotBlock()));
     disconnect(block_begin_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));
     disconnect(block_end_result, SIGNAL(textChanged()), this, SLOT(slotBlock()));

@@ -35,13 +35,13 @@ BrowserPage::BrowserPage(QWidget *parent, const char *name, Master * session)
     resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
 
     chat_view->setTextFormat(Qt::RichText);
-
+    chat_view->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ) );
     chat_view->setWrapPolicy(QTextBrowser::Anywhere);
     chat_view->setLinkUnderline(true);
 
     QStyleSheetItem *item = new QStyleSheetItem(chat_view->styleSheet(),"mypre");
     item->setWhiteSpaceMode(QStyleSheetItem::WhiteSpacePre);
-    
+
     connect(chat_view,SIGNAL(linkClicked(const QString &)),
             session, SLOT(slotLinkClicked(const QString &)));
 }

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>549</width>
-            <height>320</height>
+            <height>368</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="2" colspan="1">
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="3" colspan="1">
             <property name="name">
                 <cstring>layout7</cstring>
             </property>
@@ -304,6 +304,15 @@
                     </hbox>
                 </widget>
             </grid>
+        </widget>
+        <widget class="QLabel" row="2" column="1">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Note:
+You will need to restart the application to activate changes here</string>
+            </property>
         </widget>
     </grid>
 </widget>

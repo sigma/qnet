@@ -14,6 +14,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+#include <qinputdialog.h>
 
 #include "ChatSession.h"
 #include "telnetmanager.h"
@@ -78,6 +79,8 @@ void TelnetManager::readStdout() {
         text += "\n";
         if (password != "")
             writeStdin(password);
+        else
+            writeStdin(QInputDialog::getText("Password","Password: ",QLineEdit::Password));
         password = "";
     }
 
@@ -101,7 +104,7 @@ void TelnetManager::readStdout() {
 void TelnetManager::writeStdin(const QString& msg) {
     QString to_write(msg);
     to_write = to_write.replace(QRegExp("\n"),"\r\n") + "\r\n";
-    
+
     int index = 0;
     while ((index = to_write.find(IAC,index)) != -1) {
         to_write.insert(index,IAC);

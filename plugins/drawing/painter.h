@@ -51,6 +51,8 @@ protected:
 protected slots:
     virtual void languageChange();
 
+private:
+QString m_prefix;
 };
 
 #endif // PAINTER_H

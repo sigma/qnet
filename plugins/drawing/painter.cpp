@@ -26,7 +26,7 @@
 
 PLUGIN_FACTORY(Painter,"drawing");
 /*
- *  Constructs a Painter as a child of 'parent', with the 
+ *  Constructs a Painter as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
 Painter::Painter( QWidget* parent, const char* name, Master * session )
@@ -61,8 +61,14 @@ Painter::Painter( QWidget* parent, const char* name, Master * session )
     resize( QSize(548, 426).expandedTo(minimumSizeHint()) );
 
     connect( size_box, SIGNAL( valueChanged( int ) ), this, SLOT( slotWidth( int ) ) );
-    
+
     connect(canvas,SIGNAL(drawing(const QString&)),SLOT(sendOutput(const QString&)));
+
+    QRegExp re("\\w+@(\\w+)");
+    if (re.exactMatch(name))
+        m_prefix="senddata " + re.cap(1) + " ";
+    else
+        m_prefix=QString::null;
 }
 
 /*
@@ -134,7 +140,9 @@ void Painter::append(const QString & s) {
 }
 
 void Painter::sendOutput(const QString& msg) {
-  if(getMaster()->context()->getValue("channel") == "Dessin")
+  if (!m_prefix.isNull())
+      getMaster()->send(m_prefix + msg);
+  else if(getMaster()->context()->getValue("channel") == "Dessin")
       getMaster()->send(msg);
   else
       getMaster()->displayStderr("not in Dessin channel");

@@ -74,15 +74,18 @@ void TagsSettings::slotSelectColor()
     map[nameEdit->text()].color = color.rgb();
 }
 
-#define TAGNAME(txt) (QInputDialog::getText("Tag name","Enter a name",QLineEdit::Normal,(txt)))
+#define TAGNAME(txt) (QInputDialog::getText("Tag name","Enter a name",QLineEdit::Normal,(txt),&ok,this))
 
 void TagsSettings::addTag()
 {
+    bool ok;
     QString name = TAGNAME("tag");
-    tags_box->insertItem(name);
-    tags_box->setSelected(tags_box->count()-1,true);
-    map[name]=TagItem(name);
-    slotUpdateInfo(name);
+    if(ok) {
+        tags_box->insertItem(name);
+        tags_box->setSelected(tags_box->count()-1,true);
+        map[name]=TagItem(name);
+        slotUpdateInfo(name);
+    }
 }
 
 void TagsSettings::delTag()

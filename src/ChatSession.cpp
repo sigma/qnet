@@ -120,7 +120,7 @@ void ChatSession::displayStdout(const QString& msg) {
             mm += "<br>";
 #endif
 
-            QRegExp rx("^(-?):(\\w+\\?" "?):(\\w+):(.*)");
+            QRegExp rx("^(-?):(\\w+\\?" "?):([^ :]+):(.*)");
             if (rx.exactMatch(mm)) {
                 QString m(rx.cap(4));
 #if (QT_VERSION < 305)
@@ -221,7 +221,7 @@ void ChatSession::send(const QString & m) {
             m = msg.right(m.length() - last_space);
         }
         QString to_send(prefix + m);
-        mng->writeStdin(m_filter->filterIn(to_send));
+        mng->writeStdin(Filter::expandVars(m_filter->filterIn(to_send),context()));
     }
 
 

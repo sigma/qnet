@@ -18,6 +18,7 @@
 #include <qprocess.h>
 #include <qdir.h>
 #include <iostream>
+
 class ChatSession;
 class MtpSettings;
 class MtpFiltersSettings;
@@ -57,7 +58,6 @@ public slots:
     void slotStoreConfig();
     void fileNew();
     void fileSaveAs();
-    void fileSessions();
     void fileExit();
     void closeCurrentTab();
     void closeTab(QWidget *);

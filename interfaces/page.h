@@ -19,13 +19,13 @@
 #define PLUGIN_FACTORY(a,b)                                                     \
 extern "C" Page* create(QWidget *parent, const char *name, Master *master) {    \
     return new a(parent,name,master);                                           \
-}                                                                               \
-                                                                                \
+}                                                                                \
+                                                                                 \
 extern "C" void destroy(Page* p) {                                              \
-    delete p;                                                                   \
-}                                                                               \
+    delete p;                                                                    \
+}                                                                                \
 extern "C" QString name() {                                                     \
-return b;                                                                       \
+return b;                                                                        \
 }
 
 /**

@@ -36,13 +36,13 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     QSplitter *vsplit = new QSplitter(Qt::Vertical,this);
     chat_view = new MtpBrowser( vsplit, "chat_view" );
     chat_view->setMinimumSize( QSize( 600, 330 ) );
-    
+
     chat_view->setSizePolicy(QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ));
 
     chat_edit = new QTextEdit( vsplit, "chat_edit" );
-    
+
     chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
-    
+
     chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
@@ -66,10 +66,14 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     new_line = new QAction(chat_edit,"new");
     new_line->setAccel(QKeySequence(CTRL + Key_Return));
     pgup = new QAction(chat_edit,"pgup");
-    pgup->setAccel(QKeySequence(Key_PageUp));
+    pgup->setAccel(QKeySequence(ALT + Key_PageUp));
     pgdown = new QAction(chat_edit,"pgdown");
-    pgdown->setAccel(QKeySequence(Key_PageDown));
-    
+    pgdown->setAccel(QKeySequence(ALT + Key_PageDown));
+    home = new QAction(chat_edit,"home");
+    home->setAccel(QKeySequence(ALT + Key_Home));
+    end = new QAction(chat_edit,"end");
+    end->setAccel(QKeySequence(ALT + Key_End));
+
     connect(history_up, SIGNAL(activated()),
             this, SLOT(slotHistoryUp()));
     connect(history_down, SIGNAL(activated()),
@@ -79,7 +83,7 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
 
     connect(chat_edit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
-            
+
     connect(chat_view,SIGNAL(linkClicked(const QString &)),
             session, SLOT(slotLinkClicked(const QString &)));
 
@@ -87,14 +91,18 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
             this,SLOT(slotPageUp()));
     connect(pgdown,SIGNAL(activated()),
             this,SLOT(slotPageDown()));
+    connect(home,SIGNAL(activated()),
+            this,SLOT(slotHome()));
+    connect(end,SIGNAL(activated()),
+            this,SLOT(slotEnd()));
 
     chat_edit->setFocus();
     chat_edit->setWordWrap(QTextEdit::NoWrap);
-    //chat_edit->setTextFormat(Qt::PlainText);
-    
+    chat_edit->setTextFormat(Qt::PlainText);
+
     setPrefix(QString("tell ") + name + " ");
 
-    setFocusProxy(chat_edit);
+    chat_view->setFocusProxy(chat_edit);
 }
 
 
@@ -146,6 +154,14 @@ void TellPage::slotHistoryDown() {
         chat_edit->clear();
         history_iterator = 0;
     }
+}
+
+void TellPage::slotHome() {
+    chat_view->moveCursor(QTextEdit::MoveHome,false);
+}
+
+void TellPage::slotEnd() {
+    chat_view->moveCursor(QTextEdit::MoveEnd,false);
 }
 
 void TellPage::slotNewLine() {

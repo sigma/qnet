@@ -25,6 +25,7 @@
 #include <qaction.h>
 #include <qpopupmenu.h>
 #include <qfiledialog.h>
+#include <qfontdatabase.h>
 
 #include <dlfcn.h>
 
@@ -33,7 +34,6 @@
 #include "ChatSession.h"
 #include "version.h"
 #include "domutil.h"
-#include "SessionsDialog.h"
 #include "mtpsettings.h"
 #include "mtpfilterssettings.h"
 #include "UrlSettings.h"
@@ -44,6 +44,7 @@
 #include "page.h"
 #include "mtpbrowser.h"
 #include "tagssettings.h"
+#include "SessionsSettings.h"
 
 QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
         : QMtp_base(parent, name), m_document() {
@@ -186,6 +187,26 @@ void QMtp::slotConfigure() {
             tags_settings->addTagItem(tag);
         }
     }
+
+    // Sessions :
+
+    SessionsSettings * sessions_settings = new SessionsSettings(m_settings->stack);
+    m_settings->stack->addWidget(sessions_settings,6);
+    m_settings->prop_list->insertItem("Sessions",6);
+    {
+        QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
+        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+            QString name = *it;
+            QString host = DomUtil::readEntry(m_document,"/sessions/" + name + "/host","");
+            QString port = DomUtil::readEntry(m_document,"/sessions/" + name + "/port","");
+            QString login = DomUtil::readEntry(m_document,"/sessions/" + name + "/login","");
+            QString password = DomUtil::readEntry(m_document,"/sessions/" + name + "/password","");
+            bool autoconnect = DomUtil::readBoolEntry(m_document,"/sessions/" + name + "/autoconnect",false);
+            SessionsSettings::SessionItem session(name,host,port,login,password,autoconnect);
+            sessions_settings->addSessionItem(session);
+        }
+    }
+
     connect(m_settings, SIGNAL(end()),
             SLOT(slotStoreConfig()));
 
@@ -201,6 +222,7 @@ void QMtp::slotStoreConfig() {
         FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
         AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
         TagsSettings * tags_settings = (TagsSettings *)m_settings->stack->widget(5);
+        SessionsSettings * sessions_settings = (SessionsSettings *)m_settings->stack->widget(6);
 
         filters_settings->apply();
 
@@ -261,6 +283,28 @@ void QMtp::slotStoreConfig() {
                 DomUtil::writeBoolEntry(m_document,"/appearance/tags/" + it.name + "/spaces",it.collapse);
                 DomUtil::writeIntEntry(m_document,"/appearance/tags/" + it.name + "/size",it.size);
             }
+//            loadStyleSheet();
+        }
+
+        // Sessions :
+        {
+            QStringList l;
+            for (uint i=0; i< sessions_settings->sessions_box->count(); i++)
+                l << sessions_settings->sessions_box->text(i);
+            DomUtil::writeListEntry(m_document,"/general/sessions","session",l);
+
+            QDomElement child = DomUtil::elementByPath(m_document,"/sessions");
+            if(!child.isNull()) child.parentNode().removeChild(child);
+
+            for (uint i=0; i< sessions_settings->sessions_box->count(); i++) {
+                SessionsSettings::SessionItem it = *(sessions_settings->map.find(sessions_settings->sessions_box->text(i)));
+                DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/host",it.host);
+                DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/port",it.port);
+                DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/login",it.login);
+                DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/password",it.password);
+                DomUtil::writeBoolEntry(m_document,"/sessions/" + it.name + "/autoconnect",it.autoconnect);
+            }
+            refreshMenu();
         }
 
         saveConfigFile();
@@ -287,9 +331,6 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
         create_t* create_plugin = (create_t*) dlsym(*it, "create");
         Page* page = create_plugin(tabs,name,ref);
         int index=tabs->indexOf(ref);
-//         for(QMap<QWidget*,ChatSession*>::ConstIterator iter = tab_map.begin(); iter != tab_map.end(); ++iter) {
-//             if(iter.data() == ref) index++;
-//         }
         if (page->isSlave()) {
             tabs->insertTab(page,name,index+1);
             if(pop)
@@ -303,42 +344,6 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
     }
     system_view->append("No type \"" + type + "\" available\n");
     return 0;
-}
-
-void QMtp::fileSessions() {
-    SessionsDialog dlg;
-
-    QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
-    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-        QString name = *it;
-        QString host = DomUtil::readEntry(m_document,"/sessions/" + name + "/host","");
-        QString port = DomUtil::readEntry(m_document,"/sessions/" + name + "/port","");
-        QString login = DomUtil::readEntry(m_document,"/sessions/" + name + "/login","");
-        QString password = DomUtil::readEntry(m_document,"/sessions/" + name + "/password","");
-        bool autoconnect = DomUtil::readBoolEntry(m_document,"/sessions/" + name + "/autoconnect",false);
-        SessionsDialog::SessionItem session(name,host,port,login,password,autoconnect);
-        dlg.addSessionItem(session);
-    }
-
-    if (dlg.exec()) {
-        QStringList l;
-        for (uint i=0; i< dlg.sessions_box->count(); i++)
-            l << dlg.sessions_box->text(i);
-        DomUtil::writeListEntry(m_document,"/general/sessions","session",l);
-
-	QDomElement child = DomUtil::elementByPath(m_document,"/sessions");
-        if(!child.isNull()) child.parentNode().removeChild(child);
-
-        for (uint i=0; i< dlg.sessions_box->count(); i++) {
-            SessionsDialog::SessionItem it = *(dlg.map.find(dlg.sessions_box->text(i)));
-            DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/host",it.host);
-            DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/port",it.port);
-            DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/login",it.login);
-            DomUtil::writeEntry(m_document,"/sessions/" + it.name + "/password",it.password);
-            DomUtil::writeBoolEntry(m_document,"/sessions/" + it.name + "/autoconnect",it.autoconnect);
-        }
-    }
-    refreshMenu();
 }
 
 void QMtp::closeCurrentTab() {
@@ -356,6 +361,7 @@ void QMtp::closeTab(QWidget *w) {
         QMap<QWidget*,ChatSession*>::Iterator it;
         if ((it = tab_map.find(w)) != tab_map.end()) {
             (*it)->kill((Page*)w);
+            tab_map.remove(it);
         } else // session tab
             sessions.remove((ChatSession*)w);
         delete w;
@@ -536,6 +542,7 @@ void QMtp::refreshMenu() {
 }
 
 void QMtp::loadStyleSheet() {
+    QFontDatabase db;
     QStyleSheet * qnet_style = new QStyleSheet(this);
     QStringList tags = DomUtil::readListEntry(m_document,"/general/tags","tag");
     for(QStringList::ConstIterator it = tags.begin(); it != tags.end(); ++it) {
@@ -549,6 +556,9 @@ void QMtp::loadStyleSheet() {
         int size = DomUtil::readIntEntry(m_document,"/appearance/tags/" + *it + "/size");
 
         item->setFontFamily(family);
+        item->setFontItalic(db.italic(family, style));
+        if(db.bold(family, style))
+            item->setFontWeight(QFont::Bold);
         item->setColor(color);
         item->setFontStrikeOut(strike);
         item->setFontUnderline(underline);
@@ -561,7 +571,7 @@ void QMtp::loadStyleSheet() {
 
 void QMtp::launchSession(const QString& name) {
     ChatSession * session = new ChatSession(name,this,tabs,0,&m_document);
-
+    session->toggleUserMenu(false);
     sessions.push_back(session);
 
     tabs->insertTab(session,"@" + name);

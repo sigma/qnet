@@ -42,9 +42,12 @@ void SessionsDialog::slotSubs() {
 }
 
 void SessionsDialog::slotAdd() {
-    QString name = QInputDialog::getText("Session name","Enter a name",QLineEdit::Normal,("session"));
-    SessionItem it(name);
-    addSessionItem(it);
+    bool ok;
+    QString name = QInputDialog::getText("Session name","Enter a name",QLineEdit::Normal,("session"),&ok,this);
+    if(ok) {
+        SessionItem it(name);
+        addSessionItem(it);
+    }
 }
 
 void SessionsDialog::slotDel() {

@@ -24,6 +24,7 @@ class QListBox;
 class QListBoxItem;
 class QTextEdit;
 class QAction;
+class QPopupMenu;
 
 class ChatPage : public Master
 {
@@ -44,10 +45,13 @@ public slots:
     void slotNewLine();
     void slotPageUp();
     void slotPageDown();
-    void ensureFocus();
+    void slotHome();
+    void slotEnd();
     void removeUser(const QString&);
     void addUser(const QString&);
-    
+    void slotContextMenu(QListBoxItem*,const QPoint&);
+    void toggleUserMenu(bool);
+
 protected:
     QGridLayout* ChatPageLayout;
     QStringList history;
@@ -61,7 +65,8 @@ signals:
 	void outputMessage(const QString& );
 
 private:
-    QAction *history_up, *history_down, *new_line, *pgup, *pgdown;
+    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end;
+    QPopupMenu *user_menu;
 };
 
 #endif // CHATPAGE_H

@@ -23,7 +23,7 @@ class MtpBrowser;
 class QGridLayout;
 
 /**
- * 
+ *
  * Yann Hodique
  **/
 class TellPage : public Page {
@@ -38,7 +38,7 @@ public:
     MtpBrowser* chat_view;
 
     QString getText();
-    
+
 public slots:
     virtual void returnPressed();
     void slotHistoryUp();
@@ -46,6 +46,8 @@ public slots:
     void slotNewLine();
     void slotPageUp();
     void slotPageDown();
+    void slotHome();
+    void slotEnd();
 
 protected:
     QGridLayout* TellPageBaseLayout;
@@ -55,7 +57,7 @@ protected slots:
 
 private:
     QString prefix;
-    QAction *history_up, *history_down, *new_line, *pgup, *pgdown;
+    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end;
     QStringList history;
     QStringList::Iterator history_iterator;
 
