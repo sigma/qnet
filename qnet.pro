@@ -4,6 +4,8 @@
 # Target is a subdirs project 
 
 SUBDIRS += interfaces \
+           utils \
+           filters \
            src \
            plugins 
 TEMPLATE = subdirs 

@@ -8,37 +8,19 @@ LANGUAGE = C++
 SOURCES += main.cpp \
            qnet.cpp \
            telnetmanager.cpp \
-           MtpFilter.cpp \
-           GlobalFilter.cpp \
-           BlockFilter.cpp \
-           LineFilter.cpp \
-           ItemFilter.cpp \
-           Filter.cpp \
            ChatSession.cpp \
-           InputFilter.cpp \
-           domutil.cpp \
            SessionsDialog.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
-           MtpRegExp.cpp \
            remotecontrol.cpp \
            chatpage.cpp 
 HEADERS += qnet.h \
            telnetmanager.h \
-           MtpFilter.h \
-           GlobalFilter.h \
-           BlockFilter.h \
-           LineFilter.h \
-           ItemFilter.h \
-           Filter.h \
            ChatSession.h \
-           InputFilter.h \
            version.h \
-           domutil.h \
            SessionsDialog.h \
            UrlSettings.h \
            PrefixSettings.h \
-           MtpRegExp.h \
            remotecontrol.h \
            chatpage.h 
 IMAGES += images/filenew \
@@ -77,6 +59,12 @@ QMAKE_CXXFLAGS_RELEASE += -Os \
                           -pedantic 
 OBJECTS_DIR = .obj 
 MOC_DIR = .moc 
-INCLUDEPATH = ../interfaces 
-LIBS += ../interfaces/libinterfaces.a 
-TARGETDEPS += ../interfaces/libinterfaces.a 
+INCLUDEPATH = ../utils \
+              ../filters \
+              ../interfaces 
+LIBS += ../interfaces/libinterfaces.a \
+        ../filters/libfilters.a \
+        ../utils/libutils.a 
+TARGETDEPS += ../interfaces/libinterfaces.a \
+              ../filters/libfilters.a \
+              ../utils/libutils.a 
