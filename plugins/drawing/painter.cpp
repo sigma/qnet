@@ -134,6 +134,8 @@ void Painter::append(const QString & s) {
 }
 
 void Painter::sendOutput(const QString& msg) {
-    if(getMaster()->context()->getValue("channel") == "Dessin")
-        getMaster()->send(msg);
+  if(getMaster()->context()->getValue("channel") == "Dessin")
+      getMaster()->send(msg);
+  else
+      getMaster()->displayStderr("not in Dessin channel");
 }

@@ -287,9 +287,9 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
         create_t* create_plugin = (create_t*) dlsym(*it, "create");
         Page* page = create_plugin(tabs,name,ref);
         int index=tabs->indexOf(ref);
-        for(QMap<QWidget*,ChatSession*>::ConstIterator iter = tab_map.begin(); iter != tab_map.end(); ++iter) {
-            if(*it == ref) index++;
-        }
+//         for(QMap<QWidget*,ChatSession*>::ConstIterator iter = tab_map.begin(); iter != tab_map.end(); ++iter) {
+//             if(iter.data() == ref) index++;
+//         }
         if (page->isSlave()) {
             tabs->insertTab(page,name,index+1);
             if(pop)
