@@ -16,3 +16,4 @@ MOC_DIR = .moc
 INCLUDEPATH = ../../interfaces 
 LIBS += ../../interfaces/libinterfaces.a 
 TARGETDEPS += ../../interfaces/libinterfaces.a 
+TARGET = ../../lib/affect

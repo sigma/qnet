@@ -16,3 +16,4 @@ LIBS += ../../interfaces/libinterfaces.a
 TARGETDEPS += ../../interfaces/libinterfaces.a 
 SOURCES += emit.cpp 
 HEADERS += emit.h 
+TARGET = ../../lib/emit
