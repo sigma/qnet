@@ -59,7 +59,8 @@ QMtp::QMtp(QWidget *parent, const char *name)
     tabs->setTabPosition((QTabWidget::TabPosition)DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top));
     fortune_page = 0;
     fproc = 0;
-    //rctl = new RemoteControlServerInfo(this,5000,system_view);
+    if (DomUtil::readBoolEntry(m_document,"/remote/enabled",false))
+	rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view);
 
     // plugins
     QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
@@ -77,6 +78,9 @@ QMtp::QMtp(QWidget *parent, const char *name)
 QMtp::~QMtp() {
     saveConfigFile();
     //    delete m_document;
+    // unload plugins :
+    for (QMap<QString,void*>::Iterator it = plugins_map.begin(); it != plugins_map.end(); ++it)
+	dlclose(*it);
 }
 
 void QMtp::slotConfigure() {

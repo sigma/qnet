@@ -538,6 +538,24 @@ void ChatSession::applyFilters() {
         // end of try
     }
 
+    {// Block filter try on "finger" command
+        QString iname("finger_emit");
+
+        QString bname("finger");
+        BlockFilter * f2 = new BlockFilter(bname,m_context);
+        QString pat(":browser:Finger: \\1\\<font face=fixed size=3>\\2\\</font>\\3\\");
+        f2->setResultPattern(pat);
+        QString beg("^(<.*>)?(Login *: \\w+)(<.*>)?");
+        f2->setBeginRegExp(beg);
+        QString end("^(<.*>)?&lt Mtp&gt  End of finger(<.*>)?");
+        f2->setEndRegExp(end);
+
+        f2->enable();
+        f2->setPolicy(Filter::Transient);
+        m_filter->addBlockFilter(f2);
+        // end of try
+    }
+    
     {// Block filter try on info command
         QString bname("info");
         BlockFilter * f2 = new BlockFilter(bname,m_context);

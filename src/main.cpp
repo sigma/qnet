@@ -10,20 +10,13 @@
  ***************************************************************************/
 
 #include <qapplication.h>
-//#include <splash.h>
 
 #include "qnet.h"
 #include "version.h"
 
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
-
-/*
-    Splash *splash;
-    splash = new Splash(0,0,0);
-    QString msg("Ceci est un message de test un peu plus long que le précédent\navec un retour chariot en prime");
-    splash->append(msg);
-*/    
+  
     QMtp * mw = new QMtp();
     mw->setCaption( CLIENT );
     
