@@ -147,8 +147,9 @@ void ChatSession::displayStdout(const QString& msg) {
                         unescape(&output);
                         edit->append(output);
                     }
-                    else
-                        displayStderr("Don't know what to do with : " + mm);
+//                     else {
+//                         displayStderr("Don't know what to do with : " + QStyleSheet::escape(mm));
+//                     }
                 }
             } else {
                 output = Filter::expandVars(mm,context());

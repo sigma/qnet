@@ -44,6 +44,7 @@
 #include "page.h"
 #include "mtpbrowser.h"
 #include "tagssettings.h"
+#include "pluginssettings.h"
 #include "SessionsSettings.h"
 
 QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
@@ -76,9 +77,7 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
         rctl = new RemoteControlServerInfo(this,DomUtil::readIntEntry(m_document,"/remote/port",5000),system_view);
 
     // plugins
-    QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
-    for(QStringList::Iterator it = plugs.begin(); it != plugs.end(); ++it)
-	loadPlugin(*it);
+    loadPlugins();
 
     // autoconnect
     QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
@@ -96,9 +95,7 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
 QMtp::~QMtp() {
     saveConfigFile();
 
-    // unload plugins :
-    for (QMap<QString,void*>::Iterator it = plugins_map.begin(); it != plugins_map.end(); ++it)
-	dlclose(*it);
+    unloadPlugins();
 }
 
 QString QMtp::iconPath() {
@@ -153,18 +150,27 @@ void QMtp::slotConfigure() {
         }
     }
 
+    // Plugins :
+    PluginsSettings * plugins_settings = new PluginsSettings(m_settings->stack);
+    m_settings->stack->addWidget(plugins_settings,2);
+    m_settings->prop_list->insertItem("Plugins",2);
+    {
+        QStringList tags = DomUtil::readListEntry(m_document,"/general/plugins","file");
+        plugins_settings->plugins_box->insertStringList(tags);
+    }
+
     // Filters :
     {
         MtpFiltersSettings * filters_settings = new MtpFiltersSettings(m_settings->stack);
-        m_settings->stack->addWidget(filters_settings,2);
-        m_settings->prop_list->insertItem("Filters",2);
+        m_settings->stack->addWidget(filters_settings,3);
+        m_settings->prop_list->insertItem("Filters",3);
         filters_settings->setDom(&temporary_dom);
     }
 
     // Urls :
     UrlSettings * url_settings = new UrlSettings(m_settings->stack);
-    m_settings->stack->addWidget(url_settings,3);
-    m_settings->prop_list->insertItem("Url",3);
+    m_settings->stack->addWidget(url_settings,4);
+    m_settings->prop_list->insertItem("Url",4);
     {
         QStringList list = DomUtil::readListEntry(m_document,"/urls/available","type");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
@@ -178,8 +184,8 @@ void QMtp::slotConfigure() {
 
     // Prefixes :
     PrefixSettings * prefix_settings = new PrefixSettings(m_settings->stack);
-    m_settings->stack->addWidget(prefix_settings,4);
-    m_settings->prop_list->insertItem("Prefixes",4);
+    m_settings->stack->addWidget(prefix_settings,5);
+    m_settings->prop_list->insertItem("Prefixes",5);
     {
         QStringList list = DomUtil::readListEntry(m_document,"/prefixes","item");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
@@ -190,8 +196,8 @@ void QMtp::slotConfigure() {
 
     // Fortune :
     FortuneSettings * fortune_settings = new FortuneSettings(m_settings->stack);
-    m_settings->stack->addWidget(fortune_settings,5);
-    m_settings->prop_list->insertItem("Fortune",5);
+    m_settings->stack->addWidget(fortune_settings,6);
+    m_settings->prop_list->insertItem("Fortune",6);
     {
         QString args = DomUtil::readEntry(m_document,"/fortune");
         fortune_settings->fortune_edit->setText(args);
@@ -199,8 +205,8 @@ void QMtp::slotConfigure() {
 
     // Appearance :
     AppearanceSettings * appearance_settings = new AppearanceSettings(m_settings->stack);
-    m_settings->stack->addWidget(appearance_settings,6);
-    m_settings->prop_list->insertItem("Appearance",6);
+    m_settings->stack->addWidget(appearance_settings,7);
+    m_settings->prop_list->insertItem("Appearance",7);
     {
         int position = DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top);
         appearance_settings->rbTop->setChecked(position==QTabWidget::Top);
@@ -218,11 +224,12 @@ void QMtp::slotStoreConfig() {
 
         SessionsSettings * sessions_settings = (SessionsSettings *)m_settings->stack->widget(0);
         TagsSettings * tags_settings = (TagsSettings *)m_settings->stack->widget(1);
-        MtpFiltersSettings * filters_settings = (MtpFiltersSettings *)m_settings->stack->widget(2);
-        UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(3);
-        PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(4);
-        FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(5);
-        AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(6);
+        PluginsSettings * plugins_settings = (PluginsSettings *)m_settings->stack->widget(2);
+        MtpFiltersSettings * filters_settings = (MtpFiltersSettings *)m_settings->stack->widget(3);
+        UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(4);
+        PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(5);
+        FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(6);
+        AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(7);
 
         filters_settings->apply();
 
@@ -307,6 +314,20 @@ void QMtp::slotStoreConfig() {
             refreshMenu();
         }
 
+        // Plugins :
+        {
+            QStringList tags;
+            for (uint i=0; i< plugins_settings->plugins_box->count(); i++)
+                tags << plugins_settings->plugins_box->text(i);
+            bool reload = (tags != DomUtil::readListEntry(m_document,"/general/plugins","file"));
+            DomUtil::writeListEntry(m_document,"/general/plugins","file",tags);
+            if (reload) {
+                unloadPlugins();
+                loadPlugins();
+            }
+        }
+
+
         saveConfigFile();
     }
     delete m_settings;
@@ -342,7 +363,7 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
                 this, SLOT(slotTextDisplayed(QWidget *)));
         return page;
     }
-    system_view->append("No type \"" + type + "\" available\n");
+    system_view->append("ERROR: No plugin \"" + type + "\" available. Perhaps you should load lib" + type + ".so\n");
     return 0;
 }
 
@@ -584,4 +605,19 @@ void QMtp::launchSession(const QString& name) {
 void QMtp::launchSession(int index) {
     QStringList list = DomUtil::readListEntry(m_document,"/general/sessions","session");
     this->launchSession(list[index]);
+}
+
+void QMtp::loadPlugins() {
+    QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
+    for(QStringList::Iterator it = plugs.begin(); it != plugs.end(); ++it)
+        loadPlugin(*it);
+}
+
+void QMtp::unloadPlugins() {
+    // unload plugins :
+    for (QMap<QString,void*>::Iterator it = plugins_map.begin(); it != plugins_map.end(); ++it) {
+        system_view->append("Unloading " + it.key());
+        dlclose(*it);
+    }
+    plugins_map.clear();
 }

@@ -6,7 +6,7 @@
 DBFILE = qnet.db
 LANGUAGE = C++
 TEMPLATE = app
-CONFIG += debug \
+CONFIG += release \
 warn_on \
 qt \
 thread
@@ -75,4 +75,5 @@ FORMS += qnet_base.ui \
          appearancesettings.ui \
          mtpfilterssettings.ui \
          sessionssettingsbase.ui \
-         tagssettings.ui
+         tagssettings.ui \
+         pluginssettings.ui

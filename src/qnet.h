@@ -90,6 +90,8 @@ private:
 private slots:
     void launchSession(const QString& name);
     void launchSession(int index);
+    void loadPlugins();
+    void unloadPlugins();
 };
 
 #endif
