@@ -137,8 +137,7 @@ void ChatSession::displayStdout(QString msg) {
 
         escape(&new_msg);
         new_msg = m_filter->filterOut(new_msg);
-#if (QT_VERSION < 0x030100)
-
+#if (QT_VERSION < 305)
         new_msg += "<br>";
 #endif
 
@@ -156,16 +155,14 @@ void ChatSession::displayStdout(QString msg) {
         QStringList list = QStringList::split("\n",msg);
         for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
             QString mmsg = *it;
-#if (QT_VERSION < 0x030100)
-
+#if (QT_VERSION < 305)
             mmsg += "<br>";
 #endif
 
             QRegExp rx("^:(\\w+\\?" "?):(\\w+):(.*)");
             if (rx.exactMatch(mmsg)) {
                 QString m(rx.cap(3));
-#if (QT_VERSION < 0x030100)
-
+#if (QT_VERSION < 305)
                 m += "<br>";
 #endif
 
