@@ -15,18 +15,23 @@
 
 #include "master.h"
 
+#define PLUG_VERSION 20040419
 
-#define PLUGIN_FACTORY(a,b)                                                     \
-extern "C" Page* create(QWidget *parent, const char *name, Master *master) {    \
-    return new a(parent,name,master);                                           \
-}                                                                                \
-                                                                                 \
-extern "C" void destroy(Page* p) {                                              \
-    delete p;                                                                    \
-}                                                                                \
-extern "C" QString name() {                                                     \
-return b;                                                                        \
-}
+#define PLUGIN_FACTORY(a,b)                                             \
+    extern "C" Page* create(QWidget *parent,                            \
+                            const char *name, Master *master) {         \
+        return new a(parent,name,master);                               \
+    }                                                                   \
+                                                                        \
+    extern "C" void destroy(Page* p) {                                  \
+        delete p;                                                       \
+    }                                                                   \
+    extern "C" QString name() {                                         \
+        return b;                                                       \
+    }                                                                   \
+    extern "C" int version() {                                          \
+        return PLUG_VERSION;                                            \
+    }
 
 /**
  *
@@ -62,5 +67,6 @@ signals:
 typedef Page* create_t(QWidget *, const char *, Master *);
 typedef void destroy_t(Page*);
 typedef QString name_t();
+typedef int version_t();
 
 #endif

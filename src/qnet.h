@@ -67,7 +67,8 @@ public slots:
     void readFortune();
     void endFortune();
 
-    void loadPlugin(const QString&);
+    bool loadPlugin(const QString&);
+    bool unloadPlugin(const QString&);
 
     void refreshMenu();
     void loadStyleSheet();
@@ -77,6 +78,7 @@ private:
     QDomDocument temporary_dom;
     QMap<QWidget*,ChatSession*> tab_map;
     QMap<QString,void*> plugins_map;
+    QMap<QString,QString> plugins_name_map;
     QValueList<ChatSession*> sessions;
     QTextBrowser *fortune_page;
     QProcess *fproc;
@@ -90,6 +92,7 @@ private slots:
     void launchSession(int index);
     void loadPlugins();
     void unloadPlugins();
+    void reloadPlugins(const QStringList&);
 };
 
 #endif

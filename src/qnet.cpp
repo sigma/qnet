@@ -321,12 +321,7 @@ void QMtp::slotStoreConfig() {
             QStringList tags;
             for (uint i=0; i< plugins_settings->plugins_box->count(); i++)
                 tags << plugins_settings->plugins_box->text(i);
-            bool reload = (tags != DomUtil::readListEntry(m_document,"/general/plugins","file"));
-            DomUtil::writeListEntry(m_document,"/general/plugins","file",tags);
-            if (reload) {
-                unloadPlugins();
-                loadPlugins();
-            }
+            reloadPlugins(tags);
         }
 
 
@@ -523,24 +518,34 @@ void QMtp::endFortune() {
     fproc = 0;
 }
 
-void QMtp::loadPlugin(const QString& file_name) {
+bool QMtp::loadPlugin(const QString& file_name) {
     system_view->append("Loading " + file_name);
 
     void* plug = dlopen(file_name, RTLD_LAZY);
     if (!plug) {
         system_view->append(QString("Cannot load library: ") + dlerror() + "\n");
-        return;
+        return false;
     }
 
     create_t* create_plugin = (create_t*) dlsym(plug, "create");
     destroy_t* destroy_plugin = (destroy_t*) dlsym(plug, "destroy");
     name_t* name_plugin = (name_t*) dlsym(plug, "name");
-    if (!create_plugin || !destroy_plugin || !name_plugin) {
+    version_t* version_plugin = (version_t*) dlsym(plug, "version");
+    if (!create_plugin || !destroy_plugin || !name_plugin || !version_plugin) {
         system_view->append(QString("Cannot load symbols: ") + dlerror() + "\n");
-	return;
+        dlclose(plug);
+        return false;
+    }
+
+    if(version_plugin() != PLUG_VERSION) {
+        system_view->append(QString("Incompatible plugin: ") + file_name + "\n");
+        dlclose(plug);
+        return false;
     }
 
     plugins_map.insert(name_plugin(),plug);
+    plugins_name_map.insert(file_name,name_plugin());
+    return true;
 }
 
 void QMtp::refreshMenu() {
@@ -599,8 +604,11 @@ void QMtp::launchSession(int index) {
 
 void QMtp::loadPlugins() {
     QStringList plugs = DomUtil::readListEntry(m_document,"/general/plugins","file");
+    QStringList real;
     for(QStringList::Iterator it = plugs.begin(); it != plugs.end(); ++it)
-        loadPlugin(*it);
+        if(loadPlugin(*it))
+            real << *it;
+    DomUtil::writeListEntry(m_document,"/general/plugins","file",real);
 }
 
 void QMtp::unloadPlugins() {
@@ -610,4 +618,45 @@ void QMtp::unloadPlugins() {
         dlclose(*it);
     }
     plugins_map.clear();
+    plugins_name_map.clear();
+}
+
+void QMtp::reloadPlugins(const QStringList& plugs) {
+    QStringList base = DomUtil::readListEntry(m_document,"/general/plugins","file");
+    QStringList plus,minus,final;
+    bool nounload = false;
+
+    for(QStringList::ConstIterator it = plugs.begin(); it != plugs.end(); ++it)
+        if(base.find(*it) == base.end())
+            plus << *it;
+    for(QStringList::ConstIterator it = base.begin(); it != base.end(); ++it)
+        if(plugs.find(*it) == plugs.end())
+            minus << *it;
+        else
+            final << *it;
+    for(QStringList::ConstIterator it = plus.begin(); it != plus.end(); ++it)
+        if(loadPlugin(*it))
+            final << *it;
+    for(QStringList::ConstIterator it = minus.begin(); it != minus.end(); ++it)
+        if(!unloadPlugin(*it)) {
+            nounload = true;
+            final << *it;
+        }
+    DomUtil::writeListEntry(m_document,"/general/plugins","file",final);
+
+    if(nounload)
+        QMessageBox::warning(this,"QNet Warning","Some plugins could not be unloaded (probably in use)",
+                             QMessageBox::Ok,QMessageBox::NoButton);
+}
+
+bool QMtp::unloadPlugin(const QString& filename) {
+    if(sessions.count())
+        return false;
+
+    void *plug = plugins_map[plugins_name_map[filename]];
+    system_view->append("Unloading " + filename);
+    dlclose(plug);
+    plugins_map.remove(plugins_name_map[filename]);
+    plugins_name_map.remove(filename);
+    return true;
 }
