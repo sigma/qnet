@@ -13,7 +13,7 @@
 
 extern "C" {
 
-extern void
+static void
 SWIG_init (void)
 ;
 
@@ -1512,29 +1512,6 @@ _wrap_chatsession_chatpage (SCM s_0)
 
 
 static SCM
-_wrap_chatsession_logged_p (SCM s_0)
-{
-#define FUNC_NAME "chatsession-logged-p"
-    ChatSession *arg1 = (ChatSession *) 0 ;
-    bool result;
-    SCM gswig_result;
-    int gswig_list_p = 0;
-    
-    {
-        arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
-    }
-    result = (bool)(arg1)->isLogged();
-    
-    {
-        gswig_result = SCM_BOOL(result);
-    }
-    
-    return gswig_result;
-#undef FUNC_NAME
-}
-
-
-static SCM
 _wrap_chatsession_close_session (SCM s_0)
 {
 #define FUNC_NAME "chatsession-close-session"
@@ -2063,7 +2040,7 @@ _swigt__p_FontLock,
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
-extern void
+static void
 SWIG_init (void)
 {
     static int _swig_init = 0;
@@ -2115,7 +2092,6 @@ SWIG_init (void)
     scm_c_define_gsubr("chatsession-session-name", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_session_name);
     scm_c_define_gsubr("chatsession-update-filters", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_update_filters);
     scm_c_define_gsubr("chatsession-chatpage", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_chatpage);
-    scm_c_define_gsubr("chatsession-logged-p", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_logged_p);
     scm_c_define_gsubr("chatsession-close-session", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_close_session);
     scm_c_define_gsubr("chatsession-link-clicked", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_link_clicked);
     scm_c_define_gsubr("chatsession-reconnect", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_reconnect);
@@ -2146,7 +2122,20 @@ SWIG_init (void)
 }
 #endif
 extern "C" {
-/* Linkage: simple */
+/* Linkage: module */
+static void SWIG_init_helper(void *data)
+{
+    SWIG_init();
+    scm_c_export("qnet-load-config-file", "qnet-save-config-file", "qnet-get-new-page", "qnet-configure", "qnet-store-config", "qnet-open", "qnet-save", "qnet-exit", "qnet-close-current-tab", "qnet-close-tab", "qnet-load-plugin", "qnet-unload-plugin", "qnet-refresh-menu", "qnet-load-stylesheet", "qnet-launch-session", "qnet-load-plugins", "qnet-unload-plugins", "qnet-reload-plugins", "qnet-sessions-number", "qnet-session", "new-qnet", "delete-qnet", "mainwin-set-use-dock", "mainwin-qmtp", "main-window", "chatsession-display-err", "chatsession-display-out", "chatsession-session-name", "chatsession-update-filters", "chatsession-chatpage", "chatsession-close-session", "chatsession-link-clicked", "chatsession-reconnect", "chatsession-kill", "chatsession-send", "chatsession-incoming", "chatsession-outgoing", "new-face", "new-pattern", "pattern-add", "new-block-pattern", "font-lock-add-pattern", "font-lock-add-multi-pattern", "font-lock-clear", "chat-page-toggle-user-box", "chat-page-font-lock", "main-chat-page-toggle-user-box", "main-chat-page-font-lock", NULL);
+}
+
+SCM
+scm_init_internal_module (void)
+{
+    SCM module = scm_c_define_module("internal",
+    SWIG_init_helper, NULL);
+    return SCM_UNSPECIFIED;
+}
 
 }
 

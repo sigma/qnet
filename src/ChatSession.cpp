@@ -43,11 +43,6 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     createTelnetManager();
 
     displayStderr("Connecting to " + host + ":" + port);
-    login_set = false;
-    enable_stdout = true;
-    receiving_who = false;
-    position = 0;
-    who_demanded = false;
 
     connect(mng, SIGNAL(processExited()),
             this, SLOT(closeSession()));

@@ -15,8 +15,10 @@ CONFIG += release \
           plugin
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-INCLUDEPATH = ../../interfaces
-LIBS += ../../interfaces/libinterfaces.a
+INCLUDEPATH = ../../interfaces \
+../../utils
+LIBS += ../../interfaces/libinterfaces.a \
+../../utils/libutils.a
 TARGETDEPS += ../../interfaces/libinterfaces.a
 TARGET = ../../lib/id
 QMAKE_CXXFLAGS_DEBUG += -Werror \

@@ -3,8 +3,10 @@
 # Subdir relative project main directory: ./utils
 # Target is a library:
 
-SOURCES += domutil.cpp
-HEADERS += domutil.h
+SOURCES += domutil.cpp \
+scm.cpp
+HEADERS += domutil.h \
+scm.h
 TEMPLATE = lib
 CONFIG += release \
           warn_on \

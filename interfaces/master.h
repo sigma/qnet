@@ -29,7 +29,6 @@ class Master : public QObject {
     }
 
     MtpContext* context() { return m_context; }
-    virtual bool isLogged() = 0;
     virtual void displayStderr(const QString&) = 0;
     virtual void displayStdout(const QString&) = 0;
     virtual void send(const QString&) = 0;

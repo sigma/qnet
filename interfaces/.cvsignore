@@ -1,2 +1,4 @@
 .moc
 Makefile
+choicewidget.cpp
+choicewidget.h

@@ -1,0 +1,1 @@
+ swig -guile -c++ -module internal -scm -Linkage module qnet_guile.i

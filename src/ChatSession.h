@@ -46,8 +46,6 @@ public:
 
     MainChatPage *chatpage();
 
-    bool isLogged() {return login_set;}
-
 public slots:
     void closeSession();
     void slotLinkClicked(const QString&);
@@ -75,12 +73,6 @@ private:
 
     QMtp * mtp;
     TelnetManager * mng;
-    QString login;
-    bool login_set;
-    bool enable_stdout;
-    bool who_demanded;
-    bool receiving_who;
-    int position;
 
     QString host, port, session_name;
 

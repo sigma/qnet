@@ -14,8 +14,6 @@ public:
 
     %name(chatpage) MainChatPage *chatpage();
 
-    %name(logged_p) bool isLogged() {return login_set;}
-
     %name(close_session) void closeSession();
     %name(link_clicked) void slotLinkClicked(const QString&);
     %name(reconnect) void slotReconnect();

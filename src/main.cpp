@@ -25,11 +25,9 @@ SCM init(void *) {
     return scm_primitive_load(scm_makfrom0str((QDir::homeDirPath() + "/.qnet.scm").ascii()));
 }
 
-void guile_global_init(void *) {
+void guile_global_init() {
     guile_chatsession_created_hook=scm_make_hook(SCM_MAKINUM(0));
     scm_c_define("chatsession-created-hook",guile_chatsession_created_hook);
-
-    scm_c_export("chat-page-font-lock", NULL);
 }
 
 int main( int argc, char ** argv ) {
@@ -37,8 +35,9 @@ int main( int argc, char ** argv ) {
     QString rc;
 
     scm_init_guile();
-    scm_c_define_module("internal", guile_global_init, NULL);
-    SWIG_init();
+    scm_init_internal_module();
+
+    guile_global_init();
 
     while (1)
     {
