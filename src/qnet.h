@@ -43,7 +43,7 @@ public:
 
     bool loadConfigFile();
     bool saveConfigFile();
-    Page * getNewPage(const QString&, const QString&, ChatSession *);
+    Page * getNewPage(const QString&, const QString&, ChatSession *, bool pop = true);
     QString iconPath();
     QString rcPath() {
         return (m_rcpath.isNull()?(DEFAULT_RC_PATH):m_rcpath);

@@ -221,13 +221,14 @@ void QMtp::fileNew() {
     }
 }
 
-Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * ref) {
+Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * ref, bool pop) {
     QMap<QString,void*>::Iterator it;
     if((it = plugins_map.find(type)) != plugins_map.end()) {
 	create_t* create_plugin = (create_t*) dlsym(*it, "create");
 	Page* page = create_plugin(tabs,name,ref);
 	if (page->isSlave()) {
-	    tabs->addTab(page,name);
+	    tabs->insertTab(page,name);
+        if(pop)
             tabs->showPage(page);
 	}
 	tab_map.insert(page,ref);
@@ -407,7 +408,7 @@ void QMtp::slotDisplayFortune() {
 
         fortune_page->setWrapPolicy(QTextBrowser::Anywhere);
 
-        tabs->addTab(fortune_page,"Fortune");
+        tabs->insertTab(fortune_page,"Fortune");
         tabs->showPage(fortune_page);
     }
 
@@ -474,7 +475,7 @@ void QMtp::launchSession(const QString& name) {
 
     sessions.push_back(session);
 
-    tabs->addTab(session,name);
+    tabs->insertTab(session,name);
     tabs->showPage(session);
 
     connect(session, SIGNAL(textDisplayed(QWidget *)),
