@@ -10,13 +10,25 @@
  ***************************************************************************/
 #include <iostream>
 #include <qapplication.h>
+#include <qdir.h>
 
 #include "mainwin.h"
 #include "qnet.h"
 
+#include "qnet_guile_wrap.cxx"
+
+MainWin * main_window;
+
+SCM init(void *) {
+    return scm_primitive_load(scm_makfrom0str((QDir::homeDirPath() + "/.qnet.scm").ascii()));
+}
+
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
     QString rc;
+
+    scm_init_guile();
+    SWIG_init();
 
     while (1)
     {
@@ -31,11 +43,16 @@ int main( int argc, char ** argv ) {
                 break;
         }
     }
-    MainWin* m = new MainWin(false,false,"main_window",rc);
-    m->setUseDock();
+    main_window = new MainWin(false,false,"main_window",rc);
+
+    scm_internal_catch (SCM_BOOL_T,
+                        init, NULL,
+                        scm_handle_by_message_noexit, NULL);
+
+    main_window->setUseDock();
 
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-    a.connect( m, SIGNAL(closeProgram()), &a, SLOT(quit()) );
+    a.connect( main_window, SIGNAL(closeProgram()), &a, SLOT(quit()) );
 
     return a.exec();
 }

@@ -6,7 +6,7 @@
 DBFILE = qnet.db
 LANGUAGE = C++
 TEMPLATE = app
-CONFIG += release \
+CONFIG += debug \
 warn_on \
 qt \
 thread
@@ -78,3 +78,5 @@ QMAKE_CXXFLAGS_RELEASE += -Wall \
                           -ansi \
                           -pedantic \
                           -Wno-long-long
+QMAKE_LFLAGS_DEBUG = -lguile
+QMAKE_LFLAGS_RELEASE = -lguile

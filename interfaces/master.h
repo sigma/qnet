@@ -31,12 +31,12 @@ class Master : public QObject {
     virtual bool isLogged() = 0;
     virtual void displayStderr(const QString&) = 0;
     virtual void displayStdout(const QString&) = 0;
-    virtual void send(const QString &) = 0;
+    virtual void send(const QString&) = 0;
 
 public slots:
-    virtual void incoming(const QString &) {}
-    virtual void outgoing(const QString &) {}
-    virtual void slotLinkClicked(const QString &) {}
+    virtual void incoming(const QString&) {}
+    virtual void outgoing(const QString&) {}
+    virtual void slotLinkClicked(const QString&) {}
     virtual void closeSession() {}
     virtual void slotReconnect() {}
 

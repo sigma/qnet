@@ -24,6 +24,7 @@ class MtpFiltersSettings;
 class UrlSettings;
 class Page;
 class RemoteControlServerInfo;
+class QSocket;
 
 #define DEFAULT_RC_PATH (QDir::homeDirPath() + "/.qnetrc")
 
@@ -72,6 +73,10 @@ public slots:
     void refreshMenu();
     void loadStyleSheet();
 
+    void returnPressed();
+    void displayOut();
+    void displayErr();
+
 private:
     QDomDocument m_document;
     QDomDocument temporary_dom;
@@ -85,13 +90,19 @@ private:
     RemoteControlServerInfo *rctl;
     QString m_rcpath;
     MtpSettings *m_settings;
+    QSocket *out, *err;
 
-private slots:
+public slots:
     void launchSession(const QString& name);
     void launchSession(int index);
     void loadPlugins();
     void unloadPlugins();
     void reloadPlugins(const QStringList&);
+
+public:
+    int sessionsNumber() {return sessions.size();}
+    ChatSession *session(uint i) {return (i<sessions.size()) ? sessions[i] : 0;}
+
 };
 
 #endif

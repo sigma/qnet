@@ -28,6 +28,8 @@
 
 #include <dlfcn.h>
 
+#include <libguile.h>
+
 #include "qnet.h"
 #include "connectionbox.h"
 #include "ChatSession.h"
@@ -45,8 +47,30 @@
 #include "pluginssettings.h"
 #include "SessionsSettings.h"
 
+static int outpipe[2];
+static int errpipe[2];
+
 QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
         : QMtp_base(parent, name), m_document() {
+
+    pipe(outpipe);
+    pipe(errpipe);
+    dup2(outpipe[1], 1);
+    dup2(errpipe[1], 2);
+
+    out = new QSocket(this);
+    out->setSocket(outpipe[0]);
+    err = new QSocket(this);
+    err->setSocket(errpipe[0]);
+
+    connect(out, SIGNAL(readyRead()), this, SLOT(displayOut()));
+    connect(err, SIGNAL(readyRead()), this, SLOT(displayErr()));
+
+    connect(system_edit, SIGNAL(returnPressed()),
+            this, SLOT(returnPressed()));
+
+    system_edit->setFocus();
+    system_view->setFocusProxy(system_edit);
 
     // kick out this useless status bar
     delete statusBar();
@@ -657,4 +681,32 @@ bool QMtp::unloadPlugin(const QString& filename) {
     plugins_map.remove(plugins_name_map[filename]);
     plugins_name_map.remove(filename);
     return true;
+}
+
+SCM body (void * buffer) {
+    SCM res = scm_eval_string(scm_makfrom0str((char *)buffer));
+    return scm_write_line(res, scm_current_output_port());
+//    return res;
+}
+
+void QMtp::returnPressed() {
+    std::string text = system_edit->text();
+
+//    view->append("eval : " + text);
+    const char *buffer = text.c_str();
+
+    scm_internal_catch (SCM_BOOL_T,
+                        body, (void *)buffer,
+                        scm_handle_by_message_noexit, NULL);
+    system_edit->clear();
+}
+
+void QMtp::displayOut() {
+    while(out->canReadLine())
+        system_view->append(out->readLine());
+}
+
+void QMtp::displayErr() {
+    while(err->canReadLine())
+        system_view->append(err->readLine());
 }

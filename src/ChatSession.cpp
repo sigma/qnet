@@ -129,7 +129,7 @@ void ChatSession::displayStdout(const QString& msg) {
     }
 }
 
-const QString & ChatSession::sessionName() const {
+const QString& ChatSession::sessionName() const {
     return session_name;
 }
 
@@ -141,7 +141,7 @@ void ChatSession::kill(Page * ref) {
         }
 }
 
-void ChatSession::send(const QString & m) {
+void ChatSession::send(const QString& m) {
     QString msg(m);
 
     QString prefix = "";
@@ -183,11 +183,11 @@ void ChatSession::closeSession() {
     QMessageBox::information(m_chatpage,"Connection lost","Lost connection with host " + host);
 }
 
-void ChatSession::slotLinkClicked(const QString & link) {
+void ChatSession::slotLinkClicked(const QString& link) {
 
     QStringList list = DomUtil::readListEntry(*m_dom,"/urls/available","type");
     for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
-        if(link.startsWith(*it))
+        if(QString(link).startsWith(*it))
             executeShellCommand(DomUtil::readEntry(*m_dom,QString("/urls/" + *it + "/command")).replace(QRegExp("%l"),link));
 }
 
@@ -202,11 +202,11 @@ void ChatSession::unescape(QString * msg) {
     *msg = msg->replace(QRegExp("&bks "),"\\");
 }
 
-void ChatSession::incoming(const QString &user) {
+void ChatSession::incoming(const QString& user) {
     m_chatpage->addUser(user);
 }
 
-void ChatSession::outgoing(const QString &user) {
+void ChatSession::outgoing(const QString& user) {
     m_chatpage->removeUser(user);
 }
 

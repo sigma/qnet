@@ -39,7 +39,7 @@ public:
 
     void displayStderr(const QString&);
     void displayStdout(const QString&);
-    const QString & sessionName() const;
+    const QString& sessionName() const;
     QMtp* topLevel() const;
 
     void updateFilters();
@@ -50,13 +50,13 @@ public:
 
 public slots:
     void closeSession();
-    void slotLinkClicked(const QString &);
+    void slotLinkClicked(const QString&);
     void slotReconnect();
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
-    void send(const QString &);
-    void incoming(const QString &);
-    void outgoing(const QString &);
+    void send(const QString&);
+    void incoming(const QString&);
+    void outgoing(const QString&);
 
 signals:
 	void outputMessage(const QString& );
