@@ -63,6 +63,8 @@ protected:
     QStringList history;
     QStringList::Iterator history_iterator;
 
+    virtual void resizeEvent ( QResizeEvent * );
+
 protected slots:
     virtual void languageChange();
 

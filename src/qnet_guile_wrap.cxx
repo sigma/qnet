@@ -35,15 +35,278 @@ private:
 };                                                    
 #endif
 
+/*************************************************************** -*- c -*-
+ * guile/precommon.swg
+ *
+ * Rename all exported symbols from common.swg, to avoid symbol
+ * clashes if multiple interpreters are included
+ *
+ ************************************************************************/
+
+#define SWIG_TypeRegister    SWIG_Guile_TypeRegister
+#define SWIG_TypeCheck       SWIG_Guile_TypeCheck
+#define SWIG_TypeCast        SWIG_Guile_TypeCast
+#define SWIG_TypeDynamicCast SWIG_Guile_TypeDynamicCast
+#define SWIG_TypeName        SWIG_Guile_TypeName
+#define SWIG_TypeQuery       SWIG_Guile_TypeQuery
+#define SWIG_TypeClientData  SWIG_Guile_TypeClientData
+#define SWIG_PackData        SWIG_Guile_PackData 
+#define SWIG_UnpackData      SWIG_Guile_UnpackData 
+
+
+/***********************************************************************
+ * common.swg
+ *
+ *     This file contains generic SWIG runtime support for pointer
+ *     type checking as well as a few commonly used macros to control
+ *     external linkage.
+ *
+ * Author : David Beazley (beazley@cs.uchicago.edu)
+ *
+ * Copyright (c) 1999-2000, The University of Chicago
+ * 
+ * This file may be freely redistributed without license or fee provided
+ * this copyright message remains intact.
+ ************************************************************************/
+
+#include <string.h>
+
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#  if defined(_MSC_VER) || defined(__GNUC__)
+#    if defined(STATIC_LINKED)
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) extern a
+#    else
+#      define SWIGEXPORT(a) __declspec(dllexport) a
+#      define SWIGIMPORT(a) extern a
+#    endif
+#  else
+#    if defined(__BORLANDC__)
+#      define SWIGEXPORT(a) a _export
+#      define SWIGIMPORT(a) a _export
+#    else
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) a
+#    endif
+#  endif
+#else
+#  define SWIGEXPORT(a) a
+#  define SWIGIMPORT(a) a
+#endif
+
+#ifdef SWIG_GLOBAL
+#  define SWIGRUNTIME(a) SWIGEXPORT(a)
+#else
+#  define SWIGRUNTIME(a) static a
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef void *(*swig_converter_func)(void *);
+typedef struct swig_type_info *(*swig_dycast_func)(void **);
+
+typedef struct swig_type_info {
+  const char             *name;
+  swig_converter_func     converter;
+  const char             *str;
+  void                   *clientdata;
+  swig_dycast_func        dcast;
+  struct swig_type_info  *next;
+  struct swig_type_info  *prev;
+} swig_type_info;
+
+#ifdef SWIG_NOINCLUDE
+
+SWIGIMPORT(swig_type_info *) SWIG_TypeRegister(swig_type_info *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
+SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
+SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
+SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
+SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
+SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
+
+#else
+
+static swig_type_info *swig_type_list = 0;
+
+/* Register a type mapping with the type-checking */
+SWIGRUNTIME(swig_type_info *)
+SWIG_TypeRegister(swig_type_info *ti) {
+  swig_type_info *tc, *head, *ret, *next;
+  /* Check to see if this type has already been registered */
+  tc = swig_type_list;
+  while (tc) {
+    if (strcmp(tc->name, ti->name) == 0) {
+      /* Already exists in the table.  Just add additional types to the list */
+      if (tc->clientdata) ti->clientdata = tc->clientdata;
+      head = tc;
+      next = tc->next;
+      goto l1;
+    }
+    tc = tc->prev;
+  }
+  head = ti;
+  next = 0;
+
+  /* Place in list */
+  ti->prev = swig_type_list;
+  swig_type_list = ti;
+
+  /* Build linked lists */
+  l1:
+  ret = head;
+  tc = ti + 1;
+  /* Patch up the rest of the links */
+  while (tc->name) {
+    head->next = tc;
+    tc->prev = head;
+    head = tc;
+    tc++;
+  }
+  if (next) next->prev = head;
+  head->next = next;
+  return ret;
+}
+
+/* Check the typename */
+SWIGRUNTIME(swig_type_info *) 
+SWIG_TypeCheck(char *c, swig_type_info *ty) {
+  swig_type_info *s;
+  if (!ty) return 0;        /* Void pointer */
+  s = ty->next;             /* First element always just a name */
+  do {
+    if (strcmp(s->name,c) == 0) {
+      if (s == ty->next) return s;
+      /* Move s to the top of the linked list */
+      s->prev->next = s->next;
+      if (s->next) {
+        s->next->prev = s->prev;
+      }
+      /* Insert s as second element in the list */
+      s->next = ty->next;
+      if (ty->next) ty->next->prev = s;
+      ty->next = s;
+      s->prev = ty;
+      return s;
+    }
+    s = s->next;
+  } while (s && (s != ty->next));
+  return 0;
+}
+
+/* Cast a pointer up an inheritance hierarchy */
+SWIGRUNTIME(void *) 
+SWIG_TypeCast(swig_type_info *ty, void *ptr) {
+  if ((!ty) || (!ty->converter)) return ptr;
+  return (*ty->converter)(ptr);
+}
+
+/* Dynamic pointer casting. Down an inheritance hierarchy */
+SWIGRUNTIME(swig_type_info *) 
+SWIG_TypeDynamicCast(swig_type_info *ty, void **ptr) {
+  swig_type_info *lastty = ty;
+  if (!ty || !ty->dcast) return ty;
+  while (ty && (ty->dcast)) {
+    ty = (*ty->dcast)(ptr);
+    if (ty) lastty = ty;
+  }
+  return lastty;
+}
+
+/* Return the name associated with this type */
+SWIGRUNTIME(const char *)
+SWIG_TypeName(const swig_type_info *ty) {
+  return ty->name;
+}
+
+/* Search for a swig_type_info structure */
+SWIGRUNTIME(swig_type_info *)
+SWIG_TypeQuery(const char *name) {
+  swig_type_info *ty = swig_type_list;
+  while (ty) {
+    if (ty->str && (strcmp(name,ty->str) == 0)) return ty;
+    if (ty->name && (strcmp(name,ty->name) == 0)) return ty;
+    ty = ty->prev;
+  }
+  return 0;
+}
+
+/* Set the clientdata field for a type */
+SWIGRUNTIME(void)
+SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
+  swig_type_info *tc, *equiv;
+  if (ti->clientdata == clientdata) return;
+  ti->clientdata = clientdata;
+  equiv = ti->next;
+  while (equiv) {
+    if (!equiv->converter) {
+      tc = swig_type_list;
+      while (tc) {
+        if ((strcmp(tc->name, equiv->name) == 0))
+          SWIG_TypeClientData(tc,clientdata);
+        tc = tc->prev;
+      }
+    }
+    equiv = equiv->next;
+  }
+}
+
+/* Pack binary data into a string */
+SWIGRUNTIME(char *)
+SWIG_PackData(char *c, void *ptr, int sz) {
+  static char hex[17] = "0123456789abcdef";
+  int i;
+  unsigned char *u = (unsigned char *) ptr;
+  register unsigned char uu;
+  for (i = 0; i < sz; i++,u++) {
+    uu = *u;
+    *(c++) = hex[(uu & 0xf0) >> 4];
+    *(c++) = hex[uu & 0xf];
+  }
+  return c;
+}
+
+/* Unpack binary data from a string */
+SWIGRUNTIME(char *)
+SWIG_UnpackData(char *c, void *ptr, int sz) {
+  register unsigned char uu = 0;
+  register int d;
+  unsigned char *u = (unsigned char *) ptr;
+  int i;
+  for (i = 0; i < sz; i++, u++) {
+    d = *(c++);
+    if ((d >= '0') && (d <= '9'))
+      uu = ((d - '0') << 4);
+    else if ((d >= 'a') && (d <= 'f'))
+      uu = ((d - ('a'-10)) << 4);
+    d = *(c++);
+    if ((d >= '0') && (d <= '9'))
+      uu |= (d - '0');
+    else if ((d >= 'a') && (d <= 'f'))
+      uu |= (d - ('a'-10));
+    *u = uu;
+  }
+  return c;
+}
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
 /* -*- c -*-
  * -----------------------------------------------------------------------
- * Lib/guile/guile_gh_run.swg
+ * swig_lib/guile/guile_scm_run.swg
  *
- * Guile GH runtime file
- * Copyright (C) 2000 Matthias Koeppe
+ * Author: John Lenz <jelenz@wisc.edu>
  * ----------------------------------------------------------------------- */
 
-#include "guile/gh.h"
+#include <libguile.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -52,451 +315,283 @@ private:
 extern "C" {
 #endif
 
+typedef SCM (*swig_guile_proc)();
+typedef SCM (*guile_destructor)(SCM);
+
+typedef struct swig_guile_clientdata {
+  guile_destructor destroy;
+  SCM goops_class;
+} swig_guile_clientdata;
+
+#define SWIG_scm2str(s) \
+  SWIG_Guile_scm2newstr(s, NULL)
 #define SWIG_malloc(size) \
   SCM_MUST_MALLOC(size)
 #define SWIG_free(mem) \
   scm_must_free(mem)
 #define SWIG_ConvertPtr(s, result, type, flags) \
-  SWIG_Guile_GetPtr(s, result, type)
+  SWIG_Guile_ConvertPtr(s, result, type, flags)
 #define SWIG_MustGetPtr(s, type, argnum, flags) \
-  SWIG_Guile_MustGetPtr(s, type, argnum, FUNC_NAME)
+  SWIG_Guile_MustGetPtr(s, type, argnum, flags, FUNC_NAME)
 #define SWIG_NewPointerObj(ptr, type, owner) \
-  SWIG_Guile_MakePtr((void*)ptr, type)
-
-/* Ignore object-ownership changes in gh mode */
-#define SWIG_Guile_MarkPointerNoncollectable(s) (s)
-#define SWIG_Guile_MarkPointerDestroyed(s) (s)
-  
+  SWIG_Guile_NewPointerObj((void*)ptr, type, owner)
+#define SWIG_PropagateClientData(type) \
+  SWIG_Guile_PropagateClientData(type)
 #define SWIG_contract_assert(expr, msg)				\
   if (!(expr))							\
-    scm_error(gh_symbol2scm("swig-contract-assertion-failed"),	\
+    scm_error(scm_str2symbol("swig-contract-assertion-failed"),	\
 	      (char *) FUNC_NAME, (char *) msg,			\
 	      SCM_EOL, SCM_BOOL_F); else
-
-#if defined(SWIG_NOINCLUDE)
-#	define SWIGSTATIC
-#elif defined(SWIG_GLOBAL)
-#	define SWIGSTATIC
-#else
-#	define SWIGSTATIC static
-#endif
-
-#define GH_NOT_PASSED    SCM_UNDEFINED
-#define GH_UNSPECIFIED   SCM_UNSPECIFIED
-
-#define SWIG_APPEND_VALUE(object)						\
-    if (gswig_result == GH_UNSPECIFIED)						\
-        gswig_result = object;							\
-    else {									\
-        if (!gswig_list_p) {							\
-	    gswig_list_p = 1;							\
-	    gswig_result = gh_list(gswig_result, object, GH_NOT_PASSED);	\
-        }									\
-        else									\
-            gswig_result = gh_append2(gswig_result,				\
-                                      gh_list(object, GH_NOT_PASSED));		\
-    }
-
-#define GUILE_APPEND_RESULT SWIG_APPEND_VALUE
   
-/* scm_values was implemented on C level in 1.4.1, and the prototype
-   is not included in libguile.h, so play safe and lookup `values'... */
-#define GUILE_MAYBE_VALUES						\
-    if (gswig_list_p)							\
-        gswig_result = gh_apply(gh_lookup("values"), gswig_result);
-    
-#define GUILE_MAYBE_VECTOR				\
-    if (gswig_list_p)					\
-        gswig_result = gh_list_to_vector(gswig_result);
+#ifdef SWIG_NOINCLUDE
 
-static char *
-SWIG_scm2str (SCM s)
-{
-  return gh_scm2newstr (s, NULL);
-}
-
-#define GSWIG_scm2str SWIG_scm2str
-
-/* SCM_CHAR and SCM_CHARP were introduced in Guile 1.4; the following is for
-   1.3.4 compatibility. */
-#ifndef SCM_CHAR
-#  define SCM_CHAR SCM_ICHR
-#endif
-#ifndef SCM_CHARP
-#  define SCM_CHARP SCM_ICHRP
-#endif
-
-/* This function replaces gh_scm2char, which is broken in Guile 1.4 */
-static char
-GSWIG_scm2char (SCM s)
-{
-  if (SCM_CHARP(s)) return SCM_CHAR(s);
-  scm_wrong_type_arg(NULL, 0, s);
-}
-#define gh_scm2char GSWIG_scm2char
-
-/* More 1.3.4 compatibility */
-#ifndef SCM_INPUT_PORT_P
-#  define SCM_INPUT_PORT_P SCM_INPORTP
-#  define SCM_OUTPUT_PORT_P SCM_OUTPORTP
-#endif
-
-/* Type system */
-
-typedef void *(*swig_converter_func)(void *);
-typedef struct swig_type_info *(*swig_dycast_func)(void **);
-
-typedef struct SwigPtrType SwigPtrType;
-
-typedef struct swig_type_info {
-  const char  *name;
-  swig_converter_func converter;
-  const char  *str;
-  void        *clientdata;
-  size_t tag;
-  swig_dycast_func        dcast;
-} swig_type_info;
-
-SWIGSTATIC void
-SWIG_Guile_RegisterTypes (swig_type_info **table,
-			  swig_type_info **init);
-
-/* Register a new type-mapping with the type-checker.  origtype is the
-   original datatype and newtype is an equivalent type.  cast is optional
-   pointer to a function to cast pointer values between types (this is
-   typically used to cast pointers from derived classes to base classes in
-   C++).  */
-
-SWIGSTATIC void
-SWIG_RegisterMapping (const char *origtype, const char *newtype,
-                      swig_converter_func cast);
-
-
-/* Dynamic pointer casting. Down an inheritance hierarchy */
-SWIGSTATIC swig_type_info * 
-SWIG_TypeDynamicCast(swig_type_info *ty, void **ptr);
+/* Interface helper function */
+SWIGIMPORT(char *) SWIG_Guile_scm2newstr(SCM str, size_t *len);
 
 /* Register SWIG smobs with Guile.  */
-SWIGSTATIC void
-SWIG_Guile_Init();
-
-/* Initialization function for this SWIG module; actually renamed by a
-   #define */
-/* extern void SWIG_init(); */
-
+SWIGIMPORT(void) SWIG_Guile_Init();
 /* Get a pointer value from a smob.  If there is a type-mismatch,
    return nonzero; on success, return 0.  */
-SWIGSTATIC int
-SWIG_Guile_GetPtr (SCM s, void **result, swig_type_info *type);
-
+SWIGIMPORT(int) SWIG_Guile_ConvertPtr(SCM s, void **result, swig_type_info *type, int flags);
 /* Get a pointer value from a smob.  If there is a type-mismatch,
    signal a wrong-type-arg error for the given argument number. */
-SWIGSTATIC void *
-SWIG_Guile_MustGetPtr (SCM s, swig_type_info *type,
-		       int argnum, const char *func_name);
-
+SWIGIMPORT(void *) SWIG_Guile_MustGetPtr(SCM s, swig_type_info *type, int argnum, int flags, const char *func_name);
 /* Make a smob from a pointer and typeinfo.  */
-SWIGSTATIC SCM
-SWIG_Guile_MakePtr (void *ptr, swig_type_info *type);
-
+SWIGIMPORT(SCM) SWIG_Guile_NewPointerObj(void *ptr, swig_type_info *type, int owner);
 /* Get arguments from an argument list */
-SWIGSTATIC int
-SWIG_Guile_GetArgs (SCM *dest, SCM rest,
-		    int reqargs, int optargs,
-		    const char *procname);
+SWIGIMPORT(int) SWIG_Guile_GetArgs(SCM *dest, SCM rest, int reqargs, int optargs, const char *procname);
+/* Propagate client data to equivalent types */
+SWIGIMPORT(void) 
+SWIG_Guile_PropagateClientData(swig_type_info *type);
+/* Make a pointer object non-collectable */
+SWIGIMPORT(void)
+SWIG_Guile_MarkPointerNoncollectable(SCM s);
+/* Mark a pointer object destroyed */
+SWIGIMPORT(void)
+SWIG_Guile_MarkPointerDestroyed(SCM s);
+       
+#else
 
-typedef SCM (*swig_guile_proc)();
+SWIGRUNTIME(char *) 
+SWIG_Guile_scm2newstr(SCM str, size_t *len) {
+#define FUNC_NAME "SWIG_Guile_scm2newstr"
+  char *ret;
+  size_t l;
 
-#ifdef __cplusplus
-}
-#endif
+  l = SCM_STRING_LENGTH(str);
+  ret = (char *) SWIG_malloc( (l + 1) * sizeof(char));
+  if (!ret) return NULL;
 
-/* guiledec.swg ends here */
-
-#ifndef SWIG_NOINCLUDE
-/* SWIG pointer structure */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-struct SwigCast {
-  unsigned short      type;		  /* Index into SwigPtrTbl          */
-  void               *(*cast)(void *);    /* Pointer casting function       */
-  struct SwigCast    *next;		  /* Linked list pointer            */
-};
-
-struct SwigPtrType {
-  const char         *name;               /* Datatype name                  */
-  const char	     *prettyname;         /* Pretty datatype name           */
-  unsigned short      tag;		  /* Index in SwigPtrTable          */
-  struct SwigCast    *cast;		  /* List of compatible types       */
-};
-
-/* Some variables  */
-
-static int SwigPtrMax  = 64;            /* Max entries that can be held */
-                                        /* (may be adjusted dynamically) */
-static int SwigPtrN    = 0;             /* Current number of entries */
-static int SwigPtrSort = 0;             /* Status flag indicating sort */
-
-/* Pointer table */
-static SwigPtrType *SwigPtrList = 0;    /* Table containing types and
-					   equivalences; items will only
-                                           be appended */
-static size_t *SwigPtrTbl = 0;          /* Sorted indirect table; items will
-					   be inserted */
-
-/* Sort comparison function */
-static int
-swigsort (const void *data1, const void *data2)
-{
-  size_t index1 = * (size_t *) data1;
-  size_t index2 = * (size_t *) data2;
-  return strcmp(SwigPtrList[index1].name, SwigPtrList[index2].name);
+  memcpy(ret, SCM_STRING_CHARS(str), l);
+  ret[l] = '\0';
+  if (len) *len = l;
+  return ret;
+#undef FUNC_NAME
 }
 
-/* Register a new datatype with the type-checker */
-SWIGSTATIC size_t
-SWIG_RegisterType (const char *type, const char *prettyname)
+static scm_t_bits swig_tag = 0;
+static scm_t_bits swig_collectable_tag = 0;
+static scm_t_bits swig_destroyed_tag = 0;
+static SCM swig_make_func = SCM_EOL;
+static SCM swig_keyword = SCM_EOL;
+static SCM swig_symbol = SCM_EOL;
+
+#define SWIG_Guile_GetSmob(x) \
+  ( SCM_NNULLP(x) && SCM_INSTANCEP(x) && SCM_NFALSEP(scm_slot_exists_p(x, swig_symbol)) \
+      ? scm_slot_ref(x, swig_symbol) : (x) )
+
+SWIGRUNTIME(SCM)
+SWIG_Guile_NewPointerObj(void *ptr, swig_type_info *type, int owner)
 {
-  int i;
+  if (ptr == NULL)
+    return SCM_EOL;
+  else {
+    SCM smob;
+    swig_guile_clientdata *cdata = (swig_guile_clientdata *) type->clientdata;
+    if (owner)
+      SCM_NEWSMOB2(smob, swig_collectable_tag, ptr, (void *) type);
+    else
+      SCM_NEWSMOB2(smob, swig_tag, ptr, (void *) type);
 
-  /* Allocate the pointer table if necessary */
-  if (!SwigPtrList) {
-    SwigPtrList = (SwigPtrType *) malloc(SwigPtrMax*sizeof(SwigPtrType));
-    SwigPtrTbl = (size_t *) malloc(SwigPtrMax*sizeof(size_t));
-    SwigPtrN = 0;
-  }
-  /* Grow the table if necessary */
-  if (SwigPtrN >= SwigPtrMax) {
-    SwigPtrMax = 2*SwigPtrMax;
-    SwigPtrList = (SwigPtrType *) realloc((char *) SwigPtrList,
-					  SwigPtrMax*sizeof(SwigPtrType));
-    SwigPtrTbl = (size_t *) realloc((char *) SwigPtrTbl,
-				    SwigPtrMax*sizeof(size_t));
-  }
-  /* Look up type */
-  for (i = 0; i < SwigPtrN; i++)
-    if (strcmp(SwigPtrList[i].name,type) == 0) {
-      if (prettyname!=NULL)
-	SwigPtrList[i].prettyname = prettyname;
-      return i;
-    }
-  {
-    struct SwigPtrType *t;
-    size_t tag;
-#if 0
-    fprintf(stderr, "New type: %s\n", type);
-#endif
-    tag = SwigPtrTbl[SwigPtrN] = SwigPtrN;
-    t = &SwigPtrList[tag];
-    t->name = type;
-    t->prettyname = prettyname;
-    t->tag = SwigPtrN;
-    t->cast = NULL;
-    SwigPtrN++;
-    SwigPtrSort = 0; 
-    return tag;
-  }
-}
-
-/* Register two data types and their mapping with the type checker. */
-SWIGSTATIC void
-SWIG_RegisterMapping (const char *origtype, const char *newtype,
-		      swig_converter_func cast)
-{
-  size_t t = SWIG_RegisterType(origtype, NULL);
-
-  if (newtype!=NULL) {
-    size_t t1 = SWIG_RegisterType(newtype, NULL);
-    struct SwigCast *c;
-    /* Check for existing cast */
-    for (c = SwigPtrList[t].cast; c && c->type!=t1; c=c->next) /* nothing */;
-    if (c) {
-      if (cast) c->cast = cast;
-    }
-    else {
-      c = (struct SwigCast *) malloc(sizeof(struct SwigCast));
-      c->type = t1;
-      c->cast = cast;
-      c->next = SwigPtrList[t].cast;
-      SwigPtrList[t].cast = c;
+    if (!cdata || SCM_NULLP(cdata->goops_class) || swig_make_func == SCM_EOL ) {
+      return smob;
+    } else {
+      /* the scm_make() C function only handles the creation of gf,
+	 methods and classes (no instances) the (make ...) function is
+	 later redefined in goops.scm.  So we need to call that
+	 Scheme function. */
+      return scm_apply(swig_make_func,
+		       scm_list_3(cdata->goops_class,
+				  swig_keyword,
+				  smob),
+		       SCM_EOL);
     }
   }
-}
-
-/* Sort table */
-
-static void
-SWIG_SortTable (void)
-{
-  qsort ((void *) SwigPtrTbl, SwigPtrN, sizeof(size_t), swigsort);
-  /* Indicate that everything is sorted */
-  SwigPtrSort = 1;
-}
-
-/* Look up pointer-type entry in table */
-
-static int
-swigcmp (const void *key, const void *data)
-{
-  char *k = (char *) key;
-  size_t index = *(size_t *)data;
-  return strcmp(k, SwigPtrList[index].name);
-}
-
-static SwigPtrType *
-SWIG_GetPtrType (const char *_t)
-{
-  size_t *result;
-  if (!SwigPtrSort) SWIG_SortTable();
-  result = (size_t *) bsearch(_t, SwigPtrTbl, SwigPtrN, sizeof(size_t), swigcmp);
-  if (result!=NULL) return SwigPtrList+*result;
-  else return NULL;
-}
-
-/* Cast a pointer if possible; returns 1 if successful */
-
-static int
-SWIG_Cast (void *source, size_t source_type,
-	   void **ptr, size_t dest_type)
-{
-  if (dest_type != source_type) {
-    /* We have a type mismatch.  Will have to look through our type
-       mapping table to figure out whether or not we can accept this
-       datatype.  */
-    struct SwigCast *c;
-    for (c = SwigPtrList[dest_type].cast;
-	 c && c->type!=source_type; c = c->next) /* nothing */;
-    if (c) {
-      /* Get pointer value. */
-      if (c->cast) *ptr = (*(c->cast))(source);
-      else *ptr = source;
-      return 1;
-    }
-    /* Didn't find any sort of match for this data.
-       Get the pointer value and return false.  */
-    *ptr = source;
-    return 0;
-  } else {
-    /* Found a match on the first try.  Return pointer value.  */
-    *ptr = source;
-    return 1;
-  }
-}
-
-/* Dynamic pointer casting. Down an inheritance hierarchy */
-SWIGSTATIC swig_type_info * 
-SWIG_TypeDynamicCast(swig_type_info *ty, void **ptr) 
-{
-  swig_type_info *lastty = ty;
-  if (!ty || !ty->dcast) return ty;
-  while (ty && (ty->dcast)) {
-     ty = (*ty->dcast)(ptr);
-     if (ty) lastty = ty;
-  }
-  return lastty;
-}
-
-/* Function for getting a pointer value */
-
-static unsigned long swig_tag = 0;
-
-SWIGSTATIC SCM
-SWIG_Guile_MakePtr (void *ptr, swig_type_info *type)
-{
-  if (ptr==NULL) return SCM_EOL;
-  SCM_RETURN_NEWSMOB((((unsigned long)type->tag << 16) | swig_tag),
-		     ptr);
 }
 
 /* Return 0 if successful. */
-SWIGSTATIC int
-SWIG_Guile_GetPtr(SCM s, void **result, swig_type_info *type)
+SWIGRUNTIME(int)
+SWIG_Guile_ConvertPtr(SCM s, void **result, swig_type_info *type, int flags)
 {
-  if (SCM_NULLP(s)) {
+  swig_type_info *cast;
+  swig_type_info *from;
+  SCM smob = SWIG_Guile_GetSmob(s);
+
+  if (SCM_NULLP(smob)) {
     *result = NULL;
     return 0;
-  }
-  else if (SCM_NIMP(s)
-	   && (unsigned long) SCM_TYP16(s) == swig_tag) {
-    if (type) 
-      return !SWIG_Cast((void *) SCM_CDR(s),
-			(long) SCM_CAR(s) >> 16,
-			result, type->tag);
-    else {
-      *result = (void *) SCM_CDR(s);
+  } else if (SCM_SMOB_PREDICATE(swig_tag, smob) || SCM_SMOB_PREDICATE(swig_collectable_tag, smob)) {
+    /* we do not accept smobs representing destroyed pointers */
+    from = (swig_type_info *) SCM_CELL_WORD_2(smob);
+    if (!from) return 1;
+    if (type) {
+      cast = SWIG_TypeCheck((char*)from->name, type);
+      if (cast) {
+        *result = SWIG_TypeCast(cast, (void *) SCM_CELL_WORD_1(smob));
+        return 0;
+      } else {
+        return 1;
+      }
+    } else {
+      *result = (void *) SCM_CELL_WORD_1(smob);
       return 0;
     }
   }
   return 1;
 }
 
-SWIGSTATIC void *
+SWIGRUNTIME(void *)
 SWIG_Guile_MustGetPtr (SCM s, swig_type_info *type,
-		       int argnum, const char *func_name)
+		       int argnum, int flags, const char *func_name)
 {
   void *result;
-  if (SWIG_Guile_GetPtr(s, &result, type)) {
+  if (SWIG_Guile_ConvertPtr(s, &result, type, flags)) {
     /* type mismatch */
     scm_wrong_type_arg((char *) func_name, argnum, s);
   }
   return result;
 }
 
+/* Mark a pointer object non-collectable */
+SWIGRUNTIME(void)
+SWIG_Guile_MarkPointerNoncollectable(SCM s)
+{
+  SCM smob = SWIG_Guile_GetSmob(s);
+  if (!SCM_NULLP(smob)) {
+    if (SCM_SMOB_PREDICATE(swig_tag, smob) || SCM_SMOB_PREDICATE(swig_collectable_tag, smob)) {
+      SCM_SET_CELL_TYPE(smob, swig_tag);
+    }
+    else scm_wrong_type_arg(NULL, 0, s);
+  }
+}
+
+/* Mark a pointer object destroyed */
+SWIGIMPORT(void)
+SWIG_Guile_MarkPointerDestroyed(SCM s)
+{
+  SCM smob = SWIG_Guile_GetSmob(s);
+  if (!SCM_NULLP(smob)) {
+    if (SCM_SMOB_PREDICATE(swig_tag, smob) || SCM_SMOB_PREDICATE(swig_collectable_tag, smob)) {
+      SCM_SET_CELL_TYPE(smob, swig_destroyed_tag);
+    }
+    else scm_wrong_type_arg(NULL, 0, s);
+  }
+}
+
 /* Init */
 
 static int
+print_swig_aux (SCM swig_smob, SCM port, scm_print_state *pstate, const char *attribute)
+{
+  swig_type_info *type;
+  
+  type = (swig_type_info *) SCM_CELL_WORD_2(swig_smob);
+  if (type) {
+    scm_puts((char *) "#<", port);
+    scm_puts(attribute, port);
+    scm_puts("swig-pointer ", port);
+    if (type->str != NULL)
+      scm_puts(type->str, port);
+    else 
+      scm_puts(type->name, port);
+    scm_puts((char *) " ", port);
+    scm_intprint((long) SCM_CELL_WORD_1(swig_smob), 16, port);
+    scm_puts((char *) ">", port);
+    /* non-zero means success */
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+  
+static int
 print_swig (SCM swig_smob, SCM port, scm_print_state *pstate)
 {
-  scm_puts((char *) "#<swig ", port);
-  if (SwigPtrList[(long) SCM_CAR(swig_smob) >> 16].prettyname != NULL)
-    scm_puts((char*) SwigPtrList[(long) SCM_CAR(swig_smob) >> 16].prettyname, port);
-  else scm_puts((char*) SwigPtrList[(long) SCM_CAR(swig_smob) >> 16].name, port);
-  scm_puts((char *) " ", port);
-  scm_intprint((long) SCM_CDR(swig_smob), 16, port);
-  scm_puts((char *) ">", port);
-  /* non-zero means success */
-  return 1;
+  return print_swig_aux(swig_smob, port, pstate, "");
+}
+
+static int
+print_collectable_swig (SCM swig_smob, SCM port, scm_print_state *pstate)
+{
+  return print_swig_aux(swig_smob, port, pstate, "collectable-");
+}
+
+static int
+print_destroyed_swig (SCM swig_smob, SCM port, scm_print_state *pstate)
+{
+  return print_swig_aux(swig_smob, port, pstate, "destroyed-");
 }
 
 static SCM
 equalp_swig (SCM A, SCM B)
 {
-  if (SCM_CAR(A) == SCM_CAR(B)
-      && SCM_CDR(A) == SCM_CDR(B))
+  if (SCM_CELL_WORD_0(A) == SCM_CELL_WORD_0(B) && SCM_CELL_WORD_1(A) == SCM_CELL_WORD_1(B) 
+      && SCM_CELL_WORD_2(A) == SCM_CELL_WORD_2(B))
     return SCM_BOOL_T;
   else return SCM_BOOL_F;
 }
 
-SWIGSTATIC void
-SWIG_Guile_Init (void)
+static size_t
+free_swig(SCM A)
 {
-  if (swig_tag == 0) {
-    swig_tag = scm_make_smob_type_mfpe((char *) "swig", 0, NULL, NULL,
-				       print_swig, equalp_swig);
+  swig_type_info *type = (swig_type_info *) SCM_CELL_WORD_2(A);
+  if (type) {
+    if (type->clientdata)
+      ((swig_guile_clientdata *)type->clientdata)->destroy(A);
+  } 
+  return 0;
+}
+
+SWIGRUNTIME(void)
+SWIG_Guile_Init ()
+{
+  if (!swig_tag) {
+    swig_tag = scm_make_smob_type((char*)"swig-pointer", 0);
+    scm_set_smob_print(swig_tag, print_swig);
+    scm_set_smob_equalp(swig_tag, equalp_swig);
   }
+
+  if (!swig_collectable_tag) {
+    swig_collectable_tag = scm_make_smob_type((char*)"collectable-swig-pointer", 0);
+    scm_set_smob_print(swig_collectable_tag, print_collectable_swig);
+    scm_set_smob_equalp(swig_collectable_tag, equalp_swig);
+    scm_set_smob_free(swig_collectable_tag, free_swig);
+  }
+
+  if (!swig_destroyed_tag) {
+    swig_destroyed_tag = scm_make_smob_type((char*)"destroyed-swig-pointer", 0);
+    scm_set_smob_print(swig_destroyed_tag, print_destroyed_swig);
+    scm_set_smob_equalp(swig_destroyed_tag, equalp_swig);
+  }
+      
+  swig_make_func = scm_permanent_object(
+  scm_variable_ref(scm_c_module_lookup(scm_c_resolve_module("oop goops"), "make")));
+  swig_keyword = scm_permanent_object(scm_c_make_keyword((char*) "init-smob"));
+  swig_symbol = scm_permanent_object(scm_str2symbol("swig-smob"));
 }
 
-/* Convert datatype table */
-
-SWIGSTATIC
-void SWIG_Guile_RegisterTypes(swig_type_info **table,
-			      swig_type_info **init)
-{
-  for (; *init; table++, init++) {
-    swig_type_info *type = *table = *init;
-    const char *origname = type->name;
-    /* Register datatype itself and store pointer back */
-    type->tag = SWIG_RegisterType(origname, type->str);
-    /* Register compatible types */
-    for (type++; type->name; type++)
-      SWIG_RegisterMapping(origname, type->name, type->converter);
-  }    
-}
-
-SWIGSTATIC int
+SWIGRUNTIME(int)
 SWIG_Guile_GetArgs (SCM *dest, SCM rest,
 		    int reqargs, int optargs,
 		    const char *procname)
@@ -505,7 +600,7 @@ SWIG_Guile_GetArgs (SCM *dest, SCM rest,
   int num_args_passed = 0;
   for (i = 0; i<reqargs; i++) {
     if (!SCM_CONSP(rest))
-      scm_wrong_num_args(gh_str02scm((char *) procname));
+      scm_wrong_num_args(scm_makfrom0str((char *) procname));
     *dest++ = SCM_CAR(rest);
     rest = SCM_CDR(rest);
     num_args_passed++;
@@ -516,20 +611,75 @@ SWIG_Guile_GetArgs (SCM *dest, SCM rest,
     num_args_passed++;
   }
   for (; i<optargs; i++)
-    *dest++ = GH_NOT_PASSED;
+    *dest++ = SCM_UNDEFINED;
   if (!SCM_NULLP(rest))
-    scm_wrong_num_args(gh_str02scm((char *) procname));
+    scm_wrong_num_args(scm_makfrom0str((char *) procname));
   return num_args_passed;
 }
+
+/* This function will propagate the clientdata field of type to
+* any new swig_type_info structures that have been added into the list
+* of equivalent types.  It is like calling
+* SWIG_TypeClientData(type, clientdata) a second time.
+*/
+SWIGRUNTIME(void) 
+SWIG_Guile_PropagateClientData(swig_type_info *type) {
+  swig_type_info *equiv = type->next;
+  swig_type_info *tc;
+  if (!type->clientdata) return;
+  while (equiv) {
+    if (!equiv->converter) {
+      tc = swig_type_list;
+      while (tc) {
+        if ((strcmp(tc->name, equiv->name) == 0) && !tc->clientdata)
+          SWIG_TypeClientData(tc, type->clientdata);
+        tc = tc->prev;
+      }
+    }
+    equiv = equiv->next;
+  }
+}
+
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
-/* guile.swg ends here */
 
-#endif
 
+#define GUILE_MAYBE_VALUES \
+      if (gswig_list_p) gswig_result = scm_values(gswig_result);
+
+#define GUILE_MAYBE_VECTOR \
+      if (gswig_list_p) gswig_result = scm_vector(gswig_result);
+
+#define SWIG_APPEND_VALUE(object)						\
+    if (gswig_result == SCM_UNSPECIFIED)						\
+        gswig_result = object;							\
+    else {									\
+      if (!gswig_list_p) {							\
+	      gswig_list_p = 1;							\
+	      gswig_result = scm_listify(gswig_result, object, SCM_UNDEFINED);	\
+      }									\
+      else									\
+            gswig_result = scm_append(scm_listify(gswig_result, scm_listify(object, SCM_UNDEFINED), SCM_UNDEFINED));		\
+    }
+    /* used by Lib/exception.i */
+    #define gh_symbol2scm scm_str2symbol
+    /* useb by Lib/cdata.i */
+    #define gh_str2scm scm_mem2string
+
+
+static swig_guile_clientdata _swig_guile_clientdataqnet = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatamainwin = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatachatsession = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdataface = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatapattern = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatablock_pattern = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatafont_lock = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatachat_page = { NULL, SCM_EOL };
+static swig_guile_clientdata _swig_guile_clientdatamain_chat_page = { NULL, SCM_EOL };
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
@@ -627,12 +777,10 @@ _wrap_qnet_load_config_file (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     result = (bool)(arg1)->loadConfigFile();
     
-    gh_allow_ints();
     {
-        gswig_result = gh_bool2scm(result);
+        gswig_result = SCM_BOOL(result);
     }
     
     return gswig_result;
@@ -652,12 +800,10 @@ _wrap_qnet_save_config_file (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     result = (bool)(arg1)->saveConfigFile();
     
-    gh_allow_ints();
     {
-        gswig_result = gh_bool2scm(result);
+        gswig_result = SCM_BOOL(result);
     }
     
     return gswig_result;
@@ -686,7 +832,7 @@ _wrap_qnet_get_new_page (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -696,7 +842,7 @@ _wrap_qnet_get_new_page (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
         }
     }
     {
-        if (gh_string_p(s_2)) {
+        if (SCM_STRINGP(s_2)) {
             tempptr3 = SWIG_scm2str(s_2);
             temp3 = QString(tempptr3);
             if (tempptr3) SWIG_free(tempptr3);
@@ -710,13 +856,11 @@ _wrap_qnet_get_new_page (SCM s_0, SCM s_1, SCM s_2, SCM s_3, SCM s_4)
     }
     if (s_4 != SCM_UNDEFINED) {
         {
-            arg5 = gh_scm2bool(s_4);
+            arg5 = SCM_NFALSEP(s_4);
         }
     }
-    gh_defer_ints();
     result = (Page *)(arg1)->getNewPage((QString const &)*arg2,(QString const &)*arg3,arg4,arg5);
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Page, 0);
     }
@@ -737,10 +881,8 @@ _wrap_qnet_configure (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->slotConfigure();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -759,10 +901,8 @@ _wrap_qnet_store_config (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->slotStoreConfig();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -781,10 +921,8 @@ _wrap_qnet_open (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->fileNew();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -803,10 +941,8 @@ _wrap_qnet_save (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->fileSaveAs();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -825,10 +961,8 @@ _wrap_qnet_exit (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->fileExit();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -847,10 +981,8 @@ _wrap_qnet_close_current_tab (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->closeCurrentTab();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -873,10 +1005,8 @@ _wrap_qnet_close_tab (SCM s_0, SCM s_1)
     {
         arg2 = (QWidget *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_QWidget, 2, 0);
     }
-    gh_defer_ints();
     (arg1)->closeTab(arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -900,7 +1030,7 @@ _wrap_qnet_load_plugin (SCM s_0, SCM s_1)
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -909,12 +1039,10 @@ _wrap_qnet_load_plugin (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     result = (bool)(arg1)->loadPlugin((QString const &)*arg2);
     
-    gh_allow_ints();
     {
-        gswig_result = gh_bool2scm(result);
+        gswig_result = SCM_BOOL(result);
     }
     
     return gswig_result;
@@ -938,7 +1066,7 @@ _wrap_qnet_unload_plugin (SCM s_0, SCM s_1)
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -947,12 +1075,10 @@ _wrap_qnet_unload_plugin (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     result = (bool)(arg1)->unloadPlugin((QString const &)*arg2);
     
-    gh_allow_ints();
     {
-        gswig_result = gh_bool2scm(result);
+        gswig_result = SCM_BOOL(result);
     }
     
     return gswig_result;
@@ -971,10 +1097,8 @@ _wrap_qnet_refresh_menu (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->refreshMenu();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -993,10 +1117,8 @@ _wrap_qnet_load_stylesheet (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->loadStyleSheet();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1019,7 +1141,7 @@ _wrap_qnet_launch_session (SCM s_0, SCM s_1)
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1028,10 +1150,8 @@ _wrap_qnet_launch_session (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->launchSession((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1050,10 +1170,8 @@ _wrap_qnet_load_plugins (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->loadPlugins();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1072,10 +1190,8 @@ _wrap_qnet_unload_plugins (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->unloadPlugins();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1098,10 +1214,8 @@ _wrap_qnet_reload_plugins (SCM s_0, SCM s_1)
     {
         arg2 = (QStringList *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_QStringList, 2, 0);
     }
-    gh_defer_ints();
     (arg1)->reloadPlugins((QStringList const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1121,12 +1235,10 @@ _wrap_qnet_sessions_number (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     result = (int)(arg1)->sessionsNumber();
     
-    gh_allow_ints();
     {
-        gswig_result = gh_int2scm(result);
+        gswig_result = scm_long2num(result);
     }
     
     return gswig_result;
@@ -1148,12 +1260,10 @@ _wrap_qnet_session (SCM s_0, SCM s_1)
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
     {
-        arg2 = gh_scm2int(s_1);
+        arg2 = scm_num2int(s_1, SCM_ARG1, FUNC_NAME);
     }
-    gh_defer_ints();
     result = (ChatSession *)(arg1)->session(arg2);
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_ChatSession, 0);
     }
@@ -1171,10 +1281,8 @@ _wrap_new_qnet ()
     SCM gswig_result;
     int gswig_list_p = 0;
     
-    gh_defer_ints();
     result = (QMtp *)new QMtp();
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_QMtp, 1);
     }
@@ -1195,11 +1303,10 @@ _wrap_delete_qnet (SCM s_0)
     {
         arg1 = (QMtp *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_QMtp, 1, 0);
     }
-    gh_defer_ints();
     delete arg1;
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
+    SWIG_Guile_MarkPointerDestroyed(s_0);
     
     return gswig_result;
 #undef FUNC_NAME
@@ -1217,10 +1324,8 @@ _wrap_mainwin_set_use_dock (SCM s_0)
     {
         arg1 = (MainWin *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainWin, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->setUseDock();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1240,10 +1345,8 @@ _wrap_mainwin_qmtp (SCM s_0)
     {
         arg1 = (MainWin *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainWin, 1, 0);
     }
-    gh_defer_ints();
     result = (QMtp *)(arg1)->qmtp();
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_QMtp, 0);
     }
@@ -1288,7 +1391,7 @@ _wrap_chatsession_display_err (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1297,10 +1400,8 @@ _wrap_chatsession_display_err (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->displayStderr((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1323,7 +1424,7 @@ _wrap_chatsession_display_out (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1332,10 +1433,8 @@ _wrap_chatsession_display_out (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->displayStdout((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1355,15 +1454,13 @@ _wrap_chatsession_session_name (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     {
         QString const &_result_ref = ((ChatSession const *)arg1)->sessionName();
         result = (QString *) &_result_ref;
     }
     
-    gh_allow_ints();
     {
-        gswig_result = gh_str02scm((result)->ascii());
+        gswig_result = scm_makfrom0str((result)->ascii());
     }
     
     return gswig_result;
@@ -1382,10 +1479,8 @@ _wrap_chatsession_update_filters (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->updateFilters();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1405,10 +1500,8 @@ _wrap_chatsession_chatpage (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     result = (MainChatPage *)(arg1)->chatpage();
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_MainChatPage, 0);
     }
@@ -1430,12 +1523,10 @@ _wrap_chatsession_logged_p (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     result = (bool)(arg1)->isLogged();
     
-    gh_allow_ints();
     {
-        gswig_result = gh_bool2scm(result);
+        gswig_result = SCM_BOOL(result);
     }
     
     return gswig_result;
@@ -1454,10 +1545,8 @@ _wrap_chatsession_close_session (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->closeSession();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1480,7 +1569,7 @@ _wrap_chatsession_link_clicked (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1489,10 +1578,8 @@ _wrap_chatsession_link_clicked (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->slotLinkClicked((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1511,10 +1598,8 @@ _wrap_chatsession_reconnect (SCM s_0)
     {
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->slotReconnect();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1537,10 +1622,8 @@ _wrap_chatsession_kill (SCM s_0, SCM s_1)
     {
         arg2 = (Page *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_Page, 2, 0);
     }
-    gh_defer_ints();
     (arg1)->kill(arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1563,7 +1646,7 @@ _wrap_chatsession_send (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1572,10 +1655,8 @@ _wrap_chatsession_send (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->send((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1598,7 +1679,7 @@ _wrap_chatsession_incoming (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1607,10 +1688,8 @@ _wrap_chatsession_incoming (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->incoming((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1633,7 +1712,7 @@ _wrap_chatsession_outgoing (SCM s_0, SCM s_1)
         arg1 = (ChatSession *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatSession, 1, 0);
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1642,10 +1721,8 @@ _wrap_chatsession_outgoing (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     (arg1)->outgoing((QString const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1668,7 +1745,7 @@ _wrap_new_face (SCM s_0, SCM s_1)
     int gswig_list_p = 0;
     
     {
-        if (gh_string_p(s_0)) {
+        if (SCM_STRINGP(s_0)) {
             tempptr1 = SWIG_scm2str(s_0);
             temp1 = QString(tempptr1);
             if (tempptr1) SWIG_free(tempptr1);
@@ -1678,7 +1755,7 @@ _wrap_new_face (SCM s_0, SCM s_1)
         }
     }
     {
-        if (gh_string_p(s_1)) {
+        if (SCM_STRINGP(s_1)) {
             tempptr2 = SWIG_scm2str(s_1);
             temp2 = QString(tempptr2);
             if (tempptr2) SWIG_free(tempptr2);
@@ -1687,10 +1764,8 @@ _wrap_new_face (SCM s_0, SCM s_1)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     result = (Face *)new Face((QString const &)*arg1,(QString const &)*arg2);
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Face, 1);
     }
@@ -1712,7 +1787,7 @@ _wrap_new_pattern (SCM s_0)
     int gswig_list_p = 0;
     
     {
-        if (gh_string_p(s_0)) {
+        if (SCM_STRINGP(s_0)) {
             tempptr1 = SWIG_scm2str(s_0);
             temp1 = QString(tempptr1);
             if (tempptr1) SWIG_free(tempptr1);
@@ -1721,10 +1796,8 @@ _wrap_new_pattern (SCM s_0)
             SWIG_exception(SWIG_TypeError, "string expected");
         }
     }
-    gh_defer_ints();
     result = (Pattern *)new Pattern((QString const &)*arg1);
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_Pattern, 1);
     }
@@ -1749,16 +1822,14 @@ _wrap_pattern_add (SCM s_0, SCM s_1, SCM s_2)
         arg1 = (Pattern *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_Pattern, 1, 0);
     }
     {
-        arg2 = gh_scm2int(s_1);
+        arg2 = scm_num2int(s_1, SCM_ARG1, FUNC_NAME);
     }
     {
         argp3 = (Face *)SWIG_MustGetPtr(s_2, SWIGTYPE_p_Face, 3, 0);
         arg3 = *argp3;
     }
-    gh_defer_ints();
     (arg1)->add(arg2,arg3);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1786,10 +1857,8 @@ _wrap_new_block_pattern (SCM s_0, SCM s_1, SCM s_2)
     {
         arg3 = (Pattern *)SWIG_MustGetPtr(s_2, SWIGTYPE_p_Pattern, 3, 0);
     }
-    gh_defer_ints();
     result = (BlockPattern *)new BlockPattern((Pattern const &)*arg1,(Pattern const &)*arg2,(Pattern const &)*arg3);
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_BlockPattern, 1);
     }
@@ -1814,10 +1883,8 @@ _wrap_font_lock_add_pattern (SCM s_0, SCM s_1)
     {
         arg2 = (Pattern *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_Pattern, 2, 0);
     }
-    gh_defer_ints();
     (arg1)->addPattern((Pattern const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1840,10 +1907,8 @@ _wrap_font_lock_add_multi_pattern (SCM s_0, SCM s_1)
     {
         arg2 = (BlockPattern *)SWIG_MustGetPtr(s_1, SWIGTYPE_p_BlockPattern, 2, 0);
     }
-    gh_defer_ints();
     (arg1)->addMultiLinePattern((BlockPattern const &)*arg2);
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1862,10 +1927,8 @@ _wrap_font_lock_clear (SCM s_0)
     {
         arg1 = (FontLock *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_FontLock, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->clear();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1884,10 +1947,8 @@ _wrap_chat_page_toggle_user_box (SCM s_0)
     {
         arg1 = (ChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatPage, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->toggleUserBox();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1907,10 +1968,8 @@ _wrap_chat_page_font_lock (SCM s_0)
     {
         arg1 = (ChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_ChatPage, 1, 0);
     }
-    gh_defer_ints();
     result = (FontLock *)(arg1)->fontLock();
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_FontLock, 0);
     }
@@ -1931,10 +1990,8 @@ _wrap_main_chat_page_toggle_user_box (SCM s_0)
     {
         arg1 = (MainChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainChatPage, 1, 0);
     }
-    gh_defer_ints();
     (arg1)->toggleUserBox();
     
-    gh_allow_ints();
     gswig_result = SCM_UNSPECIFIED;
     
     return gswig_result;
@@ -1954,10 +2011,8 @@ _wrap_main_chat_page_font_lock (SCM s_0)
     {
         arg1 = (MainChatPage *)SWIG_MustGetPtr(s_0, SWIGTYPE_p_MainChatPage, 1, 0);
     }
-    gh_defer_ints();
     result = (FontLock *)(arg1)->fontLock();
     
-    gh_allow_ints();
     {
         gswig_result = SWIG_NewPointerObj (result, SWIGTYPE_p_FontLock, 0);
     }
@@ -2014,61 +2069,77 @@ SWIG_init (void)
     static int _swig_init = 0;
     
     if (!_swig_init) {
-        SWIG_Guile_RegisterTypes(swig_types, swig_types_initial);
+        int i;
+        for (i = 0; swig_types_initial[i]; i++) {
+            swig_types[i] = SWIG_TypeRegister(swig_types_initial[i]);
+        }
+        for (i = 0; swig_types_initial[i]; i++) {
+            SWIG_PropagateClientData(swig_types[i]);
+        }
         _swig_init = 1;
     }
     
     SWIG_Guile_Init();
     
-    gh_new_procedure("qnet-load-config-file", (swig_guile_proc) _wrap_qnet_load_config_file, 1, 0, 0);
-    gh_new_procedure("qnet-save-config-file", (swig_guile_proc) _wrap_qnet_save_config_file, 1, 0, 0);
-    gh_new_procedure("qnet-get-new-page", (swig_guile_proc) _wrap_qnet_get_new_page, 4, 1, 0);
-    gh_new_procedure("qnet-configure", (swig_guile_proc) _wrap_qnet_configure, 1, 0, 0);
-    gh_new_procedure("qnet-store-config", (swig_guile_proc) _wrap_qnet_store_config, 1, 0, 0);
-    gh_new_procedure("qnet-open", (swig_guile_proc) _wrap_qnet_open, 1, 0, 0);
-    gh_new_procedure("qnet-save", (swig_guile_proc) _wrap_qnet_save, 1, 0, 0);
-    gh_new_procedure("qnet-exit", (swig_guile_proc) _wrap_qnet_exit, 1, 0, 0);
-    gh_new_procedure("qnet-close-current-tab", (swig_guile_proc) _wrap_qnet_close_current_tab, 1, 0, 0);
-    gh_new_procedure("qnet-close-tab", (swig_guile_proc) _wrap_qnet_close_tab, 2, 0, 0);
-    gh_new_procedure("qnet-load-plugin", (swig_guile_proc) _wrap_qnet_load_plugin, 2, 0, 0);
-    gh_new_procedure("qnet-unload-plugin", (swig_guile_proc) _wrap_qnet_unload_plugin, 2, 0, 0);
-    gh_new_procedure("qnet-refresh-menu", (swig_guile_proc) _wrap_qnet_refresh_menu, 1, 0, 0);
-    gh_new_procedure("qnet-load-stylesheet", (swig_guile_proc) _wrap_qnet_load_stylesheet, 1, 0, 0);
-    gh_new_procedure("qnet-launch-session", (swig_guile_proc) _wrap_qnet_launch_session, 2, 0, 0);
-    gh_new_procedure("qnet-load-plugins", (swig_guile_proc) _wrap_qnet_load_plugins, 1, 0, 0);
-    gh_new_procedure("qnet-unload-plugins", (swig_guile_proc) _wrap_qnet_unload_plugins, 1, 0, 0);
-    gh_new_procedure("qnet-reload-plugins", (swig_guile_proc) _wrap_qnet_reload_plugins, 2, 0, 0);
-    gh_new_procedure("qnet-sessions-number", (swig_guile_proc) _wrap_qnet_sessions_number, 1, 0, 0);
-    gh_new_procedure("qnet-session", (swig_guile_proc) _wrap_qnet_session, 2, 0, 0);
-    gh_new_procedure("new-qnet", (swig_guile_proc) _wrap_new_qnet, 0, 0, 0);
-    gh_new_procedure("delete-qnet", (swig_guile_proc) _wrap_delete_qnet, 1, 0, 0);
-    gh_new_procedure("mainwin-set-use-dock", (swig_guile_proc) _wrap_mainwin_set_use_dock, 1, 0, 0);
-    gh_new_procedure("mainwin-qmtp", (swig_guile_proc) _wrap_mainwin_qmtp, 1, 0, 0);
-    gh_new_procedure("main-window", (swig_guile_proc) _wrap_main_window, 0, 1, 0);
-    gh_new_procedure("chatsession-display-err", (swig_guile_proc) _wrap_chatsession_display_err, 2, 0, 0);
-    gh_new_procedure("chatsession-display-out", (swig_guile_proc) _wrap_chatsession_display_out, 2, 0, 0);
-    gh_new_procedure("chatsession-session-name", (swig_guile_proc) _wrap_chatsession_session_name, 1, 0, 0);
-    gh_new_procedure("chatsession-update-filters", (swig_guile_proc) _wrap_chatsession_update_filters, 1, 0, 0);
-    gh_new_procedure("chatsession-chatpage", (swig_guile_proc) _wrap_chatsession_chatpage, 1, 0, 0);
-    gh_new_procedure("chatsession-logged-p", (swig_guile_proc) _wrap_chatsession_logged_p, 1, 0, 0);
-    gh_new_procedure("chatsession-close-session", (swig_guile_proc) _wrap_chatsession_close_session, 1, 0, 0);
-    gh_new_procedure("chatsession-link-clicked", (swig_guile_proc) _wrap_chatsession_link_clicked, 2, 0, 0);
-    gh_new_procedure("chatsession-reconnect", (swig_guile_proc) _wrap_chatsession_reconnect, 1, 0, 0);
-    gh_new_procedure("chatsession-kill", (swig_guile_proc) _wrap_chatsession_kill, 2, 0, 0);
-    gh_new_procedure("chatsession-send", (swig_guile_proc) _wrap_chatsession_send, 2, 0, 0);
-    gh_new_procedure("chatsession-incoming", (swig_guile_proc) _wrap_chatsession_incoming, 2, 0, 0);
-    gh_new_procedure("chatsession-outgoing", (swig_guile_proc) _wrap_chatsession_outgoing, 2, 0, 0);
-    gh_new_procedure("new-face", (swig_guile_proc) _wrap_new_face, 2, 0, 0);
-    gh_new_procedure("new-pattern", (swig_guile_proc) _wrap_new_pattern, 1, 0, 0);
-    gh_new_procedure("pattern-add", (swig_guile_proc) _wrap_pattern_add, 3, 0, 0);
-    gh_new_procedure("new-block-pattern", (swig_guile_proc) _wrap_new_block_pattern, 3, 0, 0);
-    gh_new_procedure("font-lock-add-pattern", (swig_guile_proc) _wrap_font_lock_add_pattern, 2, 0, 0);
-    gh_new_procedure("font-lock-add-multi-pattern", (swig_guile_proc) _wrap_font_lock_add_multi_pattern, 2, 0, 0);
-    gh_new_procedure("font-lock-clear", (swig_guile_proc) _wrap_font_lock_clear, 1, 0, 0);
-    gh_new_procedure("chat-page-toggle-user-box", (swig_guile_proc) _wrap_chat_page_toggle_user_box, 1, 0, 0);
-    gh_new_procedure("chat-page-font-lock", (swig_guile_proc) _wrap_chat_page_font_lock, 1, 0, 0);
-    gh_new_procedure("main-chat-page-toggle-user-box", (swig_guile_proc) _wrap_main_chat_page_toggle_user_box, 1, 0, 0);
-    gh_new_procedure("main-chat-page-font-lock", (swig_guile_proc) _wrap_main_chat_page_font_lock, 1, 0, 0);
+    SWIG_TypeClientData(SWIGTYPE_p_QMtp, (void *) &_swig_guile_clientdataqnet);
+    scm_c_define_gsubr("qnet-load-config-file", 1, 0, 0, (swig_guile_proc) _wrap_qnet_load_config_file);
+    scm_c_define_gsubr("qnet-save-config-file", 1, 0, 0, (swig_guile_proc) _wrap_qnet_save_config_file);
+    scm_c_define_gsubr("qnet-get-new-page", 4, 1, 0, (swig_guile_proc) _wrap_qnet_get_new_page);
+    scm_c_define_gsubr("qnet-configure", 1, 0, 0, (swig_guile_proc) _wrap_qnet_configure);
+    scm_c_define_gsubr("qnet-store-config", 1, 0, 0, (swig_guile_proc) _wrap_qnet_store_config);
+    scm_c_define_gsubr("qnet-open", 1, 0, 0, (swig_guile_proc) _wrap_qnet_open);
+    scm_c_define_gsubr("qnet-save", 1, 0, 0, (swig_guile_proc) _wrap_qnet_save);
+    scm_c_define_gsubr("qnet-exit", 1, 0, 0, (swig_guile_proc) _wrap_qnet_exit);
+    scm_c_define_gsubr("qnet-close-current-tab", 1, 0, 0, (swig_guile_proc) _wrap_qnet_close_current_tab);
+    scm_c_define_gsubr("qnet-close-tab", 2, 0, 0, (swig_guile_proc) _wrap_qnet_close_tab);
+    scm_c_define_gsubr("qnet-load-plugin", 2, 0, 0, (swig_guile_proc) _wrap_qnet_load_plugin);
+    scm_c_define_gsubr("qnet-unload-plugin", 2, 0, 0, (swig_guile_proc) _wrap_qnet_unload_plugin);
+    scm_c_define_gsubr("qnet-refresh-menu", 1, 0, 0, (swig_guile_proc) _wrap_qnet_refresh_menu);
+    scm_c_define_gsubr("qnet-load-stylesheet", 1, 0, 0, (swig_guile_proc) _wrap_qnet_load_stylesheet);
+    scm_c_define_gsubr("qnet-launch-session", 2, 0, 0, (swig_guile_proc) _wrap_qnet_launch_session);
+    scm_c_define_gsubr("qnet-load-plugins", 1, 0, 0, (swig_guile_proc) _wrap_qnet_load_plugins);
+    scm_c_define_gsubr("qnet-unload-plugins", 1, 0, 0, (swig_guile_proc) _wrap_qnet_unload_plugins);
+    scm_c_define_gsubr("qnet-reload-plugins", 2, 0, 0, (swig_guile_proc) _wrap_qnet_reload_plugins);
+    scm_c_define_gsubr("qnet-sessions-number", 1, 0, 0, (swig_guile_proc) _wrap_qnet_sessions_number);
+    scm_c_define_gsubr("qnet-session", 2, 0, 0, (swig_guile_proc) _wrap_qnet_session);
+    scm_c_define_gsubr("new-qnet", 0, 0, 0, (swig_guile_proc) _wrap_new_qnet);
+    ((swig_guile_clientdata *)(SWIGTYPE_p_QMtp->clientdata))->destroy = (guile_destructor) _wrap_delete_qnet;
+    scm_c_define_gsubr("delete-qnet", 1, 0, 0, (swig_guile_proc) _wrap_delete_qnet);
+    SWIG_TypeClientData(SWIGTYPE_p_MainWin, (void *) &_swig_guile_clientdatamainwin);
+    scm_c_define_gsubr("mainwin-set-use-dock", 1, 0, 0, (swig_guile_proc) _wrap_mainwin_set_use_dock);
+    scm_c_define_gsubr("mainwin-qmtp", 1, 0, 0, (swig_guile_proc) _wrap_mainwin_qmtp);
+    scm_c_define_gsubr("main-window", 0, 1, 0, (swig_guile_proc) _wrap_main_window);
+    SWIG_TypeClientData(SWIGTYPE_p_ChatSession, (void *) &_swig_guile_clientdatachatsession);
+    scm_c_define_gsubr("chatsession-display-err", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_display_err);
+    scm_c_define_gsubr("chatsession-display-out", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_display_out);
+    scm_c_define_gsubr("chatsession-session-name", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_session_name);
+    scm_c_define_gsubr("chatsession-update-filters", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_update_filters);
+    scm_c_define_gsubr("chatsession-chatpage", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_chatpage);
+    scm_c_define_gsubr("chatsession-logged-p", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_logged_p);
+    scm_c_define_gsubr("chatsession-close-session", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_close_session);
+    scm_c_define_gsubr("chatsession-link-clicked", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_link_clicked);
+    scm_c_define_gsubr("chatsession-reconnect", 1, 0, 0, (swig_guile_proc) _wrap_chatsession_reconnect);
+    scm_c_define_gsubr("chatsession-kill", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_kill);
+    scm_c_define_gsubr("chatsession-send", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_send);
+    scm_c_define_gsubr("chatsession-incoming", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_incoming);
+    scm_c_define_gsubr("chatsession-outgoing", 2, 0, 0, (swig_guile_proc) _wrap_chatsession_outgoing);
+    SWIG_TypeClientData(SWIGTYPE_p_Face, (void *) &_swig_guile_clientdataface);
+    scm_c_define_gsubr("new-face", 2, 0, 0, (swig_guile_proc) _wrap_new_face);
+    SWIG_TypeClientData(SWIGTYPE_p_Pattern, (void *) &_swig_guile_clientdatapattern);
+    scm_c_define_gsubr("new-pattern", 1, 0, 0, (swig_guile_proc) _wrap_new_pattern);
+    scm_c_define_gsubr("pattern-add", 3, 0, 0, (swig_guile_proc) _wrap_pattern_add);
+    SWIG_TypeClientData(SWIGTYPE_p_BlockPattern, (void *) &_swig_guile_clientdatablock_pattern);
+    scm_c_define_gsubr("new-block-pattern", 3, 0, 0, (swig_guile_proc) _wrap_new_block_pattern);
+    SWIG_TypeClientData(SWIGTYPE_p_FontLock, (void *) &_swig_guile_clientdatafont_lock);
+    scm_c_define_gsubr("font-lock-add-pattern", 2, 0, 0, (swig_guile_proc) _wrap_font_lock_add_pattern);
+    scm_c_define_gsubr("font-lock-add-multi-pattern", 2, 0, 0, (swig_guile_proc) _wrap_font_lock_add_multi_pattern);
+    scm_c_define_gsubr("font-lock-clear", 1, 0, 0, (swig_guile_proc) _wrap_font_lock_clear);
+    SWIG_TypeClientData(SWIGTYPE_p_ChatPage, (void *) &_swig_guile_clientdatachat_page);
+    scm_c_define_gsubr("chat-page-toggle-user-box", 1, 0, 0, (swig_guile_proc) _wrap_chat_page_toggle_user_box);
+    scm_c_define_gsubr("chat-page-font-lock", 1, 0, 0, (swig_guile_proc) _wrap_chat_page_font_lock);
+    SWIG_TypeClientData(SWIGTYPE_p_MainChatPage, (void *) &_swig_guile_clientdatamain_chat_page);
+    scm_c_define_gsubr("main-chat-page-toggle-user-box", 1, 0, 0, (swig_guile_proc) _wrap_main_chat_page_toggle_user_box);
+    scm_c_define_gsubr("main-chat-page-font-lock", 1, 0, 0, (swig_guile_proc) _wrap_main_chat_page_font_lock);
 }
 
 #ifdef __cplusplus

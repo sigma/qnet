@@ -71,3 +71,11 @@ void MtpBrowser::slotDelete(int id) {
     m_bookpop->removeItem(*m_names.find(bname));
     m_names.remove(bname);
 }
+
+void MtpBrowser::resizeEvent ( QResizeEvent * e ) {
+    bool bot = (contentsY() + visibleHeight() >= contentsHeight());
+    int x = contentsX();
+    QTextBrowser::resizeEvent(e);
+    if(bot)
+        ensureVisible(x,contentsHeight());
+}

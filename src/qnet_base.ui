@@ -20,6 +20,12 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
+    <property name="minimumSize">
+        <size>
+            <width>1</width>
+            <height>1</height>
+        </size>
+    </property>
     <property name="caption">
         <string>QNet</string>
     </property>
@@ -68,8 +74,8 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>600</width>
-                                <height>350</height>
+                                <width>1</width>
+                                <height>1</height>
                             </size>
                         </property>
                     </widget>

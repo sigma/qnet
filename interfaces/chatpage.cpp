@@ -46,21 +46,20 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
 
 
     chat_view = new MtpBrowser(hsplit,"chat_view");
-    chat_view->setMinimumSize( QSize( 525, 330 ) );
-    chat_view->setSizePolicy(QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ));
+    chat_view->setMinimumSize( QSize( 1, 1 ) );
+    chat_view->setSizePolicy(QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ));
     users_box = new QListBox(hsplit,"users_box");
 
     hsplit->setResizeMode(users_box,QSplitter::KeepSize);
 
-    users_box->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
-    users_box->setMinimumSize( QSize( 75, 330 ) );
-
+    users_box->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
+    users_box->setMinimumSize( QSize( 1, 1 ) );
     chat_edit = new QTextEdit(vsplit,"chat_edit");
 
     vsplit->setResizeMode(chat_edit,QSplitter::KeepSize);
 
-    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
-    chat_edit->setMinimumSize( QSize( 600, 50 ) );
+    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    chat_edit->setMinimumSize( QSize( 1, 1 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
     ChatPageLayout->addWidget(vsplit,0,0);
@@ -256,4 +255,12 @@ void ChatPage::toggleUserBox() {
 void ChatPage::append(const QString& msg) {
     chat_view->append(msg);
     emit textDisplayed(this);
+}
+
+void ChatPage::resizeEvent ( QResizeEvent * e ) {
+    QSize input_size = chat_edit->size();
+    QSize users_size = users_box->size();
+    Page::resizeEvent(e);
+    chat_edit->resize(input_size);
+    users_box->resize(users_size);
 }

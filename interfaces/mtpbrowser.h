@@ -39,6 +39,9 @@ void slotGoto(int id);
 void slotGoto(const QString&);
 void slotDelete(int id);
 
+protected:
+virtual void resizeEvent ( QResizeEvent * );
+
 private:
   QPopupMenu *m_pop, *m_bookpop, *m_delpop;
   QPoint m_point;

@@ -18,21 +18,6 @@
   (if (< session (qnet-sessions-number mtp))
       (chatsession-send (qnet-session mtp session) mesg)))
 
-(defun make-face (f)
-  (cond ((pair? f)
-         (new-face (car f) (cdr f)))
-        ((symbol? f)
-         (new-face (car (symbol-value f)) (cdr (symbol-value f))))))
-
-(defun font-lock-add-keywords (n pattern list)
-  (let* ((lock (chat-page-font-lock (chatsession-chatpage (qnet-session mtp n))))
-         (pat (new-pattern pattern)))
-    (map (lambda (e)
-           (pattern-add pat (car e) (make-face (cdr e))))
-         list)
-    (font-lock-add-pattern lock pat)
-    ))
-
 (defun font-lock ()
   (font-lock-add-keywords (- (qnet-sessions-number mtp) 1)
                           "<(Mtp)> (.*)" '((1 . yellow-face)
