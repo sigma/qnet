@@ -52,7 +52,6 @@ public slots:
     void closeSession();
     void slotLinkClicked(const QString&);
     void slotReconnect();
-    void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString&);
     void incoming(const QString&);
@@ -85,8 +84,6 @@ private:
 
     QString host, port, session_name;
 
-
-    QDomDocument * m_dom;
     MtpFilter * m_filter;
 //    MtpContext * m_context;
     std::vector<Page *> brothers;

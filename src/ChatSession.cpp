@@ -26,7 +26,6 @@
 #include "mtpbrowser.h"
 #include "mtpfilterssettings.h"
 #include "qnet.h"
-#include "domutil.h"
 #include "MtpFilter.h"
 #include "Filter.h"
 #include "MtpContext.h"
@@ -234,10 +233,6 @@ void ChatSession::executeShellCommand(const QString& com) {
     connect(proc, SIGNAL(processExited()),
             this, SLOT(deleteProcess()));
     //    }
-}
-
-void ChatSession::setDomDocument(QDomDocument * dom) {
-    m_dom = dom;
 }
 
 void ChatSession::deleteProcess() {

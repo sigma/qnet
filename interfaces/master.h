@@ -14,6 +14,7 @@
 #include <qobject.h>
 #include <qstring.h>
 
+#include "domutil.h"
 #include "MtpContext.h"
 
 class Master : public QObject {
@@ -32,6 +33,8 @@ class Master : public QObject {
     virtual void displayStderr(const QString&) = 0;
     virtual void displayStdout(const QString&) = 0;
     virtual void send(const QString&) = 0;
+    void setDomDocument(QDomDocument * dom) {m_dom = dom;}
+    QDomDocument * dom() {return m_dom;}
 
 public slots:
     virtual void incoming(const QString&) {}
@@ -42,6 +45,9 @@ public slots:
 
 private:
     MtpContext* m_context;
+
+protected:
+    QDomDocument * m_dom;
 
 signals:
     void active();

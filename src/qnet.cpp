@@ -235,8 +235,13 @@ void QMtp::slotConfigure() {
     m_settings->prop_list->insertItem("Appearance",7);
     {
         int position = DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top);
+        int input_height = DomUtil::readIntEntry(m_document,"/appearance/tabs/input",30);
+        int user_width = DomUtil::readIntEntry(m_document,"/appearance/tabs/user",70);
         appearance_settings->rbTop->setChecked(position==QTabWidget::Top);
         appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
+        ChatPage * cp = (ChatPage *)appearance_settings->tabs->page(1);
+        cp->chat_edit->resize(cp->chat_edit->size().width(),input_height);
+        cp->users_box->resize(user_width,cp->users_box->size().height());
     }
 
     connect(m_settings, SIGNAL(end()),
@@ -297,6 +302,12 @@ void QMtp::slotStoreConfig() {
             int position = appearance_settings->rbTop->isChecked()?QTabWidget::Top : QTabWidget::Bottom;
             DomUtil::writeIntEntry(m_document,"appearance/tabs/position",position);
             tabs->setTabPosition((QTabWidget::TabPosition)position);
+
+            ChatPage * cp = (ChatPage *)appearance_settings->tabs->page(1);
+            int input_height = cp->chat_edit->size().height();
+            int user_width = cp->users_box->size().width();
+            DomUtil::writeIntEntry(m_document,"/appearance/tabs/input",input_height);
+            DomUtil::writeIntEntry(m_document,"/appearance/tabs/user",user_width);
         }
 
         // StyleSheet :

@@ -22,8 +22,8 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>1</width>
-            <height>1</height>
+            <width>21</width>
+            <height>179</height>
         </size>
     </property>
     <property name="caption">
@@ -50,6 +50,12 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>1</width>
+                    <height>1</height>
+                </size>
             </property>
             <widget class="QWidget">
                 <property name="name">
@@ -82,6 +88,12 @@
                     <widget class="QLineEdit" row="1" column="0">
                         <property name="name">
                             <cstring>system_edit</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>1</width>
+                                <height>1</height>
+                            </size>
                         </property>
                     </widget>
                 </grid>

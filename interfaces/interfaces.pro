@@ -3,6 +3,8 @@
 # Subdir relative project main directory: ./interfaces
 # Target is a library:
 
+INCLUDEPATH = ../utils
+LIBS += ../utils/libutils.a
 SOURCES += MtpContext.cpp \
            mtpbrowser.cpp \
            chatpage.cpp \
@@ -13,6 +15,7 @@ HEADERS += master.h \
            MtpContext.h \
            chatpage.h \
            fontlock.h
+FORMS += choicewidget.ui
 TEMPLATE = lib
 CONFIG += release \
           warn_on \

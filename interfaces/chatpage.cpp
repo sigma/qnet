@@ -26,6 +26,7 @@
 
 #include "mtpbrowser.h"
 #include "fontlock.h"
+#include "domutil.h"
 
 #define DEFAULT_BOOKMARK "[Mark]"
 
@@ -101,8 +102,9 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
     connect(new_line, SIGNAL(activated()),
             this, SLOT(slotNewLine()));
 
-    connect(chat_view,SIGNAL(linkClicked(const QString &)),
-            master, SLOT(slotLinkClicked(const QString &)));
+    if(master)
+        connect(chat_view,SIGNAL(linkClicked(const QString &)),
+                master, SLOT(slotLinkClicked(const QString &)));
 
     connect(chat_edit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
@@ -138,6 +140,13 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
     user_menu = new QPopupMenu(users_box);
     user_box_visible = true;
     fontlock = new FontLock(chat_view);
+
+    if(master) {
+        int input_height = DomUtil::readIntEntry(*(master->dom()),"/appearance/tabs/input",30);
+        int user_width = DomUtil::readIntEntry(*(master->dom()),"/appearance/tabs/user",70);
+        chat_edit->resize(chat_edit->size().width(),input_height);
+        users_box->resize(user_width,users_box->size().height());
+    }
 }
 
 /*
