@@ -60,6 +60,8 @@ public slots:
     void slotPageUp();
     void slotPageDown();
 
+    void slotUserDoubleClicked(QListBoxItem*);
+        
     void setDomDocument(QDomDocument * dom);
     void kill(Page*);
     void send(const QString &);

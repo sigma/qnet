@@ -54,6 +54,7 @@ signals:
     
 public slots:
     void slotConfigure();
+    void slotStoreConfig();
     void fileNew();
     void fileSaveAs();
     void fileSessions();
@@ -75,6 +76,7 @@ public slots:
     
 private:
     QDomDocument m_document;
+    QDomDocument temporary_dom;
     QMap<QWidget*,ChatSession*> tab_map;
     QMap<QString,void*> plugins_map;
     QValueList<ChatSession*> sessions;
@@ -83,6 +85,7 @@ private:
     QPopupMenu *new_menu;
     RemoteControlServerInfo *rctl;
     QString m_rcpath;
+    MtpSettings *m_settings;
     
 private slots:
     void launchSession(const QString& name);

@@ -51,7 +51,8 @@ QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
     delete statusBar();
 
     m_rcpath = rcpath;
-
+    m_settings = 0;
+    
     QAction *fileNewAction = new QAction( this, "fileNewAction" );
     connect( fileNewAction, SIGNAL( activated() ), this, SLOT( fileNew() ) );
     fileNewAction->setAccel( tr( "Ctrl+N" ) );
@@ -100,28 +101,27 @@ QString QMtp::iconPath() {
 }
 
 void QMtp::slotConfigure() {
-    MtpSettings settings(this);
-    QDomDocument temporary_dom;
+    m_settings = new MtpSettings(this);
     
     temporary_dom.setContent(m_document.toString());
 
     // Select the right widget
-    connect(settings.prop_list, SIGNAL(highlighted(int)),
-            settings.stack, SLOT(raiseWidget(int)));
+    connect(m_settings->prop_list, SIGNAL(highlighted(int)),
+            m_settings->stack, SLOT(raiseWidget(int)));
 
     // Filters :
     {
-        MtpFiltersSettings * filters_settings = new MtpFiltersSettings(settings.stack);
-        settings.stack->addWidget(filters_settings,0);
-        settings.prop_list->insertItem("Filters",0);
+        MtpFiltersSettings * filters_settings = new MtpFiltersSettings(m_settings->stack);
+        m_settings->stack->addWidget(filters_settings,0);
+        m_settings->prop_list->insertItem("Filters",0);
         //filters_settings->setEnabled(false);
 	filters_settings->setDom(&temporary_dom);
     }
 
     // Urls :
-    UrlSettings * url_settings = new UrlSettings(settings.stack);
-    settings.stack->addWidget(url_settings,1);
-    settings.prop_list->insertItem("Url",1);
+    UrlSettings * url_settings = new UrlSettings(m_settings->stack);
+    m_settings->stack->addWidget(url_settings,1);
+    m_settings->prop_list->insertItem("Url",1);
     {
         QStringList list = DomUtil::readListEntry(m_document,"/urls/available","type");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
@@ -134,9 +134,9 @@ void QMtp::slotConfigure() {
     }
 
     // Prefixes :
-    PrefixSettings * prefix_settings = new PrefixSettings(settings.stack);
-    settings.stack->addWidget(prefix_settings,2);
-    settings.prop_list->insertItem("Prefixes",2);
+    PrefixSettings * prefix_settings = new PrefixSettings(m_settings->stack);
+    m_settings->stack->addWidget(prefix_settings,2);
+    m_settings->prop_list->insertItem("Prefixes",2);
     {
         QStringList list = DomUtil::readListEntry(m_document,"/prefixes","item");
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
@@ -146,25 +146,32 @@ void QMtp::slotConfigure() {
     }
 
     // Fortune :
-    FortuneSettings * fortune_settings = new FortuneSettings(settings.stack);
-    settings.stack->addWidget(fortune_settings,3);
-    settings.prop_list->insertItem("Fortune",3);
+    FortuneSettings * fortune_settings = new FortuneSettings(m_settings->stack);
+    m_settings->stack->addWidget(fortune_settings,3);
+    m_settings->prop_list->insertItem("Fortune",3);
     {
         QString args = DomUtil::readEntry(m_document,"/fortune");
         fortune_settings->fortune_edit->setText(args);
     }
 
     // Appearance :
-    AppearanceSettings * appearance_settings = new AppearanceSettings(settings.stack);
-    settings.stack->addWidget(appearance_settings,4);
-    settings.prop_list->insertItem("Appearance",4);
+    AppearanceSettings * appearance_settings = new AppearanceSettings(m_settings->stack);
+    m_settings->stack->addWidget(appearance_settings,4);
+    m_settings->prop_list->insertItem("Appearance",4);
     {
         int position = DomUtil::readIntEntry(m_document,"/appearance/tabs/position",QTabWidget::Top);
         appearance_settings->rbTop->setChecked(position==QTabWidget::Top);
         appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
     }
 
-    if (settings.exec() == QDialog::Accepted) {
+    connect(m_settings, SIGNAL(end()),
+            SLOT(slotStoreConfig()));
+
+    m_settings->show();
+}
+
+void QMtp::slotStoreConfig() {
+    if (m_settings->result() == QDialog::Accepted) {
 	
 	m_document.setContent(temporary_dom.toString());
 	
@@ -172,6 +179,11 @@ void QMtp::slotConfigure() {
 	    (*it)->updateFilters();
 	}
 
+    UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(1);
+    PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(2);
+    FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
+    AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
+    
         // Urls
         {
             QStringList l;
@@ -207,6 +219,8 @@ void QMtp::slotConfigure() {
         }	
 	saveConfigFile();
     }
+    delete m_settings;
+    m_settings = 0;
 }
 
 void QMtp::fileNew() {

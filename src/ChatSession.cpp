@@ -104,6 +104,9 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
             this,SLOT(slotPageUp()));
     connect(pgdown,SIGNAL(activated()),
             this,SLOT(slotPageDown()));
+
+//     connect(users_box, SIGNAL(doubleClicked(QListBoxItem*)),
+//             this,SLOT(slotUserDoubleClicked(QListBoxItem*)));
     
     chat_edit->setFocus();
     chat_edit->setWordWrap(QTextEdit::NoWrap);
@@ -366,6 +369,11 @@ void ChatSession::slotPageUp() {
 
 void ChatSession::slotPageDown() {
     chat_view->moveCursor(QTextEdit::MovePgDown,false);
+}
+
+void ChatSession::slotUserDoubleClicked(QListBoxItem* item) {
+    if(!item) return;
+    displayStdout(":tell:" + item->text() +": ");
 }
 
 void ChatSession::escape(QString * msg) {
