@@ -81,6 +81,10 @@ QMtp::~QMtp() {
 	dlclose(*it);
 }
 
+QString QMtp::iconPath() {
+    return DomUtil::readEntry(m_document,"/general/icon",QString::null);
+}
+
 void QMtp::slotConfigure() {
     MtpSettings settings(this);
     QDomDocument temporary_dom;
@@ -280,6 +284,7 @@ void QMtp::closeTab(QWidget *w) {
 void QMtp::fileExit() {
     saveConfigFile();
     close();
+    emit closeProgram();
 }
 
 void QMtp::gotoNextTab() {

@@ -11,17 +11,16 @@
 
 #include <qapplication.h>
 
-#include "qnet.h"
-#include "version.h"
+#include "mainwin.h"
 
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
   
-    QMtp * mw = new QMtp();
-    mw->setCaption( CLIENT );
+    MainWin* m = new MainWin(false,false,"main_window");
+    m->setUseDock();
     
-    mw->show();
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
+    a.connect( m, SIGNAL(closeProgram()), &a, SLOT(quit()) );
     
     return a.exec();
 }

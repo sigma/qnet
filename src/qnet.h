@@ -34,21 +34,18 @@ class QMtp : public QMtp_base {
     friend class RemoteControlServerInfo;
     
 public:
-/*
-    typedef enum {
-        TELL,
-        BROWSER,
-	DRAWING,
-	SPLASH
-    } PageType;
-*/
+
     QMtp(QWidget *parent = 0, const char *name = 0);
     ~QMtp();
 
     bool loadConfigFile();
     bool saveConfigFile();
     Page * getNewPage(const QString&, const QString&, ChatSession *);
+    QString iconPath();
 
+signals:
+    void closeProgram();
+    
 public slots:
     void slotConfigure();
     void fileNew();

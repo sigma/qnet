@@ -39,7 +39,10 @@ SOURCES += main.cpp \
            UrlSettings.cpp \
            PrefixSettings.cpp \
            remotecontrol.cpp \
-           chatpage.cpp 
+           chatpage.cpp \
+           trayicon.cpp \
+           trayicon_x11.cpp \
+           mainwin.cpp 
 HEADERS += qnet.h \
            telnetmanager.h \
            ChatSession.h \
@@ -50,7 +53,9 @@ HEADERS += qnet.h \
            remotecontrol.h \
            chatpage.h \
            appearancesettings.ui.h \
-           mtpfilterssettings.ui.h 
+           mtpfilterssettings.ui.h \
+           trayicon.h \
+           mainwin.h 
 IMAGES += images/filenew \
           images/fileopen \
           images/filesave \
