@@ -22,6 +22,8 @@ void MtpFiltersSettings::displayBlock( const QString & name)
 {
     block_name->setText(name);
     block_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/result"));
+    block_begin_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/beginresult"));
+    block_end_result->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/endresult"));
     block_begin->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/begin"));
     block_end->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/end"));
     block_input->setText(DomUtil::readEntry(*m_dom,"/filters/" + name + "/depend",""));
@@ -74,6 +76,8 @@ void MtpFiltersSettings::setDom( QDomDocument * dom)
 void MtpFiltersSettings::changedBlock()
 {
     DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/result",block_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/beginresult",block_begin_result->text());
+    DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/endresult",block_end_result->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/begin",block_begin->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/end",block_end->text());
     DomUtil::writeEntry(*m_dom,"/filters/" + block_rules->currentText() + "/depend",block_input->text());
