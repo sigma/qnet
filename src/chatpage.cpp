@@ -43,14 +43,19 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
  
     chat_view = new MtpBrowser(hsplit,"chat_view");
     chat_view->setMinimumSize( QSize( 525, 330 ) );
+    chat_view->setSizePolicy(QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ));
     users_box = new QListBox(hsplit,"users_box");
 
-    users_box->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
+    hsplit->setResizeMode(users_box,QSplitter::KeepSize);
+
+    users_box->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::MinimumExpanding, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
     users_box->setMinimumSize( QSize( 75, 330 ) );
 
     chat_edit = new QTextEdit(vsplit,"chat_edit");
 
-    chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    vsplit->setResizeMode(chat_edit,QSplitter::KeepSize);
+    
+    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
     chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 

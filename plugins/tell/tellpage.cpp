@@ -37,32 +37,18 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     chat_view = new MtpBrowser( vsplit, "chat_view" );
     chat_view->setMinimumSize( QSize( 600, 330 ) );
     
+    chat_view->setSizePolicy(QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored, 0, 0, chat_view->sizePolicy().hasHeightForWidth() ));
+
     chat_edit = new QTextEdit( vsplit, "chat_edit" );
     
-    chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    chat_edit->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    
     chat_edit->setMinimumSize( QSize( 600, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
-    
-//     QValueList<int> list = vsplit->sizes();
-//     int tmp = list[1];
-//     list[1] = 0; // Strange things happend here...
-//     list[0] += tmp-list[1];
-//     vsplit->setSizes(list);
 
+    vsplit->setResizeMode(chat_edit,QSplitter::KeepSize);
     TellPageBaseLayout->addWidget(vsplit,0,0);
-    /*
-    chat_edit = new QTextEdit( this, "chat_edit" );
-    chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
-    chat_edit->setMaximumSize( QSize( 32767, 50 ) );
-    chat_edit->setFrameShape( QTextEdit::LineEditPanel );
 
-    TellPageBaseLayout->addWidget( chat_edit, 1, 0 );
-
-    chat_view = new MtpBrowser( this, "chat_view" );
-
-    TellPageBaseLayout->addWidget( chat_view, 0, 0 );
-    languageChange();
-    */
     resize( QSize(600, 380).expandedTo(minimumSizeHint()) );
 
     chat_view->setTextFormat(Qt::RichText);
