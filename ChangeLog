@@ -1,3 +1,11 @@
+2005-01-20  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* src/mtpprotocol.h:
+	deported features into MtpSocket
+
+	* src/mtpsocket.h:
+	(MtpSocket): new class for Mtp specialized socket
+
 2004-12-27  Yann Hodique  <Yann.Hodique@lifl.fr>
 
 	* buttondock.cpp: plop

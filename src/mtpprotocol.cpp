@@ -1,7 +1,7 @@
 /*
  *  File: mtpprotocol.cpp
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <28/12/2004 15:26:53 Yann Hodique>
+ *  Time-stamp: <20/01/2005 20:42:24 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -17,15 +17,11 @@
 
 #include "mtpprotocol.h"
 
-#include <QTcpSocket>
+#include <QIODevice>
 #include <QStringList>
 
 MtpProtocol::MtpProtocol(QObject * parent) : QObject(parent) {
-    socket = 0;
-    host = QString::null;
-    port = 0;
-    login = QString::null;
-    passwd = QString::null;
+    io = 0;
 
     IAC = QChar(char(255));
     cmd_reg = QRegExp(QString("^") + IAC + QString(".."));
@@ -48,38 +44,25 @@ void MtpProtocol::writeLine(const QString& s) {
     str = str.replace("\n","\r\n");
     if(!str.endsWith("\n"))
         str += "\r\n";
-    writeSocket(str);
+    writeIO(str);
 }
 
-void MtpProtocol::connectToHost() {
-    if(socket == 0 && host != QString::null && port != 0) {
-        socket = new QTcpSocket(this);
-        installSocket(socket);
-        socket->connectToHost(host,port);
-    }
+void MtpProtocol::installIO(QIODevice *s) {
+    io = s;
+    connect(s, SIGNAL(readyRead()), this, SLOT(readIO()));
 }
 
-void MtpProtocol::reconnectToHost() {
-    if(socket) {
-        uninstallSocket(socket);
-        socket->deleteLater();
-    }
-    connectToHost();
+void MtpProtocol::uninstallIO() {
+    disconnect(io, SIGNAL(readyRead()), this, SLOT(readIO()));
+    io->deleteLater();
+    io = 0;
 }
 
-void MtpProtocol::installSocket(QTcpSocket *s) {
-    connect(s, SIGNAL(readyRead()), this, SLOT(readSocket()));
-}
-
-void MtpProtocol::uninstallSocket(QTcpSocket *s) {
-    disconnect(s, SIGNAL(readyRead()), this, SLOT(readSocket()));
-}
-
-void MtpProtocol::readSocket() {
-    Q_LONGLONG available = socket->bytesAvailable();
+void MtpProtocol::readIO() {
+    Q_LONGLONG available = io->bytesAvailable();
 
     char * buffer = new char[available+1];
-    socket->read(buffer,available);
+    io->read(buffer,available);
     buffer[available] = 0;
 
     QString text(buffer);
@@ -103,18 +86,12 @@ void MtpProtocol::readSocket() {
     //Login and Password management (no "\n")
     if (text.endsWith("Login: ")) {
         text += "\n";
-        if (login != "")
-            writeLine(login);
-//        login = "";
+        emit loginQuery();
     }
 
     if (text.endsWith("Password: ")) {
         text += "\n";
-        if (passwd != "")
-            writeLine(passwd);
-        else
-            emit passwdQuery();
-//        passwd = "";
+        emit passwdQuery();
     }
 
     text = suspended + text;
@@ -137,6 +114,6 @@ void MtpProtocol::readSocket() {
         emit readyRead();
 }
 
-void MtpProtocol::writeSocket(const QString& s) {
-    socket->write(s.toAscii());
+void MtpProtocol::writeIO(const QString& s) {
+    io->write(s.toAscii());
 }

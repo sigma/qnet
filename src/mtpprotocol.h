@@ -1,7 +1,7 @@
 /*
  *  File: mtpprotocol.h
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <30/12/2004 12:56:00 Yann Hodique>
+ *  Time-stamp: <20/01/2005 20:36:50 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -22,7 +22,7 @@
 #include <QQueue>
 #include <QRegExp>
 
-class QTcpSocket;
+class QIODevice;
 
 class MtpProtocol : public QObject {
 
@@ -32,38 +32,28 @@ public:
     MtpProtocol(QObject *parent = 0);
     ~MtpProtocol();
 
-    void setHost(const QString& h) {host = h;}
-    void setPort(Q_UINT16 p) {port = p;}
-    void setLogin(const QString& l) {login = l;}
-    void setPasswd(const QString& p) {passwd = p;}
-
     bool lineAvailable() const;
     QString readLine();
 
+    void installIO(QIODevice*);
+    void uninstallIO();
+
 public slots:
-    void connectToHost();
-    void reconnectToHost();
     void writeLine(const QString&);
 
 signals:
     void beepSignal();
     void cmdSignal(int cmd);
-    void readyRead();
     void passwdQuery();
+    void loginQuery();
+    void readyRead();
 
 private slots:
-    void readSocket();
-    void writeSocket(const QString& s);
+    void readIO();
+    void writeIO(const QString& s);
 
 private:
-    void installSocket(QTcpSocket*);
-    void uninstallSocket(QTcpSocket*);
-
-    QTcpSocket *socket;
-    QString host;
-    Q_UINT16 port;
-    QString login;
-    QString passwd;
+    QIODevice *io;
 
     QChar IAC;
     QRegExp cmd_reg;
