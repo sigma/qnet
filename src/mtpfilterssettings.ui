@@ -1153,12 +1153,10 @@
     <slot>downItem()</slot>
     <slot>upInput()</slot>
     <slot>downInput()</slot>
+    <slot>setDom( QDomDocument * dom )</slot>
+    <slot>updateList( QListBox * box, const QString &amp; path )</slot>
+    <slot>up( QListBox * box )</slot>
+    <slot>down( QListBox * box )</slot>
 </slots>
-<functions>
-    <function specifier="non virtual">setDom( QDomDocument * dom )</function>
-    <function>updateList( QListBox * box, const QString &amp; path )</function>
-    <function>up( QListBox * box )</function>
-    <function>down( QListBox * box )</function>
-</functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
