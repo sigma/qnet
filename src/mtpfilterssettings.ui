@@ -212,6 +212,9 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>6</number>
+                    </property>
                     <widget class="QLayoutWidget" row="0" column="0" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>layout27</cstring>

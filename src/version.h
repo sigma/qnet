@@ -11,6 +11,6 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-#define CLIENT "QNet 0.50"
+#define CLIENT "QNet 0.51"
 
 #endif
