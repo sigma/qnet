@@ -337,7 +337,9 @@ void ChatSession::slotComplete() {
 
 void ChatSession::slotReconnect() {
     delete mng;
+    emit inactive();
     createTelnetManager();
+    emit active();
 }
 
 void ChatSession::escape(QString * msg) {

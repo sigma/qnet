@@ -138,4 +138,5 @@ void TelnetManager::slotError(int error_code) {
 	    cerr << "Unknown QSocket error" << endl;
 	    break;
     }
+    emit processExited();
 }
