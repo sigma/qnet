@@ -1,3 +1,4 @@
 .moc
 Makefile
 main_wrap.cxx
+semantic.cache

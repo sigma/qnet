@@ -1,7 +1,7 @@
 /*
  *  File: mtpsocket.h
  *  Created: Thursday, January 20, 2005
- *  Time-stamp: <20/01/2005 20:38:44 Yann Hodique>
+ *  Time-stamp: <20/01/2005 22:06:39 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */

@@ -15,7 +15,7 @@ SWIG_TARGET = main_wrap.cxx
 SOURCES += $$SWIG_TARGET
 
 SWIG_MAIN = main.i
-SWIG_HEADERS = fontlock.i mainwindow.i qstring.i
+SWIG_HEADERS = fontlock.i mainwindow.i qstring.i mtpsocket.i
 
 INCLUDEPATH += ../src
 
