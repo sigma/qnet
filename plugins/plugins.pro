@@ -11,5 +11,4 @@ SUBDIRS += tell \
            drawing \
            splash \
            id \
-           file \
            affect 
