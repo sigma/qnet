@@ -16,13 +16,16 @@
 #include <qdom.h>
 #include <qmap.h>
 #include <qprocess.h>
-
+#include <qdir.h>
+#include <iostream>
 class ChatSession;
 class MtpSettings;
 class MtpFiltersSettings;
 class UrlSettings;
 class Page;
 class RemoteControlServerInfo;
+
+#define DEFAULT_RC_PATH (QDir::homeDirPath() + "/.qnetrc")
 
 /**
  * 
@@ -35,14 +38,17 @@ class QMtp : public QMtp_base {
     
 public:
 
-    QMtp(QWidget *parent = 0, const char *name = 0);
+    QMtp(QWidget *parent = 0, const char *name = 0, const QString& rcpath = QString::null);
     ~QMtp();
 
     bool loadConfigFile();
     bool saveConfigFile();
     Page * getNewPage(const QString&, const QString&, ChatSession *);
     QString iconPath();
-
+    QString rcPath() {
+        return (m_rcpath.isNull()?(DEFAULT_RC_PATH):m_rcpath);
+    }
+    
 signals:
     void closeProgram();
     
@@ -76,6 +82,7 @@ private:
     QProcess *fproc;
     QPopupMenu *new_menu;
     RemoteControlServerInfo *rctl;
+    QString m_rcpath;
     
 private slots:
     void launchSession(const QString& name);

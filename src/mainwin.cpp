@@ -48,12 +48,12 @@ void qpopupmenuclear(QPopupMenu *p) {
 //*******************************************************
 //  MainWin
 //*******************************************************
-MainWin::MainWin(bool _onTop, bool _asTool, const char *name)
+MainWin::MainWin(bool _onTop, bool _asTool, const char *name, const QString& rc)
         :QWidget(0, name, 0 | (_onTop ? WStyle_StaysOnTop: 0) | (_asTool ? WStyle_Tool: 0)) {
     tray = 0;
     trayMenu = 0;
 
-    mw = new QMtp();
+    mw = new QMtp(0,0,rc);
     mw->setCaption( CLIENT );
 
     mw->show();

@@ -16,7 +16,6 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdom.h>
-#include <qdir.h>
 #include <qlistbox.h>
 #include <qwidgetstack.h>
 #include <qregexp.h>
@@ -45,11 +44,13 @@
 #include "page.h"
 #include "mtpbrowser.h"
 
-QMtp::QMtp(QWidget *parent, const char *name)
+QMtp::QMtp(QWidget *parent, const char *name, const QString& rcpath)
         : QMtp_base(parent, name), m_document() {
 
     // kick out this useless status bar
     delete statusBar();
+
+    m_rcpath = rcpath;
 
     QAction *fileNewAction = new QAction( this, "fileNewAction" );
     connect( fileNewAction, SIGNAL( activated() ), this, SLOT( fileNew() ) );
@@ -345,7 +346,7 @@ void QMtp::helpAbout() {
 }
 
 bool QMtp::loadConfigFile() {
-    QFile fin(QDir::homeDirPath() + "/.qnetrc");
+    QFile fin(rcPath());
     if (!fin.open(IO_ReadOnly)) {
         QMessageBox::critical(this,"Error","Could not read config file");
         return false;
@@ -370,7 +371,7 @@ bool QMtp::loadConfigFile() {
 }
 
 bool QMtp::saveConfigFile() {
-    QFile fout(QDir::homeDirPath() + "/.qnetrc");
+    QFile fout(rcPath());
     if( !fout.open(IO_WriteOnly) ) {
         QMessageBox::critical(this,"Error","Could not write the config file.");
         return false;

@@ -8,15 +8,30 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-
+#include <iostream>
 #include <qapplication.h>
 
 #include "mainwin.h"
+#include "qnet.h"
 
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
-  
-    MainWin* m = new MainWin(false,false,"main_window");
+    QString rc;
+
+    while (1)
+    {
+        char c = getopt(argc, argv, "f:");
+        if (c == (char)-1) break;
+        switch (c)
+        {
+            case 'f':
+                rc = optarg;
+                break;
+            default:
+                break;
+        }
+    }
+    MainWin* m = new MainWin(false,false,"main_window",rc);
     m->setUseDock();
     
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );

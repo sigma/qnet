@@ -62,11 +62,14 @@ class QMtp;
 class MainWin : public QWidget {
     Q_OBJECT
 public:
-    MainWin(bool onTop, bool asTool, const char *name=0);
+    MainWin(bool onTop, bool asTool, const char *name=0, const QString& rc = QString::null);
     ~MainWin();
 
     void setUseDock();
-
+    QMtp* qmtp() {
+        return mw;
+    }
+    
 signals:
     void closeProgram();
 
