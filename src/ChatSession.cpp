@@ -250,12 +250,15 @@ void ChatSession::send(const QString & m) {
     QStringList list = QStringList::split("\n",msg);
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
 
-        // For looooong messages
+        // For looooong messages, break on last possible space
         QString m = *it;
         unsigned int limit = CHAT_BUFFER_LENGTH - prefix.length();
         while (m.length() > limit) {
-            mng->writeStdin(prefix + m.left(limit));
-            m = msg.right(m.length() - limit);
+            int last_space = m.findRev(' ',limit);
+            if(last_space == -1) last_space = limit;
+            
+            mng->writeStdin(prefix + m.left(last_space));
+            m = msg.right(m.length() - last_space);
         }
         QString to_send(prefix + m);
         mng->writeStdin(m_filter->filterIn(to_send));

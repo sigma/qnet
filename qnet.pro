@@ -15,8 +15,10 @@ CONFIG += release \
 QMAKE_CXXFLAGS_DEBUG += -Werror \
                         -Wall \
                         -ansi \
-                        -pedantic 
+                        -pedantic \
+                        -Wno-long-long
 QMAKE_CXXFLAGS_RELEASE += -Werror \
                           -Wall \
                           -ansi \
-                          -pedantic 
+                          -pedantic \
+                          -Wno-long-long

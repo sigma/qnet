@@ -15,11 +15,13 @@ QMAKE_CXXFLAGS_DEBUG += -g3 \
 -pg \
 -Werror \
 -ansi \
--pedantic
+-pedantic \
+-Wno-long-long
 QMAKE_CXXFLAGS_RELEASE += -Os \
 -Werror \
 -ansi \
--pedantic
+-pedantic \
+-Wno-long-long
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 INCLUDEPATH = ../filters \
