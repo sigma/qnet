@@ -1,7 +1,7 @@
 /*
  *  File: launcher.h
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <30/12/2004 11:42:28 Yann Hodique>
+ *  Time-stamp: <21/01/2005 15:44:54 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -19,15 +19,14 @@
 #define _LAUNCHER_H_
 
 #include <QApplication>
-#include <QTextBrowser>
-
-#include "mainwindow.h"
-#include "floatingtab.h"
-#include "mtpprotocol.h"
-#include "mtparea.h"
 
 class Dispatcher;
+class MtpArea;
 
+/**
+ * A temporary class for instantiating everything
+ *
+ */
 class Launcher : public QApplication {
 
     Q_OBJECT
@@ -36,13 +35,14 @@ private:
     MtpArea *ed;
     Dispatcher *d;
 
-public:
-    Launcher(int & argc, char ** argv) : QApplication(argc,argv) {
-        ed = 0;
-    }
+public slots:
+    Launcher(int & argc, char ** argv);
+    ~Launcher();
 
-    ~Launcher() {}
-
+/**
+ * Init everything.
+ *
+ */
     void init();
 
 };	// end of class Launcher

@@ -1,7 +1,7 @@
 /*
  *  File: all.h
  *  Created: Friday, December 31, 2004
- *  Time-stamp: <31/12/2004 17:58:49 Yann Hodique>
+ *  Time-stamp: <21/01/2005 14:28:27 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -17,6 +17,16 @@
 
 #ifndef _ALL_H_
 #define _ALL_H_
+
+/**
+ * @file   all.h
+ * @author Yann Hodique
+ * @date   Fri Jan 21 14:28:16 2005
+ *
+ * @brief  precompiled header
+ *
+ *
+ */
 
 #if defined __cplusplus
 #include <stdlib.h>

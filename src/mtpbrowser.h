@@ -1,7 +1,7 @@
 /*
  *  File: mtpbrowser.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <02/01/2005 11:57:56 Yann Hodique>
+ *  Time-stamp: <21/01/2005 16:59:57 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -23,16 +23,35 @@
 
 #include "mtpoutput.h"
 
+/**
+ * A graphical MtpOutput, based on a standard QTextBrowser for display
+ *
+ */
 class MtpBrowser : public QTextBrowser, public MtpOutput {
 
     Q_OBJECT
 
 public:
+    /**
+     * Constructor
+     *
+     * @param parent the parent QWidget
+     *
+     */
     MtpBrowser(QWidget * parent = 0);
 
+    /**
+     * Destructor
+     *
+     */
     ~MtpBrowser();
 
-    void display(const QString&);
+    /**
+     * output a message to the user
+     *
+     * @param msg message to display
+     */
+    void display(const QString& msg);
 
 private:
     QTextCursor cursor;

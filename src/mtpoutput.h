@@ -1,7 +1,7 @@
 /*
  *  File: mtpoutput.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 11:15:14 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:05:21 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -18,13 +18,30 @@
 #ifndef _MTPOUTPUT_H_
 #define _MTPOUTPUT_H_
 
+/**
+ * Interface class for output to a user
+ *
+ */
 class MtpOutput {
 public:
+    /**
+     * Constructor
+     *
+     */
     MtpOutput() {}
 
+    /**
+     * Destructor
+     *
+     */
     virtual ~MtpOutput() {};
 
-    virtual void display(const QString&) = 0;
+    /**
+     * display a message to the user
+     *
+     * @param msg message to display
+     */
+    virtual void display(const QString& msg) = 0;
 
 };	// end of class MtpOutput
 

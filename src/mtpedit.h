@@ -1,7 +1,7 @@
 /*
  *  File: mtpedit.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 17:49:23 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:02:26 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -25,22 +25,47 @@
 
 class QShortcut;
 
+/**
+ * A graphical MtpInput based on a standard QTextEdit
+ *
+ * @todo make the "return" action customizable
+ */
 class MtpEdit : public QTextEdit, public MtpInput {
 
     Q_OBJECT
 
 public:
+    /**
+     * Constructor
+     *
+     * @param parent the parent QWidget
+     *
+     */
     MtpEdit(QWidget *parent = 0);
 
+    /**
+     * Destructor
+     *
+     */
     ~MtpEdit();
 
 public slots:
+    /**
+     * action to perform for sending
+     *
+     * @todo change the name
+     *
+     */
     void returnPressedSlot();
 
 private:
     QShortcut* return_pressed;
 
 signals:
+    /**
+     * emitted when a message is to be sent
+     *
+     */
     void send(const QString&);
 };	// end of class MtpEdit
 

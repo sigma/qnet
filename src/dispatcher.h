@@ -1,7 +1,7 @@
 /*
  *  File: dispatcher.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 18:25:46 Yann Hodique>
+ *  Time-stamp: <21/01/2005 16:16:25 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -25,17 +25,50 @@
 class InteractionArea;
 class MtpProtocol;
 
+/**
+ * Interface between a MtpProtocol and some InteractionArea
+ *
+ * @todo suppress direct dependency to MtpProtocol, and replace it with some
+ * Protocol interface
+ *
+ */
 class Dispatcher : public QObject {
 
     Q_OBJECT
 
 public:
+    /**
+     * Constructor
+     *
+     * @param p the MtpProtocol to which this Dispatcher is attached
+     * @param parent the parent QObject
+     *
+     */
     Dispatcher(MtpProtocol * p, QObject *parent = 0);
+
+    /**
+     * Destructor
+     *
+     */
     ~Dispatcher();
 
 public slots:
-    void addInteractionArea(InteractionArea*);
-    void appendText(const QString&);
+    /**
+     * add a new InteractionArea to this Dispatcher. This provides multiple
+     * views over the same MtpProtocol object.
+     *
+     * @param area the area to link
+     *
+     */
+    void addInteractionArea(InteractionArea* area);
+
+    /**
+     * append a text to the output of each InteractionArea linked to the
+     * MtpProtocol
+     *
+     * @param txt the text to append
+     */
+    void appendText(const QString& txt);
 
 private:
     void appendLine(const QString&);

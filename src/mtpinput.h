@@ -1,7 +1,7 @@
 /*
  *  File: mtpinput.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <30/12/2004 13:25:24 Yann Hodique>
+ *  Time-stamp: <21/01/2005 17:04:32 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -18,11 +18,25 @@
 #ifndef _MTPINPUT_H_
 #define _MTPINPUT_H_
 
+/**
+ * Interface class for input from a user
+ *
+ * @todo think about common specific actions
+ *
+ */
 class MtpInput {
 
 public:
+    /**
+     * Constructor
+     *
+     */
     MtpInput() {}
 
+    /**
+     * Destructor
+     *
+     */
     virtual ~MtpInput() {}
 
 };	// end of class MtpInput

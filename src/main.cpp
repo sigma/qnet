@@ -30,6 +30,7 @@
 #include "scm.h"
 #include "fontlock.h"
 #include "mode.h"
+#include "mainwindow.h"
 
 MainWindow * mw;
 

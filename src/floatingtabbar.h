@@ -1,7 +1,7 @@
 /*
  *  File: floatingtabbar.h
  *  Created: Monday, December 27, 2004
- *  Time-stamp: <28/12/2004 09:39:49 Yann Hodique>
+ *  Time-stamp: <21/01/2005 16:33:34 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -25,17 +25,51 @@ class QPoint;
 class QRect;
 class FloatingTab;
 
+/**
+ * Floating QTabBar. It can be dragged by pressing mouse-2 button
+ *
+ * @todo allow customization of the bindings
+ *
+ */
 class FloatingTabBar: public QTabBar {
 
     Q_OBJECT
 
 public:
+    /**
+     * Constructor
+     *
+     * @param parent the parent QWidget
+     *
+     */
     FloatingTabBar(QWidget *parent = 0);
+
+    /**
+     * Destructor
+     *
+     */
     ~FloatingTabBar();
 
 protected:
+    /**
+     * Re-implementation of parent's event handler
+     *
+     * @param event received event
+     */
     void mousePressEvent(QMouseEvent *event);
+
+    /**
+     * Re-implementation of parent's event handler
+     *
+     * @param event received event
+     */
     void mouseMoveEvent(QMouseEvent *event);
+
+    /**
+     * Re-implementation of parent's event handler
+     *
+     * @param event received event
+     */
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
