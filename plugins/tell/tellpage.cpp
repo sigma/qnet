@@ -36,7 +36,7 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     QSplitter *vsplit = new QSplitter(Qt::Vertical,this);
     chat_view = new MtpBrowser( vsplit, "chat_view" );
     chat_edit = new QTextEdit( vsplit, "chat_edit" );
-
+    
     chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
     chat_edit->setMinimumSize( QSize( 300, 50 ) );
     chat_edit->setFrameShape( QTextEdit::LineEditPanel );
@@ -105,6 +105,8 @@ TellPage::TellPage(QWidget *parent, const char *name, Master * session)
     //chat_edit->setTextFormat(Qt::PlainText);
     
     setPrefix(QString("tell ") + name + " ");
+
+    setFocusProxy(chat_edit);
 }
 
 

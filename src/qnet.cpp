@@ -230,6 +230,7 @@ Page * QMtp::getNewPage(const QString& type,const QString& name,ChatSession * re
 	    tabs->insertTab(page,name);
         if(pop)
             tabs->showPage(page);
+        tabs->currentPage()->setFocus();
 	}
 	tab_map.insert(page,ref);
 	connect(page, SIGNAL(textDisplayed(QWidget *)),

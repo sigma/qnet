@@ -204,7 +204,7 @@ QString MtpFilter::filterIn(const QString & arg) {
 QString MtpFilter::filterOut(const QString & arg) {
 
     QString res(arg);
-
+    
     // Global Filter
     for (std::vector<GlobalFilter*>::iterator it = global.begin(); it != global.end(); ++it) {
         if ((*it)->isEnabled() && (*it)->applyTo(res)) {

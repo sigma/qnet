@@ -34,7 +34,7 @@
 
 ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
         : ChatPage(parent, name) {
-
+    
     host = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/host","");
     port = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/port","");
     this->mtp = mtp;
@@ -116,6 +116,7 @@ ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *paren
     m_filter = new MtpFilter(dom,context());
 //    context() = new MtpContext();
 
+    setFocusProxy(chat_edit);
 }
 
 
