@@ -2,7 +2,8 @@ QNet
 ~~~~
 QNet est un nième client pour <Mtp> Chat! écrit en Qt (enfin c'est le
 premier en Qt et le nième en général... enfin je me comprends)
-Version actuelle : 0.42
+Version actuelle : 0.47-cvs
+
 
 Compiler
 ~~~~~~~~
@@ -38,6 +39,7 @@ On essaiera de faire un peu mieux plus tard ;-)
 
 Sigma.
 
+
 Fonctionnalités
 ~~~~~~~~~~~~~~~
 Toutes les fonctionnalités ou presque sont liées à la notion de filtre (entrée/sortie). Les filtres ne sont pas encore directement accessibles à l'utilisateurs pour configuration dynamique, mais c'est prévu ;-)
@@ -48,7 +50,7 @@ Exemples de fonctionnalités :
 - support des urls, configuration des applications à lancer (attention aux trous de sécurité, aucun contrôle n'est effectué au niveau des urls)
 - onglets de tell / wall
 - fenêtres des utilisateurs présents
-- historique des commandes entrées au clavier
+- historique des commandes entrées au clavier (Shift + haut/bas)
 - zone d'entrée multilignes (Ctrl-Entrée pour aller à la ligne, flèches pour naviguer)
 - redimensionnage des messages trop longs (avec respect des commandes préfixes : tell, senddata ...)
 - mode fortune (indispensable)
@@ -56,3 +58,51 @@ Exemples de fonctionnalités :
 - support dessin (expérimental -- norme à définir avec les autres implémenteurs)
 - contrôle distant (en cours, utilité indéniable ;-))
 - équivalent du kaware (apparition en bas de l'écran d'un message contenant le login, ou d'un message de tell)
+
+
+Précisions sur les filtres
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Les versions antérieures à la 0.47 intègrent les filtres dans le code : outre le fait que ceci est Mal(tm) ca vous empêche de les configurer, donc la question est réglée.
+Bon maintenant, suite à des demandes répétées de nombreux fans (assorties de menaces d'ailleurs) les filtres sont déportés dans le .qnetrc, ce qui est Bien(tm). A l'heure où j'écris (Vendredi 9 Mai, 10h, tout est calme), la configuration a l'intérieur du client n'est pas encore possible, mais nos meilleurs techniciens y travaillent jour et nuit. Donc, si vous voulez vous lancer dans l'écriture d'un filtre, il vous faudra :
+- maîtriser la syntaxe obscure desdits filtres
+- les convertir en format xml (ce qui n'est pas nécessairement la partie la plus facile)
+
+On va s'occuper de la première partie.
+Au commencement il y eut le filtre (Filter) dans toute sa splendeur de généralité. Malheureusement il était fort virtuel (virtual) car ne sachant guère à quoi on allait l'employer, il engendra donc 5 fils :
+
+- GlobalFilter l'aîné, qui a le premier un droit de regard sur tout ce qui est émis par le serveur
+
+- BlockFilter le second, qui a la charge fort peu enviable de reconnaître des blocs spécifiques dans le bordel infâme qu'est votre session de chat.
+
+- LineFilter, dont la tache est d'agir sur les éléments plus simples que sont les lignes de texte.
+
+- ItemFilter, qui essaie de ramasser par ci, par là quelques éléments caractéristiques 
+
+- InputFilter, qui lui n'agit pas sur ce qui arrive dans le client, mais sur ce qui en sort, nous reviendrons sur son rôle ultérieurement.
+
+Il existe une hiérarchie naturelle entre les 4 premiers : chacun peut autoriser ou non le suivant à agir, et un filtre ne peut participer au repas que lorsque son supérieur a fini de manger. Oui je sais, c'est affreux ce que je dis, moyenageux et tout, mais ca simplifie la vie :-).
+InputFilter quant à lui, seul de sa caste, il n'a pas ce genre de soucis.
+
+Attardons nous un instant sur l'intération entre filtres et plugins. Pour faire simple : les plugins fournissent des outils aux filtres, et c'est tout. Un plugin peut-être chargé ou pas, si il n'est pas utilisé par un filtre, cela revient au même. Inversement, si un filtre fait appel à un plugin inexistant, le tout fonctionne forcément moins bien. Pour le moment il n'existe pas de solution permettant de conditionner un filtre par l'existence d'un plugin, ca viendra plus tard.
+
+Maintenant que j'ai dessiné le contexte, un exemple simplifié (hourras dans la foule)
+<aboutme>
+  <result>\1\&lt;font color=red>\2\\3\\4\\5\&lt;/font>
+:splash:spl:\2\\3\\4\</result>
+  <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt .*\login\[^&lt;]*)(&lt;.*>)?</regexp>
+</aboutme>
+
+Là je sens comme un silence gêné, non? bon on va détailler un peu plus. Traduit du xml en bonnes expressions régulières ca donne :
+regexp : (:\w+:\w+:)?(<.*>)?(\d{2}:\d{2}:\d{2} )?(&lt .*\login\[^<]*)(<.*>)?
+result : \1\<font color=red>\2\\3\\4\\5\</font>
+	 :splash:spl:\2\\3\\4\
+
+Toujours pas? ok
+globalement la regexp match tout ce qui peut venir du serveur et qui comporte la valeur \login\ dans la phrase principale (comprendre toute ce qui vient VRAIMENT du serveur, et pas de ce qu'on a pu y ajouter dans les étages de filtres qui précèdent)
+\login\ est une variable qui est initialisée auparavant (vous n'avez pas besoin de vous en préoccuper) pour matcher votre login, qu'il soit tout en majuscules, en minuscules ou combinaison exotique des deux.
+
+result se découpe en 2 parties: la première est transmise au plugin de destination de la ligne avant qu'elle traverse notre filtre (voir le "(:\w+:\w+:)?" qui est appelé grace à "\1\") et colorie en rouge toute la ligne.
+la deuxième partie est adressée spécifiquement au plugin qui exporte le type "splash" et a pour effet de lui faire afficher une partie de la ligne.
+
+Voilà, simple non?
+Ah oui comme vous n'aurez pas manqué de le remarquer, les lignes du serveur arrivent sous une forme un peu altérée : les "<" sont convertis en "&lt " etc.
