@@ -1,7 +1,7 @@
 /*
  *  File: scm.h
  *  Created: Saturday, October 2, 2004
- *  Time-stamp: <24/10/2004 10:17:23 Yann Hodique>
+ *  Time-stamp: <26/10/2004 11:51:45 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -23,6 +23,14 @@
 #include <qstring.h>
 #include <qmap.h>
 
+class ScmList: public QValueList<SCM> {
+public:
+    ScmList& operator<< (const QString& msg) {
+        ((QValueList<SCM>)(*this)) << scm_makfrom0str(msg.ascii());
+        return *this;
+    }
+};
+
 class Scm {
 public:
 
@@ -31,7 +39,7 @@ public:
     typedef QMap<QString,SCM> SymbolsMap;
 
     SCM loadFile(const QString&);
-    SCM runHook(const QString&, SCM);
+    SCM runHook(const QString&, ScmList);
     void createHook(const QString&, unsigned int);
     SCM resolve(const QString&);
 

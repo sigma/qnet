@@ -630,7 +630,8 @@ void QMtp::launchSession(const QString& name) {
     connect(session->chatpage(), SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
 
-    Scm::getInstance()->runHook("chatsession-created-hook", SCM_EOL);
+    ScmList l;
+    Scm::getInstance()->runHook("chatsession-created-hook", l);
 }
 
 void QMtp::launchSession(int index) {

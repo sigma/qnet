@@ -1,7 +1,7 @@
 /*
  *  File: scm.cpp
  *  Created: Saturday, October 2, 2004
- *  Time-stamp: <24/10/2004 10:20:12 Yann Hodique>
+ *  Time-stamp: <26/10/2004 11:37:39 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -48,11 +48,16 @@ SCM Scm::loadFile(const QString& filename) {
     return protect(_load_file,(void*)filename.ascii());
 }
 
-SCM Scm::runHook(const QString& hook, SCM args) {
+SCM Scm::runHook(const QString& hook, ScmList args) {
     SCM* data[2];
     SCM h = resolve(hook);
+    SCM a = SCM_EOL;
+
+    for(ScmList::ConstIterator it = args.begin(); it != args.end(); ++it)
+        a = scm_cons(*it,a);
+
     data[0] = &h;
-    data[1] = &args;
+    data[1] = &a;
 
     return protect(_run_hook,data);
 }
