@@ -181,32 +181,35 @@ void QMtp::slotConfigure() {
 
 void QMtp::slotStoreConfig() {
     if (m_settings->result() == QDialog::Accepted) {
-	
-	m_document.setContent(temporary_dom.toString());
-	
-	for(QValueList<ChatSession*>::Iterator it = sessions.begin(); it != sessions.end(); ++it) {
-	    (*it)->updateFilters();
-	}
 
-    UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(1);
-    PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(2);
-    FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
-    AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
-    
+        MtpFiltersSettings * filters_settings = (MtpFiltersSettings *)m_settings->stack->widget(0);
+        UrlSettings * url_settings = (UrlSettings *)m_settings->stack->widget(1);
+        PrefixSettings * prefix_settings = (PrefixSettings *)m_settings->stack->widget(2);
+        FortuneSettings * fortune_settings = (FortuneSettings *)m_settings->stack->widget(3);
+        AppearanceSettings * appearance_settings = (AppearanceSettings *)m_settings->stack->widget(4);
+
+        filters_settings->apply();
+        
+        m_document.setContent(temporary_dom.toString());
+	
+        for(QValueList<ChatSession*>::Iterator it = sessions.begin(); it != sessions.end(); ++it) {
+            (*it)->updateFilters();
+        }
+        
         // Urls
         {
             QStringList l;
             for (uint i=0; i< url_settings->urls_box->count(); i++)
                 l << url_settings->urls_box->text(i);
             DomUtil::writeListEntry(m_document,"/urls/available","type",l);
-
+            
             for (uint i=0; i< url_settings->urls_box->count(); i++) {
                 UrlSettings::UrlItem it = *(url_settings->map.find(url_settings->urls_box->text(i)));
                 DomUtil::writeEntry(m_document,"/urls/" + it.name + "/motif",it.prefix);
                 DomUtil::writeEntry(m_document,"/urls/" + it.name + "/command",it.command);
             }
         }
-
+        
         // Prefixes
         {
             QStringList l;
@@ -214,19 +217,19 @@ void QMtp::slotStoreConfig() {
                 l << prefix_settings->prefix_box->text(i);
             DomUtil::writeListEntry(m_document,"/prefixes","item",l);
         }
-
+        
         // Fortune :
         {
             DomUtil::writeEntry(m_document,"/fortune",fortune_settings->fortune_edit->text());
         }
-
+        
         // Appearance :
         {
             int position = appearance_settings->rbTop->isChecked()?QTabWidget::Top : QTabWidget::Bottom;
             DomUtil::writeIntEntry(m_document,"appearance/tabs/position",position);
             tabs->setTabPosition((QTabWidget::TabPosition)position);
         }	
-	saveConfigFile();
+        saveConfigFile();
     }
     delete m_settings;
     m_settings = 0;
