@@ -25,6 +25,7 @@ PLUGIN_FACTORY(Splash,"splash");
 
 Splash::Splash(QWidget * /*parent*/, const char *name, Master * session) 
     : Page(0, name, session, WStyle_Customize | WStyle_Splash), label(this) {
+    setFocusPolicy(QWidget::NoFocus);
     QColor color1("lightgrey");
 //    QColor color2("white");
     label.setPaletteBackgroundColor(color1);
@@ -60,7 +61,7 @@ void Splash::append(const QString & msg) {
     QRegExp re("\\[([NS]?)([EO]?)\\](.*)");
     if(re.exactMatch(msg)) {
         m_timer->stop();
-        label.setText(re.cap(3));
+        label.setText(re.cap(3).replace(QRegExp("&gt "),">").replace(QRegExp("&lt "),"<").replace(QRegExp("&amp "),"&"));
         label.adjustSize();
         resize(label.size());
         QRect scr = QApplication::desktop()->screenGeometry();
