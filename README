@@ -41,7 +41,7 @@ Sigma.
 
 Commentaires d'utilisateurs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<Kartoch> Lofic: très simple, il te suffit de peindre une fenetre de scroll et 5 boutons sur un parpaing... même ergonomie que le qnet original
+"<Kartoch> Lofic: très simple, il te suffit de peindre une fenetre de scroll et 5 boutons sur un parpaing... même ergonomie que le qnet original"
 
 Fonctionnalités
 ~~~~~~~~~~~~~~~
@@ -101,7 +101,7 @@ result : \1\<font color=red>\2\\3\\4\\5\</font>
 	 :splash:spl:\2\\3\\4\
 
 Toujours pas? ok
-globalement la regexp match tout ce qui peut venir du serveur et qui comporte la valeur \login\ dans la phrase principale (comprendre toute ce qui vient VRAIMENT du serveur, et pas de ce qu'on a pu y ajouter dans les étages de filtres qui précèdent)
+globalement la regexp match tout ce qui peut venir du serveur et qui comporte la valeur \login\ dans la phrase principale (comprendre tout ce qui vient VRAIMENT du serveur, et pas de ce qu'on a pu y ajouter dans les étages de filtres qui précèdent)
 \login\ est une variable qui est initialisée auparavant (vous n'avez pas besoin de vous en préoccuper) pour matcher votre login, qu'il soit tout en majuscules, en minuscules ou combinaison exotique des deux.
 
 result se découpe en 2 parties: la première est transmise au plugin de destination de la ligne avant qu'elle traverse notre filtre (voir le "(:\w+:\w+:)?" qui est appelé grace à "\1\") et colorie en rouge toute la ligne.
@@ -109,3 +109,21 @@ la deuxième partie est adressée spécifiquement au plugin qui exporte le type "sp
 
 Voilà, simple non?
 Ah oui comme vous n'aurez pas manqué de le remarquer, les lignes du serveur arrivent sous une forme un peu altérée : les "<" sont convertis en "&lt " etc.
+
+Plugins
+~~~~~~~
+Les plugins fournis avec l'engin sont les suivants:
+
+- affect : permet l'affectation d'une variable dans un filtre
+
+- browser : affichage dans une frame de texte
+
+- drawing : supporte le channel Dessin propre à <Mtp> Chat !
+
+- emit : emet un message (auto-reply, etc.)
+
+- id : fenetre expérimentale pour le finger ;-)
+
+- splash : popup dans un coin de l'écran
+
+- tell : onglet de discussion privée
