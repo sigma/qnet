@@ -78,7 +78,7 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	}
 	addBlockFilter(f);
     }
-    
+
     filters = DomUtil::readListEntry(*m_dom,"/general/filters/global","filter");
     for(QStringList::Iterator it = filters.begin(); it != filters.end(); ++it) {
 	GlobalFilter* f = new GlobalFilter(*it,m_context);
@@ -121,6 +121,8 @@ MtpFilter::~MtpFilter() {
 	    DomUtil::writeBoolEntry(*m_dom,"/filters/" + name + "/active",(*it)->isEnabled());
 	    DomUtil::writeIntEntry(*m_dom,"/filters/" + name + "/policy",(*it)->policy());
 	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/result",(*it)->getResultPattern());
+        DomUtil::writeEntry(*m_dom,"/filters/" + name + "/beginresult",(*it)->getBeginPattern());
+        DomUtil::writeEntry(*m_dom,"/filters/" + name + "/endresult",(*it)->getEndPattern());
 	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/begin",(*it)->getBeginRegExp());
 	    DomUtil::writeEntry(*m_dom,"/filters/" + name + "/end",(*it)->getEndRegExp());
 	    if((*it)->getInputDependency())

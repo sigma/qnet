@@ -132,7 +132,7 @@ void ChatSession::displayStdout(const QString& msg) {
 
         context()->setVar("login",caseUnsensitive(this->login));
         context()->setVar("Login",this->login);
-	context()->setVar("channel","Hall");
+        context()->setVar("channel","Hall");
 
         QString new_m("<Mtp> Welcome, " + login + ".");
 
