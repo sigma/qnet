@@ -25,6 +25,7 @@
 #include <qstatusbar.h>
 #include <qaction.h>
 #include <qpopupmenu.h>
+#include <qfiledialog.h>
 
 #include <dlfcn.h>
 
@@ -42,6 +43,7 @@
 #include "appearancesettings.h"
 #include "remotecontrol.h"
 #include "page.h"
+#include "mtpbrowser.h"
 
 QMtp::QMtp(QWidget *parent, const char *name)
         : QMtp_base(parent, name), m_document() {
@@ -297,6 +299,37 @@ void QMtp::fileExit() {
     saveConfigFile();
     close();
     emit closeProgram();
+}
+
+void QMtp::fileSaveAs() {
+    QWidget* w = tabs->currentPage();
+    if(w != tab && w != fortune_page) {
+
+        QString log = QString::null;
+ 
+        QMap<QWidget*,ChatSession*>::Iterator it;
+        if ((it = tab_map.find(w)) != tab_map.end()) {
+            log = (static_cast<Page*>(w))->getText();
+        }
+        else {// session tab
+            log = (static_cast<ChatSession*>(w))->chat_view->getText();
+        }
+            
+        if(log != QString::null) {
+            QString filename(QFileDialog::getSaveFileName());
+            if(!filename.isNull()) {
+                QFile file(filename);
+                if(file.open(IO_WriteOnly)) {
+                    QTextStream stream( &file );
+                    stream << log;
+                    file.close();
+                } else {
+                    QMessageBox::critical(this,"Error","Unable to write file");
+                }
+            }
+        } else
+            QMessageBox::critical(this,"Error","Log fonction not implemented yet !");
+    }
 }
 
 void QMtp::gotoNextTab() {

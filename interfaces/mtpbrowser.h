@@ -28,7 +28,9 @@ public:
 	setTextFormat(Qt::RichText);
     }
     ~MtpBrowser() {}
-  
+
+    QString getText() { return text();}
+    
 public slots:
     void setSource(const QString &) {}
 };

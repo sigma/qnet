@@ -37,6 +37,8 @@ public:
     QTextEdit* chat_edit;
     MtpBrowser* chat_view;
 
+    QString getText();
+    
 public slots:
     virtual void returnPressed();
     void slotHistoryUp();

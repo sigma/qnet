@@ -49,6 +49,7 @@ signals:
 public slots:
     void slotConfigure();
     void fileNew();
+    void fileSaveAs();
     void fileSessions();
     void fileExit();
     void closeCurrentTab();

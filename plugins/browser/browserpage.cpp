@@ -58,3 +58,7 @@ void BrowserPage::append(const QString &msg) {
 void BrowserPage::languageChange() {
     setCaption( tr( "Tell page" ) );
 }
+
+QString BrowserPage::getText() {
+    return chat_view->text();
+}

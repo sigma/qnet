@@ -32,7 +32,8 @@ public:
     ~BrowserPage();
     void append(const QString & msg);
     MtpBrowser* chat_view;
-
+    QString getText();
+    
 protected:
     QGridLayout* BrowserPageBaseLayout;
 

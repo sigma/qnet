@@ -152,3 +152,7 @@ void TellPage::slotHistoryDown() {
 void TellPage::slotNewLine() {
     chat_edit->doKeyboardAction(QTextEdit::ActionReturn);
 }
+
+QString TellPage::getText() {
+    return chat_view->text();
+}
