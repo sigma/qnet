@@ -1,7 +1,7 @@
 /*
  *  File: guile_global.h
  *  Created: Wednesday, September 15, 2004
- *  Time-stamp: <>
+ *  Time-stamp: <10/10/2004 18:04:33 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -21,5 +21,6 @@
 #include <libguile.h>
 
 SCM guile_chatsession_created_hook;
+SCM guile_chatsession_output_hook;
 
 #endif /* _GUILE_GLOBAL_H_ */

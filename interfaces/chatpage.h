@@ -40,6 +40,8 @@ public:
 
     FontLock * fontLock() {return fontlock;}
 
+    void setSizes(int,int);
+
 public slots:
     virtual void returnPressed();
     void slotHistoryUp();

@@ -34,6 +34,8 @@
 ChatSession::ChatSession(const QString& session_name, QMtp * mtp, QWidget *parent, const char *name, QDomDocument * dom)
         : Master(parent, name) {
 
+    context()->setVar("Client",CLIENT);
+
     host = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/host","");
     port = DomUtil::readEntry(*dom,"/sessions/" + session_name + "/port","");
     this->mtp = mtp;
@@ -64,8 +66,10 @@ void ChatSession::displayStderr(const QString& msg) {
     mtp->system_view->append("["+ host + ":" + port + "]" + msg);
 }
 
+extern SCM guile_chatsession_output_hook;
 void ChatSession::displayStdout(const QString& msg) {
 
+    scm_c_run_hook(guile_chatsession_output_hook, scm_cons(scm_makfrom0str(msg.ascii()),SCM_EOL));
     emit outputMessage(msg);
     QString m(msg);
     QString output;

@@ -147,9 +147,13 @@ ChatPage::ChatPage( QWidget* parent, const char* name, Master *master, WFlags fl
     if(master) {
         int input_height = DomUtil::readIntEntry(*(master->dom()),"/appearance/tabs/input",30);
         int user_width = DomUtil::readIntEntry(*(master->dom()),"/appearance/tabs/user",70);
+        setSizes(input_height, user_width);
+    }
+}
+
+void ChatPage::setSizes(int input_height, int user_width) {
         chat_edit->resize(chat_edit->size().width(),input_height);
         users_box->resize(user_width,users_box->size().height());
-    }
 }
 
 /*

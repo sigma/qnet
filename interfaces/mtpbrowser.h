@@ -26,27 +26,27 @@ class MtpBrowser : public QTextBrowser
 
 public:
 
-  MtpBrowser(QWidget *parent, const char *name);
-  ~MtpBrowser();
-  QPopupMenu* createPopupMenu(const QPoint& pos);
+    MtpBrowser(QWidget *parent, const char *name);
+    ~MtpBrowser();
+    QPopupMenu* createPopupMenu(const QPoint& pos);
 
   QString getText() { return text();}
 
 public slots:
     void setSource(const QString &) {}
-void slotBookmark(const QString& = QString::null);
-void slotGoto(int id);
-void slotGoto(const QString&);
-void slotDelete(int id);
+    void slotBookmark(const QString& = QString::null);
+    void slotGoto(int id);
+    void slotGoto(const QString&);
+    void slotDelete(int id);
 
 protected:
-virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
 private:
-  QPopupMenu *m_pop, *m_bookpop, *m_delpop;
-  QPoint m_point;
-  QMap<QString, QPair<int,int> > m_marks;
-  QMap<QString,int> m_names;
+    QPopupMenu *m_pop, *m_bookpop, *m_delpop;
+    QPoint m_point;
+    QMap<QString, QPair<int,int> > m_marks;
+    QMap<QString,int> m_names;
 };
 
 #endif

@@ -28,6 +28,8 @@ SCM init(void *) {
 void guile_global_init() {
     guile_chatsession_created_hook=scm_make_hook(SCM_MAKINUM(0));
     scm_c_define("chatsession-created-hook",guile_chatsession_created_hook);
+    guile_chatsession_output_hook=scm_make_hook(SCM_MAKINUM(1));
+    scm_c_define("chatsession-output-hook",guile_chatsession_output_hook);
 }
 
 int main( int argc, char ** argv ) {

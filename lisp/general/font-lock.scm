@@ -45,12 +45,12 @@
 (defun font-lock-add-keywords (list)
   "Add some keywords"
   (set! font-lock-keywords
-        (append list font-lock-keywords)))
+        (append font-lock-keywords list)))
 
 (defun font-lock-add-blocks (list)
   "Add some blocks"
   (set! font-lock-blocks
-        (append list font-lock-blocks)))
+        (append font-lock-blocks list)))
 
 
 (defun font-lock ()

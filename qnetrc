@@ -6,19 +6,27 @@
    <session>beta</session>
    <session>local</session>
    <session>backup</session>
+   <session>azuriel</session>
   </sessions>
   <plugins/>
   <filters>
    <input>
     <filter>wall_emit</filter>
     <filter>dessin</filter>
+    <filter>show</filter>
+    <filter>ignore</filter>
+    <filter>unignore</filter>
+    <filter>song</filter>
+    <filter>plan</filter>
    </input>
    <global>
     <filter>format</filter>
    </global>
    <block>
     <filter>wall</filter>
+    <filter>msg</filter>
     <filter>finger</filter>
+    <filter>who</filter>
     <filter>info</filter>
    </block>
    <line>
@@ -27,6 +35,8 @@
     <filter>pong</filter>
     <filter>listen</filter>
     <filter>version</filter>
+    <filter>test_file</filter>
+    <filter>ignored</filter>
     <filter>ignore_warning</filter>
     <filter>join_dessin</filter>
     <filter>join_others</filter>
@@ -35,13 +45,19 @@
     <filter>ignoremydraw</filter>
     <filter>draw_other</filter>
     <filter>tell_receive</filter>
+    <filter>multi_tell_receive</filter>
     <filter>tell_emit</filter>
+    <filter>multi_tell_emit</filter>
     <filter>notify_moves</filter>
+    <filter>out</filter>
+    <filter>in</filter>
+    <filter>rename</filter>
     <filter>mytalk</filter>
     <filter>emote</filter>
     <filter>me</filter>
     <filter>mywall</filter>
     <filter>otherwall</filter>
+    <filter>mykick</filter>
     <filter>other</filter>
     <filter>server</filter>
     <filter>aboutme</filter>
@@ -71,7 +87,7 @@
   </available>
   <http>
    <motif>http://</motif>
-   <command>konqueror %l</command>
+   <command>html &quot;%l&quot;</command>
   </http>
   <ftp>
    <motif>ftp://</motif>
@@ -85,6 +101,10 @@
    <motif>https://</motif>
    <command>konqueror %l</command>
   </https>
+  <http2>
+   <motif>http://</motif>
+   <command>html %l</command>
+  </http2>
  </urls>
  <prefixes>
   <item>reply</item>
@@ -97,6 +117,8 @@
  <appearance>
   <tabs>
    <position>1</position>
+   <input>7</input>
+   <user>70</user>
   </tabs>
   <tags>
    <mypre>
@@ -106,16 +128,16 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </mypre>
    <block>
-    <family>Monospace</family>
+    <family>Bitstream Vera Sans Mono</family>
     <style>Normal</style>
     <color>-16777216</color>
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </block>
    <family/>
    <style/>
@@ -131,7 +153,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </server>
    <me>
     <family>Verdana</family>
@@ -140,7 +162,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </me>
    <other>
     <family>Verdana</family>
@@ -149,7 +171,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </other>
    <emote>
     <family>Verdana</family>
@@ -158,7 +180,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </emote>
    <tome>
     <family>Verdana</family>
@@ -167,7 +189,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </tome>
    <default>
     <family>Verdana</family>
@@ -176,7 +198,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </default>
    <url>
     <family>Verdana</family>
@@ -185,7 +207,7 @@
     <strike>false</strike>
     <underline>false</underline>
     <spaces>false</spaces>
-    <size>2</size>
+    <size>3</size>
    </url>
   </tags>
  </appearance>
@@ -199,11 +221,22 @@
    <active>true</active>
    <policy>0</policy>
    <result>:browser:[Wall]: \1\&lt;block>\2\&lt;/block>\3\</result>
-   <beginresult>:browser:[Wall]:&lt;hr></beginresult>
+   <beginresult>-:browser:[Wall]:&lt;hr></beginresult>
    <endresult>:browser:[Wall]:</endresult>
    <begin>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  Wall :)(&lt;.*>)?</begin>
+   <main>^(&lt;.*>)?([^&lt;>]+)(&lt;.*>)?</main>
    <end>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  End of Wall)(&lt;.*>)?</end>
   </wall>
+  <msg>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:browser:[Msg]: \1\&lt;block>\2\&lt;/block>\3\</result>
+   <beginresult>-:browser:[Msg]:&lt;hr></beginresult>
+   <endresult>:browser:[Msg]:</endresult>
+   <begin>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  Your message[^&lt;]*)(&lt;.*>)?</begin>
+   <main>^(&lt;.*>)?([^&lt;>]+)(&lt;.*>)?</main>
+   <end>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  You have [^&lt;]*)(&lt;.*>)?</end>
+  </msg>
   <finger>
    <active>true</active>
    <policy>0</policy>
@@ -211,8 +244,21 @@
    <beginresult>:browser:[Finger]: \0\</beginresult>
    <endresult>:browser:[Finger]:</endresult>
    <begin>^(&lt;.*>)?(Login *: \w+)(&lt;.*>)?</begin>
+   <main>^(&lt;.*>)?([^&lt;>]+)(&lt;.*>)?</main>
    <end>^(&lt;.*>)?(&amp;lt Mtp&amp;gt  End of finger)(&lt;.*>)?</end>
   </finger>
+  <who>
+   <active>true</active>
+   <policy>0</policy>
+   <result>\1\&lt;block>\2\\3\&lt;/block>\4\
+:intern:Intern:users:add:\2\
+</result>
+   <beginresult>\1\&lt;block>\2\&lt;/block>\3\</beginresult>
+   <endresult>\1\\2\\3\</endresult>
+   <begin>^(&lt;.*>)?( Login [^&lt;]* Channel [^&lt;]*)(&lt;.*>)?</begin>
+   <main>^(&lt;.*>)?(\w+)( [^&lt;>]+)(&lt;.*>)?</main>
+   <end>(&lt;.*>)?(&amp;lt Mtp&amp;gt  There [^&lt;]*)(&lt;.*>)?</end>
+  </who>
   <info>
    <active>true</active>
    <policy>0</policy>
@@ -220,21 +266,26 @@
    <beginresult>\1\&lt;block>\2\&lt;/block>\3\</beginresult>
    <endresult>\1\\2\\3\</endresult>
    <begin>^(&lt;.*>)?([^|&amp;&lt;][^&lt;]*|&amp;lt Mtp&amp;gt  History[^&lt;]*|&amp;lt Mtp&amp;gt  System[^&lt;]*|&amp;lt Mtp&amp;gt  Help[^&lt;]*)(&lt;.*>)?</begin>
+   <main>^(&lt;.*>)?([^&lt;>]+)(&lt;.*>)?</main>
    <end>^(&lt;.*>)?(&amp;lt [^&lt;]*)(&lt;.*>)?</end>
   </info>
   <exec>
-   <active>false</active>
+   <active>true</active>
    <policy>0</policy>
    <result>\3\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|\Login\\| \[QNet\]\[exec\](.*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|\Login\\| \[QNet\]\[exec\]([^&lt;]*)(&lt;.*>)?</regexp>
   </exec>
   <incoming>
-   <active>false</active>
+   <active>true</active>
    <policy>0</policy>
    <result>\1\&lt;other>\2\\3\&lt;/other>\5\
-:emit:Emit:wall
+:intern:Intern:affect:Login=\4\
+:intern:Intern:affect:Channel=Hall
+:intern:Intern:emit:set client \Client\
+:intern:Intern:emit:who all
+:intern:Intern:emit:wall
 </result>
-   <regexp>(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  (Your client is now |You set client to ).*)(&lt;.*>)?</regexp>
+   <regexp>(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  Welcome, (\w+)\.)(&lt;.*>)?</regexp>
   </incoming>
   <pong>
    <active>false</active>
@@ -245,15 +296,28 @@
   <listen>
    <active>true</active>
    <policy>0</policy>
-   <result>:emit:Emit:senddata \3\ [Rainbow][Song][\3\ en slip.ogg]</result>
+   <result>:intern:Intern:emit:senddata \3\ [Rainbow][Song][\3\ en slip.ogg]</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| \[Rainbow\]\[Listen\](&lt;.*>)?</regexp>
   </listen>
   <version>
    <active>true</active>
    <policy>0</policy>
-   <result>:emit:Emit:senddata \3\ KACK VERSION Win95 Telnet (Ultimate Edition)</result>
+   <result>:intern:Intern:emit:senddata \3\ KACK VERSION Win95 Telnet (Ultimate Edition)</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| KREQ VERSION(&lt;.*>)?</regexp>
   </version>
+  <test_file>
+   <active>false</active>
+   <policy>0</policy>
+   <result>\0\
+:file:File:\3\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(\|\w+\| \[Rainbow\][^&lt;]*)(&lt;.*>)?</regexp>
+  </test_file>
+  <ignored>
+   <active>true</active>
+   <policy>0</policy>
+   <result/>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt (\ignored\)&amp;gt .*)(&lt;.*>)?</regexp>
+  </ignored>
   <ignore_warning>
    <active>true</active>
    <policy>0</policy>
@@ -264,67 +328,105 @@
    <active>true</active>
    <policy>0</policy>
    <result>&lt;other>\0\&lt;/other>
-:affect:Affectations:channel=Dessin
-:drawing:Dessin:</result>
+:drawing:Dessin:
+:intern:Intern:affect:channel=Dessin</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You join channel Dessin(&lt;.*>)?</regexp>
   </join_dessin>
   <join_others>
    <active>true</active>
    <policy>0</policy>
    <result>&lt;other>\0\&lt;/other>
-:affect:Affectations:channel=\3\</result>
+:intern:Intern:affect:channel=\3\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You join channel (\w+)(&lt;.*>)?</regexp>
   </join_others>
   <leave_channel>
    <active>true</active>
    <policy>0</policy>
    <result>\0\
-:affect:Affectations:channel=Hall</result>
+:intern:Intern:affect:channel=Hall</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You leave channel (\w+)(&lt;.*>)?</regexp>
   </leave_channel>
   <privatedraw>
    <active>true</active>
    <policy>0</policy>
    <result>:drawing:Dessin@\3\:\4\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| (\}\PainterCommands\[^&lt;]*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?\|(\w+)\| (\}[LCTlct][^&lt;]*)(&lt;.*>)?</regexp>
   </privatedraw>
   <ignoremydraw>
    <active>true</active>
    <policy>0</policy>
    <result>:drawing:Dessin:</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \Login\&amp;gt  )(\}\PainterCommands\[^&lt;]*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \Login\&amp;gt  )(\}[LCTlct][^&lt;]*)(&lt;.*>)?</regexp>
   </ignoremydraw>
   <draw_other>
    <active>true</active>
    <policy>0</policy>
    <result>:drawing:Dessin:\4\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \w+&amp;gt  )(\}\PainterCommands\[^&lt;]*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \w+&amp;gt  )(\}[LCTlct][^&lt;]*)(&lt;.*>)?</regexp>
   </draw_other>
   <tell_receive>
    <active>true</active>
    <policy>0</policy>
-   <result>-:tell:\4\: \1\&lt;default>&amp;lt \4\&amp;gt \6\&lt;/default>\7\
+   <result>-:tell:\4\: \1\&amp;lt \4\&amp;gt \6\\7\
 -:splash:spl:[SE]&lt;\4\> \6\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (tells you:|asks you:|replies:)([^&lt;]*)(&lt;.*>)?</regexp>
   </tell_receive>
+  <multi_tell_receive>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:intern:Intern:sort:LIST&lt;-\4\,\6\
+-:tell:\LIST\: \1\&amp;lt \4\&amp;gt \7\\8\
+-:splash:spl:[SE]&lt;\4\> \7\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (tells you\(CC: ([^\)]+)\):|asks you:)([^&lt;]*)(&lt;.*>)?</regexp>
+  </multi_tell_receive>
   <tell_emit>
    <active>true</active>
    <policy>0</policy>
    <result>-:tell:\4\: \1\&lt;me>&amp;lt \Login\&amp;gt \6\&lt;/me>\7\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You (tell|ask|reply to) (\w+)(:)(.*)(&lt;.*>)?</regexp>
   </tell_emit>
+  <multi_tell_emit>
+   <active>true</active>
+   <policy>0</policy>
+   <result>-:tell:\4\: \1\&lt;me>&amp;lt \Login\&amp;gt \6\&lt;/me>\7\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You (tell|ask|reply to) ([\w,]+)(:)(.*)(&lt;.*>)?</regexp>
+  </multi_tell_emit>
   <notify_moves>
    <active>true</active>
    <policy>0</policy>
-   <result>\1\&lt;server>\2\\3\\4\ \5\\6\\7\&lt;/server>
+   <result>\1\&lt;server>\2\\3\\4\ \5\\6\&lt;/server>\7\
 :tell?:\4\: \1\&lt;server>\3\\4\ \5\\6\&lt;/server>\7\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (is away|is back|leaves|disconnects|is kicked out|comes in)(.*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  )(\w+) (is away|is back)(.*)(&lt;.*>)?</regexp>
   </notify_moves>
+  <out>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:intern:Intern:users:remove:\4\
+\1\&lt;server>\2\\3\&lt;/server>\6\
+:tell?:\4\: \1\&lt;server>\3\&lt;/server>\6\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  (\w+) (leaves|disconnects|is kicked out)[^&lt;]*)(&lt;.*>)?</regexp>
+  </out>
+  <in>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:intern:Intern:users:add:\4\
+\1\&lt;server>\2\\3\&lt;/server>\6\
+:tell?:\4\: \1\&lt;server>\3\&lt;/server>\6\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  (\w+) (comes in|appears from)[^&lt;]*)(&lt;.*>)?</regexp>
+  </in>
+  <rename>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:intern:Intern:users:remove:\4\
+:intern:Intern:users:add:\5\
+\1\&lt;server>\2\\3\&lt;/server>\6\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  (\w+) is now known as (\w+))(&lt;.*>)?</regexp>
+  </rename>
   <mytalk>
    <active>true</active>
    <policy>0</policy>
    <result>\1\&lt;me>\2\\3\&lt;/me>\4\</result>
-   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \login\&amp;gt .*)(&lt;.*>)?</regexp>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt \Login\&amp;gt .*)(&lt;.*>)?</regexp>
   </mytalk>
   <emote>
    <active>true</active>
@@ -341,21 +443,29 @@
   <mywall>
    <active>true</active>
    <policy>0</policy>
-   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yy
-:ptime:ok:TIME&lt;-[time]hh:mm:ss
-:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\Login\&quot;:-8)
+   <result>:intern:Intern:ptime:DATE&lt;-[date]dd/MM/yy
+:intern:Intern:ptime:TIME&lt;-[time]hh:mm:ss
+:intern:Intern:pformat:LOGIN&lt;-&quot;%1&quot;,(&quot;\Login\&quot;:-8)
 :browser:[Wall]:\1\&lt;block> \DATE\ \TIME\ \LOGIN\ \3\&lt;/block>\4\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  You write to the wall: (.*)(&lt;.*>)?</regexp>
   </mywall>
   <otherwall>
    <active>true</active>
    <policy>0</policy>
-   <result>:ptime:ok:DATE&lt;-[date]dd/MM/yy
-:ptime:ok:TIME&lt;-[time]hh:mm:ss
-:pformat:ko:LOGIN&lt;-&quot;%1&quot;,(&quot;\3\&quot;:-8)
+   <result>:intern:Intern:ptime:DATE&lt;-[date]dd/MM/yy
+:intern:Intern:ptime:TIME&lt;-[time]hh:mm:ss
+:intern:Intern:pformat:LOGIN&lt;-&quot;%1&quot;,(&quot;\3\&quot;:-8)
 :browser:[Wall]:\1\&lt;block> \DATE\ \TIME\ \LOGIN\ \4\&lt;/block>\5\</result>
    <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?&amp;lt Mtp&amp;gt  (\w+) writes to the wall: (.*)(&lt;.*>)?</regexp>
   </otherwall>
+  <mykick>
+   <active>true</active>
+   <policy>0</policy>
+   <result>:intern:Intern:users:remove:\4\
+\1\&lt;other>\2\\3\&lt;/other>\5\
+:tell?:\4\: \1\&lt;other>\3\&lt;/other>\5\</result>
+   <regexp>^(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt Mtp&amp;gt  You kick (\w+) out.*)(&lt;.*>)?</regexp>
+  </mykick>
   <other>
    <active>true</active>
    <policy>0</policy>
@@ -373,19 +483,19 @@
    <policy>0</policy>
    <result>\1\\2\&lt;tome>\3\\4\&lt;/tome>\7\
 -:splash:spl:[SE]\4\</result>
-   <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt (.*(\login\)[^&lt;]*))(&lt;.*>)?</regexp>
+   <regexp>(:\w+:\w+:)?(&lt;.*>)?(\d{2}:\d{2}:\d{2} )?(&amp;lt (.*(\Login\)[^&lt;]*))(&lt;.*>)?</regexp>
   </aboutme>
   <default>
    <active>true</active>
    <policy>0</policy>
    <result>\1\&lt;default>\2\&lt;/default></result>
-   <regexp>(:\w+:[^ :]+:)?(.*)</regexp>
+   <regexp>(-?:\w+:[^ :]+:)?(.*)</regexp>
   </default>
   <urls>
    <active>true</active>
    <policy>1</policy>
    <result>&lt;url>&lt;a href=&quot;\0\&quot;>\0\&lt;/a>&lt;/url></result>
-   <regexp>((((ht|f)tps?://|mailto:)|(www|ftp)\.)([a-zA-Z0-9\.\#\@\:%&amp;_/\?\=\~\-]|&amp;amp )+)</regexp>
+   <regexp>((((ht|f)tps?://|mailto:)|(www|ftp)\.)([a-zA-Z0-9\.\#\@\:%&amp;_/\?\=\~\-\+,]|&amp;amp )+)</regexp>
   </urls>
   <wall_emit>
    <active>true</active>
@@ -395,16 +505,52 @@
    <memorize>true</memorize>
   </wall_emit>
   <dessin>
-   <active>false</active>
+   <active>true</active>
    <policy>0</policy>
    <result>senddata \Login\ [QNet][exec]:drawing:Dessin@\1\:</result>
    <regexp>/dessin (\w+)</regexp>
    <memorize>false</memorize>
   </dessin>
+  <show>
+   <active>true</active>
+   <policy>0</policy>
+   <result>senddata \Login\ \\1\\</result>
+   <regexp>/show (\w+)</regexp>
+   <memorize>false</memorize>
+  </show>
+  <ignore>
+   <active>true</active>
+   <policy>0</policy>
+   <result>senddata \Login\ [QNet][exec]:affect:Affectations:ignored+=|\1\</result>
+   <regexp>/ignore (\w+)</regexp>
+   <memorize>false</memorize>
+  </ignore>
+  <unignore>
+   <active>true</active>
+   <policy>0</policy>
+   <result>senddata \Login\ [QNet][exec]:affect:Affectations:ignored=</result>
+   <regexp>/unignore</regexp>
+   <memorize>false</memorize>
+  </unignore>
+  <song>
+   <active>true</active>
+   <policy>0</policy>
+   <result>senddata \1\ [Rainbow][Listen]</result>
+   <regexp>/listen (\w+)</regexp>
+   <memorize>false</memorize>
+  </song>
+  <plan>
+   <active>true</active>
+   <policy>0</policy>
+   <result>\0\
+emote just changed his plan \1\</result>
+   <regexp>set plan(\d) +.*</regexp>
+   <memorize>false</memorize>
+  </plan>
  </filters>
  <sessions>
   <zen>
-   <host>zen.dtdns.net</host>
+   <host>mtpchat.zeninc.net</host>
    <port>4000</port>
    <login></login>
    <password></password>
@@ -426,10 +572,17 @@
   </local>
   <backup>
    <host>www.danstesoreilles.com</host>
-   <port>4000</port>
+   <port>4500</port>
    <login></login>
    <password></password>
    <autoconnect>false</autoconnect>
   </backup>
+  <azuriel>
+   <host>azuriel.dyndns.org</host>
+   <port>4000</port>
+   <login></login>
+   <password></password>
+   <autoconnect>false</autoconnect>
+  </azuriel>
  </sessions>
 </qnet>

@@ -14,6 +14,7 @@
 void AppearanceSettings::init() {
     ChatPage * cp;
     cp = new ChatPage;
+
     tabs->insertTab(cp,"@session");
 
     browser->setText("Here will come various messages, maybe debug ones");
