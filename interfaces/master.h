@@ -20,6 +20,8 @@ public:
     Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {}
     virtual ~Master() {}
     
+    virtual void displayStderr(QString) = 0;
+    virtual void displayStdout(QString) = 0;
     virtual void send(QString &) = 0;
     
 public slots:

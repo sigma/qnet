@@ -24,7 +24,9 @@ class MtpBrowser : public QTextBrowser
   Q_OBJECT
 
 public:
-    MtpBrowser(QWidget *parent, const char *name) : QTextBrowser(parent,name) {}
+    MtpBrowser(QWidget *parent, const char *name) : QTextBrowser(parent,name) {
+	setTextFormat(Qt::RichText);
+    }
     ~MtpBrowser() {}
   
 public slots:
