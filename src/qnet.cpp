@@ -47,14 +47,9 @@ QMtp::QMtp(QWidget *parent, const char *name)
     // kick out this useless status bar
     delete statusBar();
 
-    //system_view->setFamily("fixed");
-    //system_view->setPointSize(10);
-    //system_view->setWrapPolicy(QTextBrowser::Anywhere);
-
     connect(tabs,SIGNAL(currentChanged(QWidget*)),
             this, SLOT(slotCurrentPageChanged(QWidget*)));
 
-    //    m_document = new QDomDocument();
     if (!loadConfigFile()) {
 	QString default_content("<qnet/>");
 	m_document.setContent(default_content);
@@ -80,7 +75,7 @@ QMtp::QMtp(QWidget *parent, const char *name)
 
 QMtp::~QMtp() {
     saveConfigFile();
-    //    delete m_document;
+    
     // unload plugins :
     for (QMap<QString,void*>::Iterator it = plugins_map.begin(); it != plugins_map.end(); ++it)
 	dlclose(*it);
@@ -88,6 +83,9 @@ QMtp::~QMtp() {
 
 void QMtp::slotConfigure() {
     MtpSettings settings(this);
+    QDomDocument temporary_dom;
+    
+    temporary_dom.setContent(m_document.toString());
 
     // Select the right widget
     connect(settings.prop_list, SIGNAL(highlighted(int)),
@@ -98,7 +96,8 @@ void QMtp::slotConfigure() {
         MtpFiltersSettings * filters_settings = new MtpFiltersSettings(settings.stack);
         settings.stack->addWidget(filters_settings,0);
         settings.prop_list->insertItem("Filters",0);
-        filters_settings->setEnabled(false);
+        //filters_settings->setEnabled(false);
+	filters_settings->setDom(&temporary_dom);
     }
 
     // Urls :
@@ -147,9 +146,13 @@ void QMtp::slotConfigure() {
         appearance_settings->rbBottom->setChecked(!appearance_settings->rbTop->isChecked());
     }
 
-    if (settings.exec()) {
-
-        // Filters
+    if (settings.exec() == QDialog::Accepted) {
+	
+	m_document.setContent(temporary_dom.toString());
+	
+	for(QValueList<ChatSession*>::Iterator it = sessions.begin(); it != sessions.end(); ++it) {
+	    (*it)->updateFilters();
+	}
 
         // Urls
         {
@@ -183,9 +186,8 @@ void QMtp::slotConfigure() {
             int position = appearance_settings->rbTop->isChecked()?QTabWidget::Top : QTabWidget::Bottom;
             DomUtil::writeIntEntry(m_document,"appearance/tabs/position",position);
             tabs->setTabPosition((QTabWidget::TabPosition)position);
-        }
-
-
+        }	
+	saveConfigFile();
     }
 }
 
