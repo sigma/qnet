@@ -127,3 +127,11 @@ Les plugins fournis avec l'engin sont les suivants:
 - splash : popup dans un coin de l'écran
 
 - tell : onglet de discussion privée
+
+- ptime : gestion de l'heure et de la date (timestamp par exemple)
+  ex : :ptime:ok:HOUR<-[time]hh:mm:ss
+  ex : :ptime:ok:DAY<-[date]dd:MM:yy
+
+- pformat : formatage de chaines de caractères
+  ex : :pformat:ok:PLOP<-"%1",("\Login\":-8)
+  met dans la variable PLOP votre login formaté sur 8 caractères avec alignement à gauche
