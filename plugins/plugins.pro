@@ -13,4 +13,5 @@ SUBDIRS += tell \
            id \
            affect \
            emit \
-           ptime
+           ptime \
+           pformat
