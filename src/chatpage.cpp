@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'chatpage.ui'
 **
 ** Created: Mon Jan 6 19:27:11 2003
-**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.2 2003/02/15 20:53:06 Sigma Exp $)
+**      by: The User Interface Compiler ($Id: chatpage.cpp,v 1.3 2003/03/03 10:00:34 Sigma Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -316,16 +316,26 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
 {
     if ( !name )
 	setName( "ChatPage" );
-    
+        
     ChatPageLayout = new QGridLayout( this, 1, 1, 6, 6, "ChatPageLayout");
     
     QSplitter *vsplit = new QSplitter(Qt::Vertical,this);
     QSplitter *hsplit = new QSplitter(Qt::Horizontal,vsplit);
-    
+  
+ 
     chat_view = new MtpBrowser(hsplit,"chat_view");
     users_box = new QListBox(hsplit,"users_box");
+
+    users_box->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, users_box->sizePolicy().hasHeightForWidth() ) );
+    users_box->setMinimumSize( QSize( 75, 200 ) );
+
     chat_edit = new QTextEdit(vsplit,"chat_edit");
-    
+
+    chat_edit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, chat_edit->sizePolicy().hasHeightForWidth() ) );
+    chat_edit->setMinimumSize( QSize( 300, 50 ) );
+    chat_edit->setFrameShape( QTextEdit::LineEditPanel );
+
+   
     QValueList<int> list = vsplit->sizes();
     int tmp = list[1];
     list[1] = 0; // Strange things happend here...
@@ -336,10 +346,10 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
     tmp = list[1];
     list[1] = 0; // Strange things happend here...
     list[0] += tmp-list[1];
-    hsplit->setSizes(list);
+    hsplit->setSizes(list);  
     
-    ChatPageLayout->addWidget(vsplit,0,0);
-    /*
+       ChatPageLayout->addWidget(vsplit,0,0);
+       /* 
     ChatPageLayout = new QGridLayout( this, 1, 1, 6, 6, "ChatPageLayout"); 
 
     chat_edit = new QTextEdit( this, "chat_edit" );
@@ -361,6 +371,7 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
     languageChange();
     */
     resize( QSize(573, 361).expandedTo(minimumSizeHint()) );
+    repaint();
 }
 
 /*
