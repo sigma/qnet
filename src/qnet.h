@@ -61,9 +61,6 @@ public slots:
     void fileExit();
     void closeCurrentTab();
     void closeTab(QWidget *);
-    void gotoPreviousTab();
-    void gotoNextTab();
-    void helpAbout();
     void slotTextDisplayed(QWidget* w);
     void slotCurrentPageChanged(QWidget* w);
     void slotDisplayFortune();

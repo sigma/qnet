@@ -5,7 +5,8 @@
 ** update this file, preserving your code. Create an init() slot in place of
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
-
+#include "version.h"
+#include <qmessagebox.h>
 
 void QMtp_base::fileNew()
 {
@@ -79,11 +80,8 @@ void QMtp_base::slotConfigure()
 
 void QMtp_base::helpAbout()
 {
-
+    QMessageBox::about(this, "About QNet", CLIENT + QString("\n© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
 }
-
-
-
 
 void QMtp_base::closeCurrentTab()
 {
@@ -92,16 +90,25 @@ void QMtp_base::closeCurrentTab()
 
 void QMtp_base::gotoNextTab()
 {
-
+    tabs->setCurrentPage((tabs->currentPageIndex() + 1) % tabs->count());
 }
 
 void QMtp_base::gotoPreviousTab()
 {
-
+    tabs->setCurrentPage((tabs->currentPageIndex() + tabs->count() - 1) % tabs->count());
 }
 
 
 void QMtp_base::slotDisplayFortune()
 {
 
+}
+
+
+void QMtp_base::slotToggleMenu()
+{
+    if(menuBar()->isVisible())
+	menuBar()->hide();
+    else
+	menuBar()->show();
 }

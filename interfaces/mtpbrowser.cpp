@@ -43,7 +43,7 @@ QPopupMenu* MtpBrowser::createPopupMenu(const QPoint& pos) {
 }
 
 void MtpBrowser::slotBookmark(const QString& name) {
-    placeCursor(m_point);
+    placeCursor(name.isNull()?m_point:this->viewportToContents(QPoint(0,0)));
     int para, index;
     getCursorPosition(&para,&index);
     QString bname = name.isNull()?QInputDialog::getText("Bookmark","Enter a name for bookmark :"):name;
@@ -56,7 +56,11 @@ void MtpBrowser::slotBookmark(const QString& name) {
 }
 
 void MtpBrowser::slotGoto(int id) {
-    QPair<int,int> pos = *m_marks.find(m_bookpop->text(id));
+    slotGoto(m_bookpop->text(id));
+}
+
+void MtpBrowser::slotGoto(const QString& label) {
+    QPair<int,int> pos = *m_marks.find(label);
     setCursorPosition(pos.first, pos.second);
 }
 

@@ -26,6 +26,8 @@
 
 #include "mtpbrowser.h"
 
+#define DEFAULT_BOOKMARK "[Mark]"
+
 /*
  *  Constructs a ChatPage as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
@@ -88,6 +90,10 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
 
     box = new QAction(this,"box");
     box->setAccel(QKeySequence(CTRL + Key_H));
+    bookmark = new QAction(this,"bookmark");
+    bookmark->setAccel(QKeySequence(CTRL + Key_Space));
+    gotob = new QAction(this,"goto");
+    gotob->setAccel(QKeySequence(CTRL + Key_J));
 
     connect(history_up, SIGNAL(activated()),
             this, SLOT(slotHistoryUp()));
@@ -113,6 +119,10 @@ ChatPage::ChatPage( QWidget* parent, const char* name, WFlags fl )
 
     connect(box,SIGNAL(activated()),
             this,SLOT(toggleUserBox()));
+    connect(bookmark,SIGNAL(activated()),
+            this,SLOT(slotBookmark()));
+    connect(gotob,SIGNAL(activated()),
+            this,SLOT(slotGoto()));
 
 //     connect(users_box, SIGNAL(doubleClicked(QListBoxItem*)),
 //             this,SLOT(slotUserDoubleClicked(QListBoxItem*)));
@@ -191,6 +201,14 @@ void ChatPage::slotHome() {
 
 void ChatPage::slotEnd() {
     chat_view->moveCursor(QTextEdit::MoveEnd,false);
+}
+
+void ChatPage::slotBookmark() {
+    chat_view->slotBookmark(DEFAULT_BOOKMARK);
+}
+
+void ChatPage::slotGoto() {
+    chat_view->slotGoto(DEFAULT_BOOKMARK);
 }
 
 void ChatPage::addUser(const QString& name) {

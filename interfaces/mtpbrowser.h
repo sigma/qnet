@@ -33,11 +33,12 @@ public:
 
   QString getText() { return text();}
 
-  public slots:
-      void setSource(const QString &) {}
-  void slotBookmark(const QString& = QString::null);
-  void slotGoto(int id);
-  void slotDelete(int id);
+public slots:
+    void setSource(const QString &) {}
+void slotBookmark(const QString& = QString::null);
+void slotGoto(int id);
+void slotGoto(const QString&);
+void slotDelete(int id);
 
 private:
   QPopupMenu *m_pop, *m_bookpop, *m_delpop;

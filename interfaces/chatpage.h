@@ -47,6 +47,8 @@ public slots:
     void slotPageDown();
     void slotHome();
     void slotEnd();
+    void slotBookmark();
+    void slotGoto();
     void removeUser(const QString&);
     void addUser(const QString&);
     void slotContextMenu(QListBoxItem*,const QPoint&);
@@ -66,7 +68,7 @@ signals:
 	void outputMessage(const QString& );
 
 private:
-    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end, *box;
+    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end, *box, *bookmark, *gotob;
     QPopupMenu *user_menu;
 };
 

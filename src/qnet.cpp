@@ -428,18 +428,6 @@ void QMtp::fileSaveAs() {
     }
 }
 
-void QMtp::gotoNextTab() {
-    tabs->setCurrentPage((tabs->currentPageIndex() + 1) % tabs->count());
-}
-
-void QMtp::gotoPreviousTab() {
-    tabs->setCurrentPage((tabs->currentPageIndex() + tabs->count() - 1) % tabs->count());
-}
-
-void QMtp::helpAbout() {
-    QMessageBox::about(this, "About QNet", CLIENT + QString("\n© 2002 - Sigma <Yann.Hodique@lifl.fr>"));
-}
-
 bool QMtp::loadConfigFile() {
     QFile fin(rcPath());
     if (!fin.open(IO_ReadOnly)) {

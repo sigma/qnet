@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>386</height>
+            <width>616</width>
+            <height>461</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -100,6 +100,7 @@
     <item text="&amp;View" name="PopupMenu">
         <action name="viewPrevTab"/>
         <action name="viewNextTab"/>
+        <action name="viewHide_MenuAction"/>
     </item>
     <item text="&amp;Tools" name="PopupMenu_2">
         <action name="toolsFortuneDisplay"/>
@@ -325,6 +326,36 @@
             <string>Ctrl+Alt+F</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>viewnew_itemAction</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewAction</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewHide_MenuAction</cstring>
+        </property>
+        <property name="text">
+            <string>Show/Hide Menu</string>
+        </property>
+        <property name="menuText">
+            <string>Show/Hide &amp;Menu</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+M</string>
+        </property>
+    </action>
 </actions>
 <connections>
     <connection>
@@ -405,6 +436,12 @@
         <receiver>QMtp_base</receiver>
         <slot>gotoPreviousTab()</slot>
     </connection>
+    <connection>
+        <sender>viewHide_MenuAction</sender>
+        <signal>activated()</signal>
+        <receiver>QMtp_base</receiver>
+        <slot>slotToggleMenu()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">qnet_base.ui.h</include>
@@ -429,6 +466,7 @@
     <slot>gotoNextTab()</slot>
     <slot>gotoPreviousTab()</slot>
     <slot>slotDisplayFortune()</slot>
+    <slot>slotToggleMenu()</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
