@@ -15,51 +15,26 @@
 #include <qaction.h>
 #include <qstringlist.h>
 
-#include "page.h"
-#include "master.h"
-
-class QTextEdit;
-class MtpBrowser;
-class QGridLayout;
+#include "chatpage.h"
 
 /**
  *
  * Yann Hodique
  **/
-class TellPage : public Page {
+class TellPage : public ChatPage {
     Q_OBJECT
 
 public:
     TellPage(QWidget *parent, const char *name, Master * session);
     ~TellPage();
-    virtual void append(const QString & msg);
     void setPrefix(const QString&);
-    QTextEdit* chat_edit;
-    MtpBrowser* chat_view;
-
     QString getText();
 
 public slots:
     virtual void returnPressed();
-    void slotHistoryUp();
-    void slotHistoryDown();
-    void slotNewLine();
-    void slotPageUp();
-    void slotPageDown();
-    void slotHome();
-    void slotEnd();
-
-protected:
-    QGridLayout* TellPageBaseLayout;
-
-protected slots:
-    virtual void languageChange();
 
 private:
     QString prefix;
-    QAction *history_up, *history_down, *new_line, *pgup, *pgdown, *home, *end;
-    QStringList history;
-    QStringList::Iterator history_iterator;
 
 };
 
