@@ -1,7 +1,7 @@
 /*
  *  File: fontlock.h
  *  Created: Thursday, December 30, 2004
- *  Time-stamp: <07/01/2005 18:24:46 Yann Hodique>
+ *  Time-stamp: <29/01/2005 17:49:44 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -37,7 +37,16 @@ public:
         tcf.setFont(font);
         tcf.setTextColor(color);
     }
-    Face(const QString& family, const QString& color, int size = 12, int weight = QFont::Normal, int italic = 0) : m_font(family,size,weight,italic), m_color(color) {
+
+    typedef enum {
+        Light = QFont::Light,
+        Normal = QFont::Normal,
+        DemiBold = QFont::DemiBold,
+        Bold = QFont::Bold,
+        Black = QFont::Black
+    } Weight;
+
+    Face(const QString& family, const QString& color, int size = 12, int weight = Normal, bool italic = false) : m_font(family,size,weight,italic), m_color(color) {
         tcf.setFont(m_font);
         tcf.setTextColor(color);
     }

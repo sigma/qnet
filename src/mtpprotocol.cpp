@@ -1,7 +1,7 @@
 /*
  *  File: mtpprotocol.cpp
  *  Created: Tuesday, December 28, 2004
- *  Time-stamp: <21/01/2005 17:14:18 Yann Hodique>
+ *  Time-stamp: <29/01/2005 15:27:02 Yann Hodique>
  *  Copyright: Yann Hodique
  *  Email: Yann.Hodique@lifl.fr
  */
@@ -51,11 +51,15 @@ void MtpProtocol::installIO(QIODevice *s) {
     if(io) uninstallIO();
     io = s;
     connect(s, SIGNAL(readyRead()), this, SLOT(readIO()));
+    connect(this, SIGNAL(loginQuery()), s, SLOT(sendLogin()));
+    connect(this, SIGNAL(passwdQuery()), s, SLOT(sendPasswd()));
 }
 
 void MtpProtocol::uninstallIO() {
     if(io) {
         disconnect(io, SIGNAL(readyRead()), this, SLOT(readIO()));
+        disconnect(this, SIGNAL(loginQuery()), io, SLOT(sendLogin()));
+        disconnect(this, SIGNAL(passwdQuery()), io, SLOT(sendPasswd()));
         io->deleteLater();
         io = 0;
     }

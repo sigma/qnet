@@ -26,9 +26,10 @@
 **
 ****************************************************************************/
 
-#include "launcher.h"
 #include "scm.h"
 #include "mainwindow.h"
+
+#include <QApplication>
 
 MainWindow * mw;
 
@@ -66,12 +67,10 @@ int main(int argc, char **argv)
         }
     }
 
-    Launcher app(argc, argv);
+    QApplication app(argc, argv);
     mw = new MainWindow(0,0,false);
     app.setMainWidget(mw);
     mw->show();
-
-    app.init();
 
     scm->loadFile(QDir::homePath() + "/.qnet2.scm");
 

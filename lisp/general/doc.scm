@@ -1,6 +1,7 @@
 (define-module (general doc))
 
 (export defun
+        defun*
         defvar
         documentation
         test-string)
@@ -27,6 +28,20 @@
             (append (list 'define decl) b)
             (list 'set! (list 'documentation (quote ',name)) d)))))
 (set! (documentation 'defun) "define a function in emacs style")
+
+(defmacro* defun* (name args docstring #:rest body)
+  `(let ((decl (cons ',name ',args))
+         (b ',body)
+         (d ',docstring))
+     (if (not (test-string ',docstring))
+         (begin
+           (set! b (cons ',docstring ',body))
+           (set! d "undocumented")))
+     (primitive-eval
+      (list 'begin
+            (append (list 'define* decl) b)
+            (list 'set! (list 'documentation (quote ',name)) d)))))
+(set! (documentation 'defun*) "define a function in emacs style")
 
 (defmacro* defvar (name #:optional init docstring)
   `(let ((d ',docstring))

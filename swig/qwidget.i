@@ -1,0 +1,7 @@
+%{
+#include <QWidget>
+%}
+
+class QWidget {
+
+};

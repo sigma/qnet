@@ -1,10 +1,7 @@
 (define-module (general utils))
 
 (export symbol-value
-        mtp
-        launch
-        session-name
-        send)
+        nth)
 
 (use-modules (general doc)
              (internal))
@@ -14,16 +11,5 @@
       (primitive-eval s)
       (error "Not a symbol !")))
 
-(defvar mtp (mainwin-qmtp (main-window)))
-
-(defun launch (s)
-  (qnet-launch-session mtp s))
-
-(defun session-name (n)
-  (if (< n (qnet-sessions-number mtp))
-      (chatsession-session-name (qnet-session mtp n))
-      nil))
-
-(defun send (session mesg)
-  (if (< session (qnet-sessions-number mtp))
-      (chatsession-send (qnet-session mtp session) mesg)))
+(defmacro nth (n l)
+  `(list-ref ,l ,n))

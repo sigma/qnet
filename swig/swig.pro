@@ -16,7 +16,8 @@ SOURCES += $$SWIG_TARGET
 
 SWIG_MAIN = main.i
 SWIG_HEADERS = fontlock.i mainwindow.i qstring.i mtpsocket.i mode.i	\
-	dispatcher.i mtpprotocol.i qiodevice.i mtparea.i
+	dispatcher.i mtpprotocol.i qiodevice.i mtparea.i qwidget.i	\
+	interactionarea.i floatingtab.i
 
 INCLUDEPATH += ../src
 
