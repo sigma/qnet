@@ -22,11 +22,15 @@ Affect::Affect(QWidget */*parent*/, const char *name, Master * session) : Page(0
 Affect::~Affect() {}
 
 void Affect::append(const QString& msg) {
-    QRegExp re("(\\w+)(=|\\|=)(\\w+)");
+    QRegExp re("(\\w+)([\\|\\+]?=)(.*)");
     if(re.exactMatch(msg)) {
         if(re.cap(2) == "=") {
             getMaster()->displayStderr("Setting " + re.cap(1) + " to " + re.cap(3));
             getMaster()->context()->setVar(re.cap(1),re.cap(3));
+        }
+        else if(re.cap(2) == "+=") {
+            getMaster()->context()->setVar(re.cap(1),
+                                           getMaster()->context()->getValue(re.cap(1)) + re.cap(3));
         }
         else { // shell command by |=
             getMaster()->displayStderr("Calling shell command : " + re.cap(3));
