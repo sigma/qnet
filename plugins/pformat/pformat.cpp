@@ -38,7 +38,7 @@ void PFormat::append(const QString& msg) {
                 value = value.arg(re2.cap(1),re2.cap(2).toInt());
         }
         getMaster()->context()->setVar(re.cap(1),value);
-        getMaster()->displayStderr("Setting " + re.cap(1) + " to " + value);
+//        getMaster()->displayStderr("Setting " + re.cap(1) + " to " + value);
     }
 }
 
