@@ -124,7 +124,6 @@ void MtpFiltersSettings::addGlobal()
     global_rules->insertItem(global_name->text());
     global_rules->setSelected(global_rules->count()-1,true);
     changedGlobal();
-
     updateList(global_rules,"/general/filters/global"); 
 }
 
@@ -297,9 +296,10 @@ void MtpFiltersSettings::up( QListBox * box)
 {
     int index = box->currentItem();
     if (index) {
-        QString text = box->currentText();
-        box->removeItem(index);
-        box->insertItem(text,index - 1);
+	QString text = box->currentText();
+	box->removeItem(index);
+	box->insertItem(text,index - 1);
+	box->setCurrentItem(index-1);
     }
 }
 
@@ -309,8 +309,9 @@ void MtpFiltersSettings::down( QListBox * box)
     uint index = box->currentItem();
 
     if (index < box->count()) {
-        QString text = box->currentText();
-        box->removeItem(index);
-        box->insertItem(text,index + 1);
+	QString text = box->currentText();
+	box->removeItem(index);
+	box->insertItem(text,index + 1);
+	box->setCurrentItem(index+1);
     }
 }

@@ -118,8 +118,7 @@ void QMtp::slotConfigure() {
         MtpFiltersSettings * filters_settings = new MtpFiltersSettings(m_settings->stack);
         m_settings->stack->addWidget(filters_settings,0);
         m_settings->prop_list->insertItem("Filters",0);
-        //filters_settings->setEnabled(false);
-	filters_settings->setDom(&temporary_dom);
+        filters_settings->setDom(&temporary_dom);
     }
 
     // Urls :
@@ -170,9 +169,10 @@ void QMtp::slotConfigure() {
 
     // Stylesheet :
     TagsSettings * tags_settings = new TagsSettings(m_settings->stack);
+    tags_settings->setEnabled(false);
     m_settings->stack->addWidget(tags_settings,5);
     m_settings->prop_list->insertItem("StyleSheet",5);
-    
+
     connect(m_settings, SIGNAL(end()),
             SLOT(slotStoreConfig()));
 

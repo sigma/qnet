@@ -126,12 +126,13 @@ void MainWin::trayDoubleClicked() {
 }
 
 void MainWin::trayShow() {
-  mw->move(m_pos);
+    mw->move(m_pos);
     mw->show();
+    mw->raise();
 }
 
 void MainWin::trayHide() {
-  m_pos = mw->pos();
+    m_pos = mw->pos();
     mw->hide();
 }
 
