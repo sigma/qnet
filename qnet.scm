@@ -87,6 +87,6 @@
                                       (xosd-hide osd)
                                       (xosd-display-string osd 0 "New ChatSession !")))
 
-; (add-hook! chatsession-output-hook (lambda (s)
-;                                      (xosd-scroll osd 1)
-;                                      (xosd-display-string osd (- osd-size 1) s)))
+(add-hook! chatsession-output-hook (lambda (s)
+                                     (xosd-scroll osd 1)
+                                     (xosd-display-string osd (- osd-size 1) s)))

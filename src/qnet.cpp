@@ -27,7 +27,10 @@
 #include <qprocess.h>
 
 #include <dlfcn.h>
+
+#ifdef GUILE
 #include <scm.h>
+#endif
 
 #include "qnet.h"
 #include "connectionbox.h"
@@ -630,8 +633,10 @@ void QMtp::launchSession(const QString& name) {
     connect(session->chatpage(), SIGNAL(textDisplayed(QWidget *)),
             this, SLOT(slotTextDisplayed(QWidget *)));
 
+#ifdef GUILE
     ScmList l;
     Scm::getInstance()->runHook("chatsession-created-hook", l);
+#endif
 }
 
 void QMtp::launchSession(int index) {
@@ -698,11 +703,13 @@ bool QMtp::unloadPlugin(const QString& filename) {
     return true;
 }
 
+#ifdef GUILE
 SCM body (void * buffer) {
     SCM res = scm_eval_string(scm_makfrom0str((char *)buffer));
     return scm_write_line(res, scm_current_output_port());
 //    return res;
 }
+#endif
 
 void QMtp::returnPressed() {
     std::string text = system_edit->text();
@@ -710,9 +717,12 @@ void QMtp::returnPressed() {
 //    view->append("eval : " + text);
     const char *buffer = text.c_str();
 
+#ifdef GUILE
     scm_internal_catch (SCM_BOOL_T,
                         body, (void *)buffer,
                         scm_handle_by_message_noexit, NULL);
+#endif
+
     system_edit->clear();
 }
 

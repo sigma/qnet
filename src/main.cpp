@@ -16,26 +16,33 @@
 #include "mainwin.h"
 #include "qnet.h"
 
+#ifdef GUILE
 #include "qnet_guile_wrap.cxx"
 #include <scm.h>
+#endif
 
 MainWin * main_window;
 
+#ifdef GUILE
 void guile_global_init() {
     Scm *scm = Scm::getInstance();
     scm->createHook("chatsession-created-hook",0);
     scm->createHook("chatsession-output-hook",1);
 }
+#endif
 
 int main( int argc, char ** argv ) {
     QApplication a( argc, argv );
     QString rc;
+
+#ifdef GUILE
     Scm *scm = Scm::getInstance();
 
     scm_init_guile();
     scm_init_internal_module();
 
     guile_global_init();
+#endif
 
     while (1)
     {
@@ -53,7 +60,9 @@ int main( int argc, char ** argv ) {
     main_window = new MainWin(false,false,"main_window",rc);
     main_window->setUseDock();
 
+#ifdef GUILE
     scm->loadFile(QDir::homeDirPath() + "/.qnet.scm");
+#endif
 
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     a.connect( main_window, SIGNAL(closeProgram()), &a, SLOT(quit()) );

@@ -29,7 +29,10 @@ class QResizeEvent;
 class MtpFilter;
 class MtpContext;
 class Page;
+
+#ifdef GUILE
 class Scm;
+#endif
 
 class ChatSession : public Master {
     Q_OBJECT
@@ -82,7 +85,10 @@ private:
     std::vector<Page *> brothers;
 
     MainChatPage *m_chatpage;
+
+#ifdef GUILE
     Scm *m_scm;
+#endif
 
 private slots:
 	void deleteProcess();
