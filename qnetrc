@@ -16,6 +16,7 @@
    <file>/usr/lib/qnet/libaffect.so</file>
    <file>/usr/lib/qnet/libptime.so</file>
    <file>/usr/lib/qnet/libpformat.so</file>
+   <file>/usr/lib/qnet/libcron.so</file>
   </plugins>
   <filters>
    <input>

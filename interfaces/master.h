@@ -18,7 +18,7 @@
 
 class Master : public QWidget {
     Q_OBJECT
-public:  
+        public:  
     Master(QWidget* parent = 0, const char* name = 0, WFlags fl = 0) : QWidget(parent, name, fl) {
         m_context = new MtpContext;
     }
