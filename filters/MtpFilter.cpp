@@ -63,6 +63,8 @@ MtpFilter::MtpFilter(QDomDocument* dom, MtpContext* context) {
 	f->setBeginRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/begin"));
 	f->setEndRegExp(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/end"));
 	f->setResultPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/result"));
+    f->setBeginPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/beginresult"));
+    f->setEndPattern(DomUtil::readEntry(*m_dom,"/filters/" + *it + "/endresult"));
 	f->setPolicy((Filter::Policy)DomUtil::readIntEntry(*m_dom,"/filters/" + *it + "/policy",Filter::Transient));
 	f->setEnabled(DomUtil::readBoolEntry(*m_dom,"/filters/" + *it + "/active",true));
 	

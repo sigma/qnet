@@ -26,28 +26,29 @@ bool BlockFilter::applyTo(QString & msg, Position pos) {
         bool match = re.exactMatch(msg);
 
         if (match) {
-            setResult(applyProcessedRegexpToPattern(re,pattern));
+            setResult(applyProcessedRegexpToPattern(re,begin_pattern));
             finished = false;
         }
             
         return match;
     }    
     case IN: {
-        MtpRegExp re("^(<.*>)?([^<>]+)(<.*>)?");
-        bool match = re.exactMatch(msg);
+        MtpRegExp re(end_reg);
+        bool match_test = re.exactMatch(msg);
 
-        if (match)
-            setResult(applyProcessedRegexpToPattern(re,pattern));
-
-        MtpRegExp test(end_reg);
-        bool match_test = test.exactMatch(msg);
-
-        if (match_test)
+        if (match_test) {
             finished = true;
-        
+            setResult(applyProcessedRegexpToPattern(re,end_pattern));
+        }
+        else {
+            MtpRegExp re("^(<.*>)?([^<>]+)(<.*>)?");
+            bool match = re.exactMatch(msg);
+
+            if (match)
+                setResult(applyProcessedRegexpToPattern(re,main_pattern));
         return match;
         }
-    }
+    }}
     return false;
 }
 
@@ -74,7 +75,15 @@ bool BlockFilter::isFinished() const {
 }
 
 void BlockFilter::setResultPattern(const QString& pat) {
-    this->pattern = pat;
+    this->main_pattern = pat;
+}
+
+void BlockFilter::setBeginPattern(const QString& pat) {
+    this->begin_pattern = pat;
+}
+
+void BlockFilter::setEndPattern(const QString& pat) {
+    this->end_pattern = pat;
 }
 
 QString BlockFilter::getBeginRegExp() const {
@@ -86,5 +95,13 @@ QString BlockFilter::getEndRegExp() const {
 }
 
 QString BlockFilter::getResultPattern() const {
-    return pattern;
+    return main_pattern;
+}
+
+QString BlockFilter::getBeginPattern() const {
+    return begin_pattern;
+}
+
+QString BlockFilter::getEndPattern() const {
+    return end_pattern;
 }
