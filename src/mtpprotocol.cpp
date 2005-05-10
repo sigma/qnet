@@ -1,4 +1,4 @@
-/*  Time-stamp: <09/02/2005 20:53:40 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:34:53 Yann Hodique>  */
 
 /**
  *  @file mtpprotocol.cpp
@@ -75,7 +75,7 @@ void MtpProtocol::uninstallIO() {
 void MtpProtocol::readIO() {
     if(!io) return;
 
-    Q_LONGLONG available = io->bytesAvailable();
+    qint64 available = io->bytesAvailable();
 
     char * buffer = new char[available+1];
     io->read(buffer,available);
@@ -86,7 +86,7 @@ void MtpProtocol::readIO() {
 
     // IAC management
     if(text.startsWith(QString(IAC)) && text.size() > 3) {
-        int cmd = text.at(1).ascii() << sizeof(char) + text.at(2).ascii();
+        int cmd = text.at(1).toAscii() << sizeof(char) + text.at(2).toAscii();
         emit cmdSignal(cmd);
         text = text.replace(cmd_reg,"").replace(QString(IAC) + IAC,QString(IAC));
     }

@@ -1,4 +1,4 @@
-/*  Time-stamp: <07/02/2005 21:22:30 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 19:34:35 Yann Hodique>  */
 
 /**
  *  @file mainwindow.cpp
@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags, bool transient)
     }
     setupDockWindows();
 
-    statusBar()->message(tr("Status Bar"));
+    statusBar()->showMessage(tr("Status Bar"));
 }
 
 void MainWindow::setupMenuBar() {
@@ -59,18 +59,22 @@ void MainWindow::checkTabs() {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * e) {
-    int key = e->key();
-    QKeySequence seq(key + e->modifiers());
-    KeyMap::ExecutionStatus status = KeyMap::getCurrentKeyMap()->execute(seq);
-    switch(status) {
-        case KeyMap::Keymap:
-            statusBar()->message(seq);
-            break;
-        case KeyMap::Rejected:
-            statusBar()->message("Undefined");
-            break;
-        case KeyMap::Accepted:
-            statusBar()->clear();
-            break;
+    QString key = KeyMap::keyFromKeyEvent(e);
+//    statusBar()->showMessage(key);
+
+    if(key != QString::null) {
+        QKeySequence seq(key);
+        KeyMap::ExecutionStatus status = KeyMap::getCurrentKeyMap()->execute(seq);
+        switch(status) {
+            case KeyMap::Keymap:
+                statusBar()->showMessage(seq);
+                break;
+            case KeyMap::Rejected:
+                statusBar()->showMessage("Undefined");
+                break;
+            case KeyMap::Accepted:
+                statusBar()->clearMessage();
+                break;
+        }
     }
 }

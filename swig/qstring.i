@@ -24,9 +24,9 @@
 }
 
 %typemap(out) QString {
-    $result = gh_str02scm(($1).ascii());
+    $result = gh_str02scm(($1).toAscii().constData());
 }
 
 %typemap(out) const QString & {
-    $result = gh_str02scm(($1)->ascii());
+    $result = gh_str02scm(($1)->toAscii().constData());
 }

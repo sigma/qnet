@@ -1,4 +1,4 @@
-/*  Time-stamp: <09/02/2005 19:19:47 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:41:00 Yann Hodique>  */
 
 /**
  *  @file main.cpp
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
     mw = new MainWindow(0,0,false);
-    app.setMainWidget(mw);
+    //app.setMainWidget(mw);
     mw->show();
 
     scm->loadFile(QDir::homePath() + "/.qnet2.scm");

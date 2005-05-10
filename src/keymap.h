@@ -1,4 +1,4 @@
-/*  Time-stamp: <08/02/2005 09:22:18 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 19:24:40 Yann Hodique>  */
 
 /**
  *  @file keymap.h
@@ -35,6 +35,8 @@ public:
 
     static const KeyMap& getGlobalKeyMap() {return global_keymap;}
     static KeyMap* getCurrentKeyMap() {return current_keymap;}
+
+    static QString keyFromKeyEvent(QKeyEvent *e);
 
     void setKey(const QKeySequence&, SCM);
     void setKey(const QKeySequence&, KeyMap*);

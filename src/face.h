@@ -1,4 +1,4 @@
-/*  Time-stamp: <13/02/2005 11:56:52 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 18:17:27 Yann Hodique>  */
 
 /**
  *  @file face.h
@@ -55,7 +55,7 @@ public:
  * @param color the color to apply
  */
     Face(const QColor& color) : m_color(color) {
-        tcf.setTextColor(color);
+        tcf.setForeground(color);
     }
 
 /**
@@ -66,7 +66,7 @@ public:
  */
     Face(const QFont& font, const QColor& color) : m_font(font), m_color(color) {
         tcf.setFont(font);
-        tcf.setTextColor(color);
+        tcf.setForeground(color);
     }
 
 /**
@@ -92,7 +92,7 @@ public:
  */
     Face(const QString& family, const QString& color, int size = 12, int weight = Normal, bool italic = false) : m_font(family,size,weight,italic), m_color(color) {
         tcf.setFont(m_font);
-        tcf.setTextColor(color);
+        tcf.setForeground(QColor(color));
     }
 
     ~Face() {} //the destructor

@@ -1,4 +1,4 @@
-/*  Time-stamp: <13/02/2005 11:29:28 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:33:17 Yann Hodique>  */
 
 /**
  *  @file scm.h
@@ -26,7 +26,7 @@
 class ScmList: public QList<SCM> {
 public:
     ScmList& operator<< (const QString& msg) {
-        append(scm_makfrom0str(msg.ascii()));
+        append(scm_makfrom0str(msg.toAscii().constData()));
         return *this;
     }
 };

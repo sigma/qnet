@@ -1,4 +1,4 @@
-/*  Time-stamp: <13/02/2005 11:21:33 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:41:53 Yann Hodique>  */
 
 /**
  *  @file scm.cpp
@@ -45,7 +45,7 @@ extern "C" {
 }
 
 SCM Scm::loadFile(const QString& filename) const {
-    return protect(_load_file,(void*)filename.ascii());
+    return protect(_load_file,(void*)filename.toAscii().constData());
 }
 
 SCM Scm::runHook(const QString& hook, const ScmList& args) const {
@@ -64,7 +64,7 @@ SCM Scm::runHook(const QString& hook, const ScmList& args) const {
 
 SCM Scm::createHook(const QString& symb, unsigned int nbargs) {
     SCM hook=scm_make_hook(SCM_MAKINUM(nbargs));
-    scm_c_define(symb.ascii(),hook);
+    scm_c_define(symb.toAscii().constData(),hook);
     sym[symb] = hook;
     return hook;
 }
@@ -84,6 +84,6 @@ SCM Scm::protect(scm_t_catch_body body, void *body_data) const {
 }
 
 void Scm::createVar(const QString& name, SCM value) {
-    scm_c_define(name.ascii(),value);
+    scm_c_define(name.toAscii().constData(),value);
     sym[name] = value;
 }

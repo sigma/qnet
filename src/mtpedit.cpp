@@ -1,4 +1,4 @@
-/*  Time-stamp: <07/02/2005 21:22:37 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 18:41:30 Yann Hodique>  */
 
 /**
  *  @file mtpedit.cpp
@@ -22,7 +22,7 @@
 #include <iostream>
 
 MtpEdit::MtpEdit(QWidget *parent) : QTextEdit(parent) {
-    setWordWrap(QTextEdit::NoWrap);
+    setLineWrapMode(QTextEdit::NoWrap);
 
     //@todo Suppress this hardcoded shortcut
     return_pressed = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Return),parent);

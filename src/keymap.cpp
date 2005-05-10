@@ -1,4 +1,4 @@
-/*  Time-stamp: <08/02/2005 09:22:43 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 21:52:13 Yann Hodique>  */
 
 /**
  *  @file keymap.cpp
@@ -20,6 +20,29 @@
 
 KeyMap KeyMap::global_keymap;
 KeyMap* KeyMap::current_keymap = &global_keymap;
+
+QString KeyMap::keyFromKeyEvent(QKeyEvent *e) {
+    if(!e) return QString::null;
+    Qt::KeyboardModifiers mod = e->modifiers();
+
+    switch(e->key()) {
+        case Qt::Key_Shift:
+        case Qt::Key_Control:
+        case Qt::Key_Meta:
+        case Qt::Key_Alt:
+        case Qt::Key_Super_L:
+        case Qt::Key_Super_R:
+        case Qt::Key_Hyper_L:
+        case Qt::Key_Hyper_R:
+            return QString::null;
+        default:
+            return QString(((mod & Qt::ControlModifier) ? "Ctrl+" : ""))
+                + ((mod & Qt::ShiftModifier) ? "Shift+" : "")
+                + ((mod & Qt::MetaModifier) ? "Meta+" : "")
+                + ((mod & Qt::AltModifier) ? "Alt+" : "")
+                + e->key();
+    }
+}
 
 KeyMap::KeyMap(QObject *parent) : QObject(parent) {}
 

@@ -1,4 +1,4 @@
-/*  Time-stamp: <07/02/2005 21:21:58 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:37:03 Yann Hodique>  */
 
 /**
  *  @file floatingtabbar.cpp
@@ -27,7 +27,7 @@
 #include <iostream>
 
 FloatingTabBar::FloatingTabBar(QWidget *parent) : QTabBar(parent), state(0) {
-    tab = qt_cast<FloatingTab*>(parent);
+    tab = qobject_cast<FloatingTab*>(parent);
 }
 
 FloatingTabBar::~FloatingTabBar() {}
@@ -85,7 +85,7 @@ void FloatingTabBar::mouseReleaseEvent(QMouseEvent *event) {
     QWidget *focus = qApp->focusWidget();
 
     QWidget *widget = QApplication::widgetAt(event->globalPos());
-    while (widget && !qt_cast<FloatingTab *>(widget)) {
+    while (widget && !qobject_cast<FloatingTab *>(widget)) {
         if (widget->isTopLevel()) {
             widget = 0;
             break;
@@ -95,11 +95,11 @@ void FloatingTabBar::mouseReleaseEvent(QMouseEvent *event) {
 
     FloatingTab *ft;
     if (widget) {
-        ft = qt_cast<FloatingTab *>(widget);
+        ft = qobject_cast<FloatingTab *>(widget);
     } else {
         MainWindow *mw = new MainWindow;
         mw->show();
-        ft = qt_cast<FloatingTab*>(mw->centralWidget());
+        ft = qobject_cast<FloatingTab*>(mw->centralWidget());
     }
     if (ft && (ft != tab)) {
         int index = tab->indexOf(state->widget);

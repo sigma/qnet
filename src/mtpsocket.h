@@ -1,4 +1,4 @@
-/*  Time-stamp: <09/02/2005 20:49:51 Yann Hodique>  */
+/*  Time-stamp: <09/05/2005 17:29:06 Yann Hodique>  */
 
 /**
  *  @file mtpsocket.h
@@ -31,7 +31,7 @@ public:
     ~MtpSocket();
 
     void setHost(const QString& h) {host = h;}
-    void setPort(Q_UINT16 p) {port = p;}
+    void setPort(int p) {port = p;}
     void setLogin(const QString& l) {login = l;}
     void setPasswd(const QString& p) {passwd = p;}
 
@@ -45,7 +45,7 @@ public slots:
 
 private:
     QString host;
-    Q_UINT16 port;
+    int port;
     QString login;
     QString passwd;
 
